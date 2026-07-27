@@ -3,6 +3,7 @@ import { Link } from '@inertiajs/vue3';
 import AppLayout from '@/Components/AppLayout.vue';
 import StatTile from '@/Components/StatTile.vue';
 import Card from '@/Components/Card.vue';
+import FlowMotif from '@/Components/FlowMotif.vue';
 
 defineProps({
     permohonanCount: {
@@ -23,26 +24,33 @@ defineProps({
 <template>
     <AppLayout title="Beranda">
         <!-- Hero Section -->
-        <section class="pt-16 pb-20 md:pt-24 md:pb-28">
-            <div class="max-w-6xl mx-auto px-4 sm:px-6">
-                <div class="max-w-3xl">
-                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[#E9F6F2] border border-[#0E8F79]/20 text-[#0E8F79] text-xs font-extrabold uppercase tracking-wider mb-6">
-                        Jaringan Inovasi Plus Daerah Kota Samarinda
-                    </div>
-                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#14202B] tracking-tight leading-tight mb-6">
-                        Platform Pengajuan & Penilaian Inovasi Daerah
-                    </h1>
-                    <p class="text-base sm:text-lg text-[#3E4C57] mb-8 leading-relaxed">
-                        JARSIPLUS memfasilitasi pendokumentasian, pemenuhan indikator bukti fisik, verifikasi, serta pengukuran Indeks Inovasi Daerah Pemerintah Kota Samarinda secara akuntabel dan transparan.
-                    </p>
+        <section class="relative pt-16 pb-20 md:pt-24 md:pb-28 overflow-hidden">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    <div class="lg:col-span-8">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[#E9F6F2] border border-[#0E8F79]/20 text-[#0E8F79] text-xs font-extrabold uppercase tracking-wider mb-6">
+                            Jaringan Inovasi Plus Daerah Kota Samarinda
+                        </div>
+                        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#14202B] tracking-tight leading-tight mb-6">
+                            Platform Pengajuan & Penilaian Inovasi Daerah
+                        </h1>
+                        <p class="text-base sm:text-lg text-[#3E4C57] mb-8 leading-relaxed">
+                            JARSIPLUS memfasilitasi pendokumentasian, pemenuhan indikator bukti fisik, verifikasi, serta pengukuran Indeks Inovasi Daerah Pemerintah Kota Samarinda secara akuntabel dan transparan.
+                        </p>
 
-                    <div class="flex flex-wrap gap-4">
-                        <Link href="/permohonan" class="btn-mahakam flex items-center gap-2 text-sm">
-                            Ajukan Inovasi Daerah
-                        </Link>
-                        <Link href="/informasi" class="px-5 py-2.5 rounded-xl bg-white border border-[#E5E1D8] text-[#14202B] font-bold text-sm hover:bg-[#F0ECE1] transition flex items-center gap-2">
-                            Alur & Indikator Penilaian
-                        </Link>
+                        <div class="flex flex-wrap items-center gap-4">
+                            <Link href="/permohonan" class="btn-mahakam flex items-center gap-2 text-sm">
+                                Ajukan Inovasi Daerah &rarr;
+                            </Link>
+                            <Link href="/informasi" class="px-5 py-2.5 rounded-xl bg-white border border-[#E5E1D8] text-[#14202B] font-bold text-sm hover:bg-[#F0ECE1] transition flex items-center gap-2">
+                                Pelajari Alur Penilaian
+                            </Link>
+                        </div>
+                    </div>
+
+                    <!-- Flow Motif Visual -->
+                    <div class="lg:col-span-4 hidden lg:block">
+                        <FlowMotif />
                     </div>
                 </div>
             </div>
@@ -77,10 +85,10 @@ defineProps({
             <div class="max-w-6xl mx-auto px-4 sm:px-6">
                 <div class="text-center max-w-2xl mx-auto mb-14">
                     <h2 class="text-2xl sm:text-3xl font-extrabold text-[#14202B] mb-3">Alur Pengajuan & Penilaian</h2>
-                    <p class="text-sm text-[#71808A]">Proses berjenjang yang transparan untuk mengukur indeks inovasi daerah.</p>
+                    <p class="text-sm text-[#71808A]">Proses berjenjang yang transparan untuk mengukur indeks inovasi daerah Kota Samarinda.</p>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
                     <Card class="relative">
                         <div class="w-10 h-10 rounded-xl bg-[#E9F6F2] text-[#0E8F79] font-extrabold text-base flex items-center justify-center mb-4">1</div>
                         <h3 class="text-lg font-bold text-[#14202B] mb-2">1. Input Profil Inovasi</h3>

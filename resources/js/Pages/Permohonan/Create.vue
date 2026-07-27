@@ -2,6 +2,8 @@
 import { Link, useForm } from '@inertiajs/vue3';
 import AppLayout from '@/Components/AppLayout.vue';
 import Card from '@/Components/Card.vue';
+import Field from '@/Components/Field.vue';
+import Button from '@/Components/Button.vue';
 
 const form = useForm({
     judul: '',
@@ -28,46 +30,64 @@ const submit = () => {
 
             <Card>
                 <form @submit.prevent="submit" class="space-y-6">
-                    <div>
-                        <label class="block text-xs font-bold text-[#14202B] uppercase tracking-wider mb-2">Nama Inovasi Daerah</label>
+                    <Field
+                        id="judul"
+                        label="Nama Inovasi Daerah"
+                        hint="Contoh: Aplikasi Sistem Pelayanan Terpadu..."
+                        :error="form.errors.judul"
+                        required
+                    >
                         <input
+                            id="judul"
                             v-model="form.judul"
                             type="text"
-                            placeholder="Contoh: Aplikasi Sistem Pelayanan Terpadu..."
+                            placeholder="Ketik nama inovasi..."
                             class="w-full px-4 py-3 rounded-xl bg-[#F7F5F0] border border-[#E5E1D8] text-[#14202B] text-sm focus:outline-none focus:border-[#0E8F79]"
                             required
                         />
-                    </div>
+                    </Field>
 
-                    <div>
-                        <label class="block text-xs font-bold text-[#14202B] uppercase tracking-wider mb-2">Inovator / Perangkat Daerah (OPD)</label>
+                    <Field
+                        id="instansi"
+                        label="Inovator / Perangkat Daerah (OPD)"
+                        hint="Dinas / UPTD / Kelompok Inovator"
+                        :error="form.errors.instansi"
+                        required
+                    >
                         <input
+                            id="instansi"
                             v-model="form.instansi"
                             type="text"
-                            placeholder="Dinas / UPTD / Kelompok Inovator"
+                            placeholder="Nama perangkat daerah / unit..."
                             class="w-full px-4 py-3 rounded-xl bg-[#F7F5F0] border border-[#E5E1D8] text-[#14202B] text-sm focus:outline-none focus:border-[#0E8F79]"
                             required
                         />
-                    </div>
+                    </Field>
 
-                    <div>
-                        <label class="block text-xs font-bold text-[#14202B] uppercase tracking-wider mb-2">Rancang Bangun & Ringkasan Inovasi</label>
+                    <Field
+                        id="deskripsi"
+                        label="Rancang Bangun & Ringkasan Inovasi"
+                        hint="Jelaskan secara ringkas latar belakang dan keunggulan inovasi..."
+                        :error="form.errors.deskripsi"
+                        required
+                    >
                         <textarea
+                            id="deskripsi"
                             v-model="form.deskripsi"
                             rows="4"
-                            placeholder="Jelaskan secara ringkas latar belakang dan keunggulan inovasi..."
+                            placeholder="Ringkasan inovasi daerah..."
                             class="w-full px-4 py-3 rounded-xl bg-[#F7F5F0] border border-[#E5E1D8] text-[#14202B] text-sm focus:outline-none focus:border-[#0E8F79]"
                             required
                         ></textarea>
-                    </div>
+                    </Field>
 
                     <div class="pt-4 flex justify-end gap-3 border-t border-[#E5E1D8]">
-                        <Link href="/permohonan" class="px-5 py-2.5 rounded-xl bg-[#F0ECE1] text-xs font-bold text-[#3E4C57] hover:bg-[#E5E1D8] transition">
-                            Batal
+                        <Link href="/permohonan">
+                            <Button variant="secondary">Batal</Button>
                         </Link>
-                        <button type="submit" :disabled="form.processing" class="btn-mahakam text-xs disabled:opacity-50">
+                        <Button type="submit" variant="primary" :loading="form.processing">
                             Kirim Usulan Inovasi
-                        </button>
+                        </Button>
                     </div>
                 </form>
             </Card>

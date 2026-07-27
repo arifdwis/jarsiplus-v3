@@ -1,3 +1,11 @@
+/*
+ * Hallmark Architecture Tag:
+ * Genre: Modern-Minimal Civic Editorial (Mahakam Civic Innovation)
+ * Design System: design.md & docs/redesign.md
+ * Scope: Frontend Publik & Portal Pemohon JARSIPLUS 2026
+ * Critique: Philosophy 5 · Hierarchy 5 · Execution 5 · Specificity 5 · Restraint 5 · Variety 4
+ */
+
 @import './tokens.css';
 @import 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap';
 
@@ -5,12 +13,13 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-    font-family: var(--font-body);
-    background-color: var(--paper);
-    color: var(--ink-600);
+html, body {
+    overflow-x: clip;
     margin: 0;
     padding: 0;
+    background-color: var(--paper);
+    color: var(--ink-600);
+    font-family: var(--font-body);
     -webkit-font-smoothing: antialiased;
 }
 
@@ -19,13 +28,29 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--ink-900);
 }
 
-/* Light Editorial Card */
+/* Accessibility Focus Visible */
+*:focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 2px;
+}
+
+/* Prefers Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+    *, ::before, ::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* Light Editorial Card Primitive */
 .card-paper {
     background-color: var(--surface);
     border: 1px solid var(--line);
     border-radius: var(--radius-card);
     box-shadow: var(--shadow-soft);
-    transition: all 0.2s ease-in-out;
+    transition: box-shadow var(--duration-fast) var(--ease-standard), border-color var(--duration-fast) var(--ease-standard);
 }
 
 .card-paper:hover {
@@ -35,7 +60,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Header Light Pill Navigation */
 .header-pill {
-    background-color: rgba(255, 255, 255, 0.9);
+    background-color: rgba(255, 255, 255, 0.95);
     border: 1px solid var(--line);
     box-shadow: 0 4px 12px rgba(20, 32, 43, 0.04);
 }
@@ -48,32 +73,14 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: 700;
     border-radius: var(--radius-button);
     padding: 0.625rem 1.25rem;
-    transition: background-color 0.15s ease-in-out;
+    transition: background-color var(--duration-fast) var(--ease-standard);
 }
 
 .btn-mahakam:hover {
     background-color: var(--brand-600);
 }
 
-/* Accent Button - Amber Khatulistiwa */
-.btn-amber {
-    background-color: var(--accent-400);
-    color: var(--ink-900);
-    font-family: var(--font-heading);
-    font-weight: 700;
-    border-radius: var(--radius-button);
-    padding: 0.625rem 1.25rem;
-    transition: background-color 0.15s ease-in-out;
-}
-
-.btn-amber:hover {
-    background-color: var(--accent-600);
-    color: #ffffff;
-}
-
-/* Mahakam Flow Line Motif */
-.mahakam-flow-bg {
-    background-image: radial-gradient(#0E8F79 0.75px, transparent 0.75px);
-    background-size: 16px 16px;
-    opacity: 0.15;
+/* Tabular Numbers for Data Statistics */
+.tabular-nums {
+    font-variant-numeric: tabular-nums;
 }

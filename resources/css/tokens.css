@@ -1,33 +1,31 @@
-/* Mahakam Design Tokens — JARSIPLUS 2026 (docs/redesign.md) */
+/* Mahakam Civic Innovation Design Tokens — JARSIPLUS 2026 */
 :root {
-  /* Brand Inovasi — Teal Hijau Mahakam */
-  --brand-50:    #E9F6F2;
-  --brand-100:   #C6EBE2;
-  --brand-500:   #0E8F79;
-  --brand-600:   #0A6E5D;
-  --brand-800:   #094E43;
-  --brand-900:   #08302A;
+  /* Colors */
+  --paper:          #F7F5F0;
+  --surface:        #FFFFFF;
+  --surface-strong: #14202B;
+  --ink-900:        #14202B;
+  --ink-600:        #3E4C57;
+  --ink-400:        #71808A;
+  --ink-200:        #CBD5E1;
+  --line:           #E5E1D8;
+  --line-dark:      #D4CEBF;
 
-  /* Accent Hangat — Amber Khatulistiwa */
-  --accent-100:  #FEF3D6;
-  --accent-400:  #F2B441;
-  --accent-600:  #C8871B;
+  /* Brand Mahakam Teal */
+  --brand-50:       #E9F6F2;
+  --brand-100:      #C6EBE2;
+  --brand-500:      #0E8F79;
+  --brand-600:      #0A6E5D;
+  --brand-800:      #094E43;
+  --brand-900:      #08302A;
 
-  /* Otoritas & Teks — Deep Slate Navy */
-  --ink-900:     #14202B;
-  --ink-700:     #293745;
-  --ink-600:     #3E4C57;
-  --ink-400:     #71808A;
-  --ink-200:     #CBD5E1;
+  /* Accent Amber Samarinda */
+  --accent-100:     #FEF3D6;
+  --accent-400:     #F2B441;
+  --accent-600:     #C8871B;
 
-  /* Kanvas Terang (Light-First, Warm Paper) */
-  --paper:       #F7F5F0;
-  --paper-subtle:#F0ECE1;
-  --surface:     #FFFFFF;
-  --line:        #E5E1D8;
-  --line-dark:   #D4CEBF;
-
-  /* Status */
+  /* Focus & Status */
+  --color-focus:    #0E8F79;
   --status-success-bg: #EAF8F1;
   --status-success:    #1E9E6A;
   --status-warning-bg: #FEF6E9;
@@ -38,15 +36,32 @@
   --status-info:       #2C6E9B;
 
   /* Typography */
-  --font-heading: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-body:    "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-heading:   "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body:      "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
 
-  /* Radii & Shadows */
-  --radius-card:   16px;
-  --radius-button: 10px;
-  --radius-input:  10px;
-  --radius-chip:   8px;
+  /* Spacing Scale (4px grid) */
+  --space-3xs:      2px;
+  --space-2xs:      4px;
+  --space-xs:       8px;
+  --space-sm:       12px;
+  --space-md:       16px;
+  --space-lg:       24px;
+  --space-xl:       32px;
+  --space-2xl:      48px;
+  --space-3xl:      64px;
+  --space-4xl:      96px;
 
-  --shadow-soft:   0 1px 3px rgba(20, 32, 43, 0.05), 0 8px 24px rgba(20, 32, 43, 0.06);
-  --shadow-hover:  0 4px 6px rgba(20, 32, 43, 0.06), 0 14px 32px rgba(20, 32, 43, 0.1);
+  /* Radii & Elevation */
+  --radius-card:    16px;
+  --radius-button:  10px;
+  --radius-input:   10px;
+  --radius-badge:   8px;
+
+  --shadow-soft:    0 1px 3px rgba(20, 32, 43, 0.05), 0 8px 24px rgba(20, 32, 43, 0.06);
+  --shadow-hover:   0 4px 6px rgba(20, 32, 43, 0.06), 0 14px 32px rgba(20, 32, 43, 0.1);
+
+  /* Motion */
+  --duration-fast:     180ms;
+  --duration-standard: 240ms;
+  --ease-standard:     cubic-bezier(0.2, 0, 0, 1);
 }

@@ -3,6 +3,7 @@ import { Link } from '@inertiajs/vue3';
 import AppLayout from '@/Components/AppLayout.vue';
 import Card from '@/Components/Card.vue';
 import Badge from '@/Components/Badge.vue';
+import EmptyState from '@/Components/EmptyState.vue';
 
 defineProps({
     permohonan: {
@@ -26,16 +27,15 @@ defineProps({
             </div>
 
             <!-- Empty State -->
-            <div v-if="!permohonan || permohonan.length === 0" class="card-paper p-12 text-center">
-                <div class="w-16 h-16 rounded-2xl bg-[#E9F6F2] text-[#0E8F79] font-extrabold text-2xl flex items-center justify-center mx-auto mb-4">
-                    ?
-                </div>
-                <h3 class="text-base font-bold text-[#14202B] mb-1">Belum Ada Inovasi Terdaftar</h3>
-                <p class="text-xs text-[#71808A] mb-6">Anda belum mendaftarkan usulan inovasi daerah Kota Samarinda.</p>
-                <Link href="/permohonan/create" class="btn-mahakam inline-block text-xs">
+            <EmptyState
+                v-if="!permohonan || permohonan.length === 0"
+                title="Belum Ada Inovasi Terdaftar"
+                description="Anda belum mendaftarkan usulan inovasi daerah Kota Samarinda."
+            >
+                <Link href="/permohonan/create" class="btn-mahakam inline-block text-xs mt-2">
                     Ajukan Inovasi Sekarang
                 </Link>
-            </div>
+            </EmptyState>
 
             <!-- Data List -->
             <div v-else class="space-y-4">

@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import AppLayout from '@/Components/AppLayout.vue';
-import Card from '@/Components/Card.vue';
+import Accordion from '@/Components/Accordion.vue';
 
 const faqs = ref([
     {
@@ -15,6 +15,10 @@ const faqs = ref([
     {
         q: 'Apakah pengajuan inovasi daerah dipungut biaya?',
         a: 'Seluruh proses pengajuan, pendampingan, dan verifikasi inovasi daerah di JARSIPLUS 100% GRATIS.'
+    },
+    {
+        q: 'Format file apa saja yang diperbolehkan untuk unggah bukti indikator?',
+        a: 'Format file yang didukung adalah PDF, JPG, PNG dengan ukuran maksimum sesuai petunjuk teknis di masing-masing indikator.'
     }
 ]);
 </script>
@@ -27,15 +31,10 @@ const faqs = ref([
                     Pertanyaan Populer
                 </div>
                 <h1 class="text-3xl font-extrabold text-[#14202B] mb-2">Pertanyaan Yang Sering Diajukan</h1>
-                <p class="text-sm text-[#71808A]">Jawaban lengkap seputar tata cara pendaftaran, indikator, dan verifikasi inovasi daerah.</p>
+                <p class="text-sm text-[#71808A]">Jawaban lengkap seputar tata cara pendaftaran, indikator, dan verifikasi inovasi daerah Kota Samarinda.</p>
             </div>
 
-            <div class="space-y-4">
-                <Card v-for="(item, index) in faqs" :key="index">
-                    <h3 class="text-base font-bold text-[#14202B] mb-2">{{ item.q }}</h3>
-                    <p class="text-sm text-[#3E4C57] leading-relaxed">{{ item.a }}</p>
-                </Card>
-            </div>
+            <Accordion :items="faqs" />
         </div>
     </AppLayout>
 </template>
