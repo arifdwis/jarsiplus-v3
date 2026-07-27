@@ -1,5 +1,8 @@
 <script setup>
-import { Head, Link } from '@inertiajs/vue3';
+import { Link } from '@inertiajs/vue3';
+import AppLayout from '@/Components/AppLayout.vue';
+import Card from '@/Components/Card.vue';
+import Badge from '@/Components/Badge.vue';
 
 defineProps({
     item: {
@@ -10,30 +13,25 @@ defineProps({
 </script>
 
 <template>
-    <Head title="Detail Permohonan Kerjasama - JARSIPLUS" />
-
-    <div class="min-h-screen bg-slate-950 text-slate-100">
-        <header class="sticky top-0 z-50 backdrop-blur-md bg-slate-950/80 border-b border-slate-800">
-            <div class="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between">
-                <Link href="/permohonan" class="flex items-center gap-2 text-sm text-slate-400 hover:text-white">
-                    <i class="bi bi-arrow-left"></i> Kembali
+    <AppLayout title="Detail Inovasi Daerah">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 py-16">
+            <div class="mb-8">
+                <Link href="/permohonan" class="text-xs font-semibold text-[#0E8F79] hover:underline mb-2 inline-block">
+                    &larr; Kembali ke Daftar Inovasi
                 </Link>
-            </div>
-        </header>
-
-        <main class="max-w-4xl mx-auto px-4 py-12">
-            <div class="p-8 rounded-2xl bg-slate-900 border border-slate-800 mb-8">
-                <div class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20 mb-4">
-                    Status: {{ item.status_label || 'Dalam Verifikasi' }}
+                <div class="flex items-center gap-3 mb-2">
+                    <Badge variant="warning">{{ item.status_label || 'Dalam Verifikasi Indikator' }}</Badge>
                 </div>
-                <h1 class="text-2xl font-bold mb-2">{{ item.judul || 'Permohonan Kerjasama' }}</h1>
-                <p class="text-sm text-slate-400 mb-6">Instansi: {{ item.instansi || '-' }} &bull; Kode UUID: {{ item.uuid }}</p>
-
-                <div class="border-t border-slate-800 pt-6">
-                    <h3 class="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-2">Ringkasan Deskripsi</h3>
-                    <p class="text-slate-300 text-sm leading-relaxed">{{ item.deskripsi || 'Belum ada deskripsi tambahan.' }}</p>
-                </div>
+                <h1 class="text-2xl font-extrabold text-[#14202B]">{{ item.judul || 'Detail Usulan Inovasi' }}</h1>
+                <p class="text-xs text-[#71808A] mt-1">Inovator: {{ item.instansi || '-' }} &bull; UUID: {{ item.uuid }}</p>
             </div>
-        </main>
-    </div>
+
+            <Card class="space-y-6">
+                <div>
+                    <h3 class="text-xs font-bold text-[#14202B] uppercase tracking-wider mb-2">Rancang Bangun & Deskripsi</h3>
+                    <p class="text-sm text-[#3E4C57] leading-relaxed">{{ item.deskripsi || 'Belum ada ringkasan deskripsi.' }}</p>
+                </div>
+            </Card>
+        </div>
+    </AppLayout>
 </template>

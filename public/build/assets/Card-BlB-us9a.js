@@ -1,0 +1,1 @@
+import{o as s,b as n,j as a}from"./app-De6xWF8T.js";const _=(e,t)=>{const o=e.__vccOpts||e;for(const[r,c]of t)o[r]=c;return o},d={},l={class:"card-paper p-6"};function p(e,t){return s(),n("div",l,[a(e.$slots,"default")])}const i=_(d,[["render",p]]);export{i as C};
