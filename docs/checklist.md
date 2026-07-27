@@ -8,8 +8,8 @@ Centang saat selesai. Jangan lanjut fase berikut sebelum blok "Titik uji" fase t
 ---
 
 ## Fase 0 — Persiapan
-- [ ] T0.1 `git init` + commit baseline
-- [ ] T0.2 Secret keluar repo (`.env`, `database_dump.sql` di-`.gitignore`), rotasi APP_KEY/DB/SSO
+- [x] T0.1 `git init` + commit baseline
+- [x] T0.2 Secret keluar repo (`.env`, `database_dump.sql` di-`.gitignore`), rotasi APP_KEY/DB/SSO
 - [ ] T0.3 PHP 8.3 + MySQL lokal, app baseline jalan
 - [ ] T0.4 Migration nyata dari `database_dump.sql`
 - [ ] T0.5 Daftar smoke test manual ditulis
