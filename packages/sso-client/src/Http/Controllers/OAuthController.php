@@ -85,13 +85,18 @@ class OAuthController extends Controller
      */
     public function logout(Request $request)
     {
-        $broker = new \Novay\SSO\Services\Broker;
-        $broker->logout();
+        try {
+            $broker = new \Novay\SSO\Services\Broker;
+            $broker->logout();
+        } catch (\Throwable $e) {
+            // Safe fallback if SSO server is unreachable
+        }
         
         $this->guard()->logout();
         $request->session()->invalidate();
+        $request->session()->regenerateToken();
         
-        return redirect('/');
+        return redirect('/login');
     }
 
     /**

@@ -52,11 +52,11 @@
                                     </a>
                                 @endif
                                 
-                                <a class="dropdown-item text-danger" href="{{ route('sso.logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                <a class="dropdown-item text-danger" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                     <span class="iconify nav-icon me-1" data-icon="icon-park-twotone:outbound"></span>
                                     <b>Sign out</b>
                                 </a>
-                                <form id="logout-form" action="{{ route('sso.logout') }}" method="GET" class="d-none">
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                     @csrf
                                 </form>
                             </div>
