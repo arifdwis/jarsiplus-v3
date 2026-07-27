@@ -19,7 +19,7 @@
 //     Route::resource('kategori','KategoriController');
 // });
 
-Route::prefix('sikerja')->as('epanel.')->middleware(['auth'])->group(function() 
+Route::prefix('jarsiplus')->as('epanel.')->middleware(['auth'])->group(function() 
 {
     Route::resources([
         'logpermohonan' => 'LogPermohonanController',

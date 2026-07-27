@@ -11,7 +11,7 @@
 |
 */
 
-Route::prefix('sikerja')->as('epanel.')->middleware(['auth'])->group(function () {
+Route::prefix('jarsiplus')->as('epanel.')->middleware(['auth'])->group(function () {
    Route::get('bukti-dukung', 'BuktiDukungController@index')->name('bukti-dukung.index');
    Route::get('bukti-dukung/export', 'BuktiDukungController@export')->name('bukti-dukung.export');
    Route::post('permohonan/{id}/notifikasi-status', 'PermohonanController@notifyStatus')->name('permohonan.notify-status');

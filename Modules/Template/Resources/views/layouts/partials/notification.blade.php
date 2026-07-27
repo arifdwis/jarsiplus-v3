@@ -13,7 +13,7 @@
             </div>
         </div>
         <div class="notification-content">
-            <img src="{{asset('images/logo-sikerja.svg')}}" alt="image" class="imaged w64 square">
+            <img src="{{asset('images/logo-jarsiplus.svg')}}" alt="image" class="imaged w64 square">
                 
             <div class="in">
                 <h3 class="subtitle">Auto close in 3 seconds.</h3>

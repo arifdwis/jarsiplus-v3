@@ -34,12 +34,12 @@ Centang saat selesai. Jangan lanjut fase berikut sebelum blok "Titik uji" fase t
 - **Titik uji**: [x] admin Nue login & operasi jalan, [x] SSO login sukses
 
 ## Fase 2 — Bersihkan SIKERJA + hapus penjurian Beimbai
-- [ ] T2.1 Prefix route `sikerja`→`jarsiplus` (Formulir/Core/Pemohon)
-- [ ] T2.2 Branding logo + breadcrumb
-- [ ] T2.3 Hapus aset & `public_/` (grep verifikasi dulu)
-- [ ] T2.4 Hapus penjurian Beimbai (route:44 + controller + stub)
+- [x] T2.1 Prefix route `sikerja`→`jarsiplus` (Formulir/Core/Pemohon)
+- [x] T2.2 Branding logo + breadcrumb
+- [x] T2.3 Hapus aset & `public_/` (grep verifikasi dulu)
+- [x] T2.4 Hapus penjurian Beimbai (route:44 + controller + stub)
 - [ ] T2.5 (Opsional) migrasi path storage `sikerja/`
-- **Titik uji**: [ ] `route:list` tanpa `beimbai-permohonan.penilaian`, [ ] grep `sikerja` kode = 0 (kecuali storage), [ ] admin & pemohon jalan
+- **Titik uji**: [x] `route:list` tanpa `beimbai-permohonan.penilaian`, [x] grep `sikerja` kode = 0 (kecuali storage), [x] admin & pemohon jalan
 
 ## Fase 3 — Frontend Inertia + Vue 3
 - [ ] T3.1 Mix→Vite + vue3/inertia terpasang

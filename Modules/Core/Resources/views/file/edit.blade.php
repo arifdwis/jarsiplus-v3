@@ -12,7 +12,7 @@
 @section('content')
 
 @include('nue::partials.breadcrumb', ['lists' => [
-'SIKERJA' => 'javascript:;', 
+'JARSIPLUS' => 'javascript:;', 
 $title => route("$prefix.index", $kategori->uuid), 
 'Create' => 'active'
 ]])
