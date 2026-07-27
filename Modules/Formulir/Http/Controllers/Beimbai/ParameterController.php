@@ -27,7 +27,8 @@ class ParameterController extends Controller
         $this->data = $data;
         $this->kategori = $kategori;
 
-        $this->toIndex = route('epanel.beimbai-indikator.parameter.index', request()->segment(4));
+        $segment = request()->segment(4);
+        $this->toIndex = $segment ? route('epanel.beimbai-indikator.parameter.index', $segment) : '#';
         $this->prefix = 'epanel.beimbai-indikator.parameter';
         $this->view = 'formulir::indikator.parameter';
 

@@ -1,0 +1,31 @@
+{
+    "name": "nue-extensions/lockscreen",
+    "version": "1.0.0",
+    "description": "Lock-screen page for Nue.",
+    "type": "library",
+    "keywords": ["nue", "extension", "lock", "screen", "lockscreen"],
+    "homepage": "https://github.com/nue-extensions/lockscreen",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Noviyanto Rahmadi",
+            "email": "novay@btekno.id"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0",
+        "novay/nue": "^2.0|^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Nue\\Lock\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Nue\\Lock\\Providers\\LockServiceProvider"
+            ]
+        }
+    }
+}

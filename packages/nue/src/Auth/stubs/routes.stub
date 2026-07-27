@@ -1,0 +1,5 @@
+
+
+Route::get('home', 'App\Http\Controllers\HomeController@index')
+    ->name('home')
+    ->prefix(config('nue.route.prefix'));

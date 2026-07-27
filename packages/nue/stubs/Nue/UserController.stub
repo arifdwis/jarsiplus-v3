@@ -1,0 +1,222 @@
+<?php
+
+namespace App\Http\Controllers\Nue;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+
+class UserController extends Controller
+{
+    /**
+     * Title for current resource.
+     *
+     * @var string
+     */
+    protected $title = 'Users';
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct() 
+    {
+        $this->models = config('nue.database.users_model');
+        $this->data = new $this->models;
+        
+        $this->prefix = 'settings.users';
+        $this->view = 'nue::settings.users';
+
+        $this->tCreate = "$this->title created successfully!";
+        $this->tUpdate = "$this->title changed successfully!";
+        $this->tDelete = "Some $this->title deleted successfully!";
+
+        view()->share([
+            'title' => $this->title, 
+            'view' => $this->view, 
+            'prefix' => $this->prefix
+        ]);
+    }
+
+    /**
+     * Index interface.
+     *
+     * @param Request $request
+     *
+     * @return Content
+     */
+    public function index(Request $request)
+    {
+        $data = $this->data->query();
+
+        if($request->has('datatable')):
+            return $this->datatable($data);
+        endif;
+
+        return view("{$this->view}.index", compact('data'));
+    }
+
+    /**
+     * Create interface.
+     *
+     * @param Request $request
+     *
+     * @return Content
+     */
+    public function create(Request $request)
+    {
+        $permissions = config('nue.database.permissions_model')::pluck('name', 'id');
+
+        return view("$this->view.create", compact('permissions'));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @return mixed
+     */
+    public function store(Request $request)
+    {
+        $this->validate($request, [
+            'photo' => 'mimes:jpg,jpeg,png', 
+            'name' => 'required', 
+            'email' => 'required|unique:users,email', 
+            'password' => 'required|min:5',
+            'password_confirmation' => 'required|same:password',
+        ]);
+
+        $input = $request->all();
+        $input['password'] = bcrypt($request->password);
+
+        $user = $this->data->create($input);
+        $user->roles()->sync($request->roles);
+        $user->permissions()->sync($request->permissions);
+
+        if (isset($input['photo'])) {
+            $user->updateProfilePhoto($input['photo']);
+        }
+        
+        notify()->flash($this->tCreate, 'success');
+        return redirect(route("$this->prefix.index"));
+    }
+
+    /**
+     * Show interface.
+     *
+     * @param mixed   $id
+     * @param Request $request
+     *
+     * @return Content
+     */
+    public function show(Request $request, $id)
+    {
+        abort(404);
+    }
+
+    /**
+     * Edit interface.
+     *
+     * @param mixed   $id
+     * @param Request $request
+     *
+     * @return Content
+     */
+    public function edit(Request $request, $id)
+    {
+        $edit = $this->data->findOrFail($id);
+     
+        $permissions = config('nue.database.permissions_model')::pluck('name', 'id');
+
+        return view("{$this->view}.edit", compact('edit', 'permissions'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param int $id
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        $edit = $this->data->findOrFail($id);
+
+        $this->validate($request, [
+            'photo' => 'mimes:jpg,jpeg,png', 
+            'name' => 'required', 
+            'email' => 'required|unique:users,email,'.$edit->id, 
+            'password_confirmation' => 'same:password',
+        ]);
+
+        $input = $request->all();
+
+        if($request->filled('password')) {
+            $input['password'] = bcrypt($request->password);
+        } else {
+            $input['password'] = $edit->password;
+        }
+
+        if (isset($input['photo'])) {
+            $edit->updateProfilePhoto($input['photo']);
+        }
+        
+        $edit->update($input);
+        $edit->roles()->sync($request->roles);
+        $edit->permissions()->sync($request->permissions);
+        
+        notify()->flash($this->tUpdate, 'success');
+        return redirect(route("$this->prefix.index"));
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param int $id
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Request $request, $id)
+    {
+        if($request->has('pilihan')):
+            foreach($request->pilihan as $temp):
+                $data = $this->data->findOrFail($temp);
+                $data->delete();
+            endforeach;
+            
+            notify()->flash($this->tDelete, 'success');
+            return redirect()->back();
+        endif;
+    }
+
+    /**
+     * Datatable API
+     * @param  $data
+     * @return Datatable
+     */
+    public function datatable($data) 
+    {
+        return datatables()->of($data)
+            ->editColumn('pilihan', function($data) {
+                return '<div class="form-check mb-0">
+                    <input type="checkbox" class="form-check-input pilihan" id="pilihan['.$data->id.']" name="pilihan[]" value="'.$data->id.'">
+                        <label class="form-check-label" for="pilihan['.$data->id.']"></label>
+                    </div>';
+            })
+            ->editColumn('roles', function($data) {
+                $return = '';
+                foreach($data->roles as $temp) {
+                    $return .= '<label class="badge bg-success me-1">'.$temp->name.'</label>';
+                }
+                return $return;
+            })
+            ->editColumn('action', function($data) {
+                return '<a href="'.route("$this->prefix.edit", $data->id).'" class="link link-secondary">
+                        <span class="iconify" data-icon="uil:edit"></span> <span class="">Edit</span>
+                    </a>';
+
+                return $return;
+            })
+            ->escapeColumns(['*'])->toJson();
+    }
+}

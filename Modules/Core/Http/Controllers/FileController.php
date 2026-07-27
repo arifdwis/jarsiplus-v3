@@ -36,7 +36,8 @@ class FileController extends Controller
         $this->parameter = $parameter;
         $this->user = $user;
 
-        $this->toIndex = route('epanel.permohonan.file.index',  [request()->segment(4)]);
+        $segment = request()->segment(4);
+        $this->toIndex = $segment ? route('epanel.permohonan.file.index', [$segment]) : '#';
         $this->toHome = route('epanel.permohonan.index');
         $this->prefix = 'epanel.permohonan.file';
         $this->cprefix = 'epanel.file';

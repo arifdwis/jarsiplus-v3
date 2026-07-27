@@ -33,7 +33,8 @@ class FileController extends Controller
         $this->validasi = $validasi;
         $this->user = $user;
 
-        $this->toIndex = route('epanel.penilaian.file.index',  [request()->segment(4)]);
+        $segment = request()->segment(4);
+        $this->toIndex = $segment ? route('epanel.penilaian.file.index', [$segment]) : '#';
         $this->prefix = 'epanel.penilaian.file';
         $this->cprefix = 'epanel.file';
         $this->view = 'core::file';

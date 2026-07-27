@@ -5,6 +5,7 @@ namespace Modules\Pemohon\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Str;
 use Modules\Pemohon\Entities\Pemohon;
 use Ramsey\Uuid\Uuid;
 
@@ -65,14 +66,14 @@ class PemohonController extends Controller
     {
 
         $input = request()->all();
-        $input['slug'] = str_slug($request->nama);
+        $input['slug'] = Str::slug($request->nama);
 
         if ($request->hasFile('file')):
             $input['file'] = $this->upload($request->file('file'));
         endif;
 
         if ($request->hasFile('foto')):
-            $input['foto'] = $this->upload($request->file('foto'), str_slug($request->judul));
+            $input['foto'] = $this->upload($request->file('foto'), Str::slug($request->judul));
         endif;
 
         // return $input;

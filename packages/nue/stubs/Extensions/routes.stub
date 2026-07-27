@@ -1,0 +1,10 @@
+<?php
+
+Route::group([
+	'namespace' => ':namespace\Http\Controllers', 
+	'prefix' => 'nue'
+], function() {
+
+	Route::get(':path', ':class_nameController@index');
+
+});

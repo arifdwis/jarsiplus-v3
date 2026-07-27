@@ -1,0 +1,69 @@
+@extends('layouts.app')
+@section('title', __('Dashboard'))
+@section('m-home', 'active')
+
+@section('content')
+    <div class="content container-fluid">
+        <div class="row align-items-center mb-3">
+            <div class="col-sm mb-2 mb-sm-0">
+                <h1 class="page-header-title mb-1">Hai, {{ Nue::user()->name }}!</h1>
+                <p class="page-header-text">You are using an underated package for your laziness.</p>
+            </div>
+            <div class="col-auto">
+                <a class="btn btn-sm btn-dark" href="https://github.com/novay/nue" target="_blank">
+                    <i class="bi-github me-1"></i> Github
+                </a>
+                <a class="btn btn-sm btn-secondary" href="https://nue.btekno.id/docs" target="_blank">
+                    <i class="bi-book me-1"></i> Documentation
+                </a>
+                <a class="btn btn-sm btn-secondary" href="https://nue.btekno.id" target="_blank">
+                    <i class="bi-layers me-1"></i> Demo
+                </a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 pe-1">
+                <div class="card rounded-1">
+                    <div class="card-header card-header-content-between">
+                        <h4 class="card-header-title">
+                            <span class="iconify" data-icon="file-icons:dotenv"></span>
+                            Environment
+                        </h4>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-sm">
+                            @foreach($envs as $env)
+                                <tr>
+                                    <td width="25%">{!! $env['name'] !!}</td>
+                                    <td>{!! $env['value'] !!}</td>
+                                </tr>
+                            @endforeach
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 ps-1 pe-1">
+                <div class="card rounded-1 mb-1">
+                    <div class="card-header card-header-content-sm-between">
+                        <h4 class="card-header-title mb-2 mb-sm-0">
+                            <span class="iconify" data-icon="octicon:package-dependencies-16"></span>
+                            Dependencies
+                        </h4>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            @foreach($dependencies as $dependency => $version)
+                            <tr>
+                                <td>
+                                    <code class="small">{{ $dependency }}</code>
+                                </td>
+                                <td align="right"><span class="badge bg-secondary">{{ $version }}</span></td>
+                            </tr>
+                            @endforeach
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection

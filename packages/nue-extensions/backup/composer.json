@@ -1,0 +1,32 @@
+{
+    "name": "nue-extensions/backup",
+    "version": "1.0.0",
+    "description": "Backup extension for Nue.",
+    "type": "library",
+    "keywords": ["nue", "extension", "backup"],
+    "homepage": "https://github.com/nue-extensions/backup",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Noviyanto Rahmadi",
+            "email": "novay@btekno.id"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0",
+        "novay/nue": "*",
+        "spatie/laravel-backup": "^8.0|^9.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Nue\\Backup\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Nue\\Backup\\BackupServiceProvider"
+            ]
+        }
+    }
+}

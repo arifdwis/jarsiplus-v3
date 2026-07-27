@@ -27,7 +27,8 @@ class PembahasanController extends Controller
         $this->kategori = $kategori;
         $this->histori = $histori;
 
-        $this->toIndex = route('epanel.file.pembahasan.index', [request()->segment(4)]);
+        $segment = request()->segment(4);
+        $this->toIndex = $segment ? route('epanel.file.pembahasan.index', [$segment]) : '#';
         $this->prefix = 'epanel.file.pembahasan';
         $this->view = 'core::file.pembahasan';
 

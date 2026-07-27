@@ -11,13 +11,13 @@
 |
 */
 
-Route::prefix('core')->group(function() {
-    Route::get('/', 'CoreController@index');
-});
+// Route::prefix('core')->group(function() {
+//     Route::get('/', 'CoreController@index');
+// });
 
-Route::middleware('auth')->prefix('core')->name('core.')->group(function() {
-    Route::resource('kategori','KategoriController');
-});
+// Route::middleware('auth')->prefix('core')->name('core.')->group(function() {
+//     Route::resource('kategori','KategoriController');
+// });
 
 Route::prefix('sikerja')->as('epanel.')->middleware(['auth'])->group(function() 
 {

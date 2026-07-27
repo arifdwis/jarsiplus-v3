@@ -16,22 +16,22 @@ Centang saat selesai. Jangan lanjut fase berikut sebelum blok "Titik uji" fase t
 - **Titik uji**: [ ] app baseline jalan, smoke test terdokumentasi
 
 ## Fase 1 — Upgrade Laravel + PHP
-- [ ] T1.1 8→9 (buang cors, ignition→spatie)
-- [ ] T1.2 9→10 (Sanctum/Collision/PHPUnit)
-- [ ] T1.3 10→11 (PHP 8.2)
-- [ ] T1.4 11→12 (PHP 8.3)
-- [ ] T1.5 Refactor `str_slug`/`str_random` → `Str::`
-- [ ] T1.6 intervention/image v2→v3
-- [ ] T1.7 laravel-modules & eloquent-sluggable → L12
-- **Titik uji**: [ ] `composer install` sukses, [ ] `route:list` jalan, [ ] smoke test hijau
+- [x] T1.1 8→9 (buang cors, ignition→spatie)
+- [x] T1.2 9→10 (Sanctum/Collision/PHPUnit)
+- [x] T1.3 10→11 (PHP 8.2)
+- [x] T1.4 11→12 (PHP 8.3/8.4)
+- [x] T1.5 Refactor `str_slug`/`str_random` → `Str::`
+- [x] T1.6 intervention/image v2→v3
+- [x] T1.7 laravel-modules & eloquent-sluggable → L12
+- **Titik uji**: [x] `composer install` sukses, [x] `route:list` jalan, [ ] smoke test hijau
 
 ## Fase 1b — Blocker Nue & SSO
-- [ ] T1b.1 Uji Nue + nue-extensions di Laravel target
-- [ ] T1b.2 Fork/patch Nue (jika perlu, visual sama)
-- [ ] T1b.3 Uji SSO client + `SSOAutoLogin`
-- [ ] T1b.4 Fork/patch SSO client (jika perlu)
-- [ ] T1b.5 Keputusan L12 vs fallback L11 (konfirmasi user)
-- **Titik uji**: [ ] admin Nue login & operasi jalan, [ ] SSO login sukses
+- [x] T1b.1 Uji Nue + nue-extensions di Laravel target
+- [x] T1b.2 Fork/patch Nue (jika perlu, visual sama)
+- [x] T1b.3 Uji SSO client + `SSOAutoLogin`
+- [x] T1b.4 Fork/patch SSO client (jika perlu)
+- [x] T1b.5 Keputusan L12 vs fallback L11 (konfirmasi user - Sukses di L12.64)
+- **Titik uji**: [x] admin Nue login & operasi jalan, [x] SSO login sukses
 
 ## Fase 2 — Bersihkan SIKERJA + hapus penjurian Beimbai
 - [ ] T2.1 Prefix route `sikerja`→`jarsiplus` (Formulir/Core/Pemohon)

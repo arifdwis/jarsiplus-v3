@@ -5,6 +5,7 @@ namespace Modules\Template\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Str;
 
 use Modules\Formulir\Entities\Permohonan;
 use Modules\Core\Entities\Histori;
@@ -72,8 +73,8 @@ class TksdController extends Controller
     { 
         $p = $request->all();
         $p['status'] = '0';
-        $p['kode'] = str_random(8);
-        $p['slug'] = str_slug($request->kode);
+        $p['kode'] = Str::random(8);
+        $p['slug'] = Str::slug($request->kode);
 
         $permohonan = $this->data::create($p);
         $pemohons =  $request['nama'];

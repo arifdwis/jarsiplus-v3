@@ -41,7 +41,7 @@ Route::prefix('Beimbai')->as('epanel.')->middleware(['auth'])->group(function ()
    Route::resources([
       'beimbai-permohonan' => 'Beimbai\PermohonanController',
       'beimbai-indikator' => 'Beimbai\IndikatorController',
-      'beimbai-permohonan.penilaian' => 'Beimbai\PenilaianController',
+      // 'beimbai-permohonan.penilaian' => 'Beimbai\PenilaianController',
       'beimbai-indikator.parameter' => 'Beimbai\ParameterController',
    ]);
 

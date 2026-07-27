@@ -42,17 +42,17 @@ return [
 
             'default' => [
 
-                'light' => asset('images/logo.svg'), 
+                'light' => '/images/logo.svg', 
 
-                'dark' => asset('images/logo.svg'),
+                'dark' => '/images/logo.svg',
 
             ],
 
             'mini' => [
 
-                'light' => asset('images/logo.svg'), 
+                'light' => '/images/logo.svg', 
 
-                'dark' => asset('images/logo.svg')
+                'dark' => '/images/logo.svg'
 
             ],
         ], 

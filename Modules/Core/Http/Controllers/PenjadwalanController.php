@@ -26,7 +26,8 @@ class PenjadwalanController extends Controller
         $this->data = $data;
         $this->kategori = $kategori;
 
-        $this->toIndex = route('epanel.permohonan.persetujuan.index',  [request()->segment(4)]);
+        $segment = request()->segment(4);
+        $this->toIndex = $segment ? route('epanel.permohonan.persetujuan.index', [$segment]) : '#';
         $this->toHome = route('epanel.permohonan.index');
         $this->prefix = 'epanel.permohonan.persetujuan';
         $this->cprefix = 'epanel.persetujuan';

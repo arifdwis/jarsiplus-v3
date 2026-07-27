@@ -27,7 +27,8 @@ class UrusanController extends Controller
         $this->data = $data;
         $this->kategori = $kategori;
 
-        $this->toIndex = route('epanel.kategori.urusan.index', request()->segment(4));
+        $segment = request()->segment(4);
+        $this->toIndex = $segment ? route('epanel.kategori.urusan.index', $segment) : '#';
         $this->prefix = 'epanel.kategori.urusan';
         $this->view = 'formulir::kategori.urusan';
 

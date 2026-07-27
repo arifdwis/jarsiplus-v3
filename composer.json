@@ -5,34 +5,52 @@
     "keywords": ["framework", "laravel"],
     "license": "MIT",
     "require": {
-        "php": "^7.3|^8.0",
-        "cviebrock/eloquent-sluggable": "^8.0",
-        "fruitcake/laravel-cors": "^2.0",
-        "guzzlehttp/guzzle": "^7.0.1",
-        "intervention/image": "^2.7",
-        "laravel/framework": "^8.75",
-        "laravel/helpers": "^1.5",
-        "laravel/sanctum": "^2.11",
-        "laravel/socialite": "^5.5",
-        "laravel/tinker": "^2.5",
-        "novay/nue": "2.26",
-        "novay/sso-client": "^1.0",
-        "nue-extensions/backup": "^1.00",
-        "nue-extensions/env": "^1.2",
-        "nue-extensions/lockscreen": "^1.0",
-        "nue-extensions/settings": "^1.20",
-        "nwidart/laravel-modules": "^8.3",
-        "ramsey/uuid": "^4.5",
-        "silviolleite/laravelpwa": "^2.0",
-        "torchlight/torchlight-laravel": "^0.5.11"
+        "php": "^8.2|^8.3|^8.4",
+        "cviebrock/eloquent-sluggable": "^11.0|^12.0",
+        "guzzlehttp/guzzle": "^7.8",
+        "intervention/image": "^2.7|^3.0",
+        "laravel/framework": "^12.0",
+        "laravel/helpers": "^1.7",
+        "laravel/sanctum": "^4.0",
+        "laravel/socialite": "^5.11",
+        "laravel/tinker": "^2.9",
+        "novay/nue": "*",
+        "novay/sso-client": "*",
+        "nue-extensions/backup": "*",
+        "nue-extensions/env": "*",
+        "nue-extensions/lockscreen": "*",
+        "nue-extensions/settings": "*",
+        "nwidart/laravel-modules": "^11.0|^12.0",
+        "ramsey/uuid": "^4.7",
+        "yajra/laravel-datatables-oracle": "^11.0|^12.0"
     },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "packages/nue"
+        },
+        {
+            "type": "path",
+            "url": "packages/sso-client"
+        },
+        {
+            "type": "path",
+            "url": "packages/nue-extensions/*"
+        }
+    ],
     "require-dev": {
-        "facade/ignition": "^2.5",
-        "fakerphp/faker": "^1.9.1",
-        "laravel/sail": "^1.0.1",
-        "mockery/mockery": "^1.4.4",
-        "nunomaduro/collision": "^5.10",
-        "phpunit/phpunit": "^9.5.10"
+        "fakerphp/faker": "^1.23",
+        "laravel/sail": "^1.26",
+        "mockery/mockery": "^1.6",
+        "nunomaduro/collision": "^8.0",
+        "phpunit/phpunit": "^10.5|^11.0",
+        "spatie/laravel-ignition": "^2.4"
+    },
+    "replace": {
+        "fruitcake/laravel-cors": "*",
+        "facade/ignition": "*",
+        "laravelcollective/html": "*",
+        "torchlight/torchlight-laravel": "*"
     },
     "autoload": {
         "psr-4": {
@@ -73,7 +91,10 @@
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "wikimedia/composer-merge-plugin": true
+        }
     },
     "minimum-stability": "dev",
     "prefer-stable": true

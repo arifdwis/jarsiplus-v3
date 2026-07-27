@@ -1,0 +1,30 @@
+<?php
+
+namespace :namespace\Providers;
+
+use Illuminate\Support\ServiceProvider;
+use Novay\Nue\Nue;
+use :namespace\:class_name;
+
+class :class_nameServiceProvider extends ServiceProvider
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function boot(:class_name $extension)
+    {
+        if (! :class_name::boot()) {
+            return ;
+        }
+
+        if ($views = $extension->views()) {
+            $this->loadViewsFrom($views, 'nue-:base_package');
+        }
+
+        $this->app->booted(function () {
+            :class_name::routes(__DIR__.'/../../routes/web.php');
+        });
+
+        Nue::extend(':base_package', __CLASS__);
+    }
+}

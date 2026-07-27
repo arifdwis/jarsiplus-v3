@@ -1,0 +1,29 @@
+@extends('layouts.app')
+@section('title', $title)
+
+@section('css')
+@endsection
+
+@section('js')
+@endsection
+
+@section('content')
+	
+	{{-- Breadcrumb example (you are free to remove this) --}}
+	@include('nue::partials.breadcrumb', ['lists' => [
+		'Extensions' => 'javascript:;', 
+		$title => 'active'
+	]])
+
+	<div class="d-flex bg-white align-items-center p-2">
+		<div class="col-sm">
+			<h2 class="page-header-title mb-0">{!! $title !!}</h2>
+			<p class="mb-0">Description.</p>
+		</div>
+		<div class="col-sm-auto d-sm-flex d-none"></div>
+	</div>
+
+	<div class="content container-fluid">
+		<h1>Welcome to Nue</h1>
+	</div>
+@endsection

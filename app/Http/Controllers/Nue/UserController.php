@@ -85,7 +85,7 @@ class UserController extends Controller
         $input['email'] = $explode[1];
         $input['name'] = $explode[2];
 
-        $random = str_random(10);
+        $random = Str::random(10);
         $input['password'] = bcrypt($random);
         $input['plain'] = $random;
 

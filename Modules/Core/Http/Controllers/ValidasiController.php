@@ -28,7 +28,8 @@ class ValidasiController extends Controller
         $this->data     = $data;
         $this->user     = $user;
 
-        $this->toIndex = route('epanel.file.validasi.index', [request()->segment(4)]);
+        $segment = request()->segment(4);
+        $this->toIndex = $segment ? route('epanel.file.validasi.index', [$segment]) : '#';
         $this->prefix = 'epanel.file.validasi';
         $this->view = 'core::file.validasi';
 

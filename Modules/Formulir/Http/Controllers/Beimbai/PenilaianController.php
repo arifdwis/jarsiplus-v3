@@ -27,7 +27,8 @@ class PenilaianController extends Controller
         $this->data = $data;
         $this->kategori = $kategori;
 
-        $this->toIndex = route('epanel.permohonan.penilaian.index', request()->segment(4));
+        $segment = request()->segment(4);
+        $this->toIndex = $segment ? route('epanel.permohonan.penilaian.index', $segment) : '#';
         $this->prefix = 'epanel.permohonan.penilaian';
         $this->cprefix = 'epanel.penilaian';
         $this->view = 'formulir::permohonan.penilaian';

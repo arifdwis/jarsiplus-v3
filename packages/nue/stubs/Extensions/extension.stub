@@ -1,0 +1,25 @@
+<?php
+
+namespace :namespace;
+
+use Novay\Nue\Extension;
+
+class :class_name extends Extension
+{
+    public $name = ':base_package';
+
+    public $views = __DIR__.'/../resources/views';
+
+    /**
+     * Enable this function if you want to automatically inject menu & permission
+     * for your package into nue.
+     * 
+     * {@inheritdoc}
+     */
+    // public static function import()
+    // {
+    //     parent::createMenu(':class_name', ':base_package', 'fa:asterisk');
+
+    //     parent::createPermission(':class_name', 'ext.:base_package', ':base_package*');
+    // }
+}
