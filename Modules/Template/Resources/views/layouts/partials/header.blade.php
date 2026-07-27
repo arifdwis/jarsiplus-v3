@@ -1,81 +1,35 @@
-<!-- loader -->
-    <div id="loader">
-        <div class="spinner-border text-primary" role="status"></div>
-    </div>
-    <!-- * loader -->
+<header class="jp-header">
+    <div class="jp-header__inner">
+        <a href="{{ route('welcome') }}" class="jp-brand" aria-label="JARSIPLUS Kota Samarinda">
+            <span class="jp-brand__mark" aria-hidden="true">J+</span>
+            <span>
+                <strong>JARSIPLUS</strong>
+                <small>Inovasi Daerah Kota Samarinda</small>
+            </span>
+        </a>
 
-    <!-- App Header -->
-    <div class="appHeader bg-primary scrolled">
-        <div class="left">
+        <button class="jp-menu-toggle" type="button" aria-expanded="false" aria-controls="jp-primary-navigation">
+            <span class="sr-only">Buka navigasi</span>
+            <span></span><span></span><span></span>
+        </button>
 
+        <nav id="jp-primary-navigation" class="jp-nav" aria-label="Navigasi utama">
+            <a href="{{ route('welcome') }}">Beranda</a>
+            <a href="{{ route('informasi.index') }}">Informasi</a>
+            <a href="{{ route('statistik.index') }}">Statistik</a>
+            <a href="{{ route('faq.index') }}">FAQ</a>
+        </nav>
+
+        <div class="jp-header__actions">
             @if(Nue::user())
-            
-            <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('header-logout-form').submit();" class="headerButton text-danger" title="Logout">
-                <ion-icon name="log-out-outline"></ion-icon>
-            </a>
-            <form id="header-logout-form" action="{{ route('logout') }}" method="POST" style="display:none;">
-                @csrf
-            </form>
-
+                <a class="jp-link" href="{{ route('settings') }}">Pengaturan</a>
+                <a class="jp-button jp-button--primary" href="{{ route('permohonan.index') }}">Permohonan Saya</a>
+                <a class="jp-link" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('header-logout-form').submit();">Keluar</a>
+                <form id="header-logout-form" action="{{ route('logout') }}" method="POST" class="d-none">@csrf</form>
             @else
-
-            <a href="{{ route('sso.authorize') }}" class="headerButton">
-                <ion-icon name="finger-print-outline"></ion-icon>
-            </a>
-            @endif
-
-
-            <div class="pageTitle">
-                {{env('APP_NAME')}}
-            </div>
-        </div>
-        
-        <div class="right"> 
-            @if(Nue::user())
-            <!-- top right -->
-            <div class="fab-button animate top-right dropdown">
-                <a href="#" class="fab" data-toggle="dropdown" style="background: #fff;">
-                    <ion-icon name="add-outline"></ion-icon>
-                </a>
-                <div class="dropdown-menu">
-                    <a class="dropdown-item" href="{{route('settings')}}">
-                        <ion-icon name="settings-outline"></ion-icon>
-                        <p>Pengaturan</p>
-                    </a>
-                    <a class="dropdown-item" href="{{route('permohonan.index')}}">
-                        <ion-icon name="briefcase-outline"></ion-icon>
-                        <p>Permohonan</p>
-                    </a>
-                    
-                </div>
-            </div>
-            <!-- * top right -->
-            @else
-
-            <div class="custom-control custom-switch">
-                <input type="checkbox" class="custom-control-input dark-mode-switch" id="darkmodeswitch">
-                <label class="custom-control-label" for="darkmodeswitch"></label>
-            </div>    
-
+                <a class="jp-link" href="{{ url('/jarsiplus/permohonan') }}">E-Panel Admin</a>
+                <a class="jp-button jp-button--primary" href="{{ route('sso.authorize') }}">Masuk Portal</a>
             @endif
         </div>
-
-
     </div>
-    <!-- * App Header -->
-
-    <!-- Search Component -->
-    <div id="search" class="appHeader">
-        <form class="search-form">
-            <div class="form-group searchbox">
-                <input type="text" class="form-control" placeholder="Search...">
-                <i class="input-icon">
-                    <ion-icon name="search-outline"></ion-icon>
-                </i>
-                <a href="javascript:;" class="ml-1 close toggle-searchbox">
-                    <ion-icon name="close-circle"></ion-icon>
-                </a>
-            </div>
-        </form>
-    </div>
-    <!-- * Search Component -->
+</header>

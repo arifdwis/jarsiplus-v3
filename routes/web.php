@@ -12,12 +12,6 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/offline', function(){
-    return view('vendor.laravelpwa.offline');
-});
-
-
-
 Route::get('home', 'App\Http\Controllers\HomeController@index')
     ->name('home')
     ->prefix(config('nue.route.prefix'));

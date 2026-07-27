@@ -1,0 +1,173 @@
+/*
+ * Mahakam Civic Atelier — JARSIPLUS 2026 CSS Architecture
+ * BEM namespace: .jp-* | Utilities: .u-*
+ */
+
+@import './jarsiplus-tokens.css';
+
+/* Layout Grid & Container */
+.l-container {
+  width: 100%;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+.l-grid {
+  display: grid;
+  gap: 24px;
+}
+
+.l-grid--2 { grid-template-columns: repeat(1, 1fr); }
+.l-grid--3 { grid-template-columns: repeat(1, 1fr); }
+.l-grid--4 { grid-template-columns: repeat(1, 1fr); }
+
+@media (min-width: 768px) {
+  .l-grid--2 { grid-template-columns: repeat(2, 1fr); }
+  .l-grid--3 { grid-template-columns: repeat(3, 1fr); }
+  .l-grid--4 { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 1024px) {
+  .l-grid--4 { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* Sections */
+.jp-section {
+  padding-top: 56px;
+  padding-bottom: 56px;
+}
+
+@media (min-width: 768px) {
+  .jp-section {
+    padding-top: 96px;
+    padding-bottom: 96px;
+  }
+}
+
+.jp-section--soft {
+  background-color: var(--jp-teal-soft);
+}
+
+.jp-section--strong {
+  background-color: var(--jp-surface-strong);
+  color: #FFFFFF;
+}
+
+.jp-section--strong h1,
+.jp-section--strong h2,
+.jp-section--strong h3 {
+  color: #FFFFFF !important;
+}
+
+/* Components */
+.jp-card {
+  background-color: var(--jp-surface);
+  border: 1px solid var(--jp-rule);
+  border-radius: var(--radius-card);
+  padding: 24px;
+  box-shadow: var(--shadow-soft);
+  transition: all var(--duration-fast) var(--ease-standard);
+}
+
+.jp-card:hover {
+  box-shadow: var(--shadow-hover);
+  border-color: var(--jp-rule-dark);
+}
+
+.jp-card--featured {
+  border-color: var(--jp-teal);
+  background-color: var(--jp-surface);
+}
+
+.jp-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--jp-font-heading);
+  font-weight: 700;
+  font-size: 0.875rem;
+  border-radius: var(--radius-button);
+  padding: 10px 20px;
+  border: 1px solid transparent;
+  text-decoration: none !important;
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-standard);
+}
+
+.jp-btn--primary {
+  background-color: var(--jp-teal) !important;
+  color: #FFFFFF !important;
+}
+
+.jp-btn--primary:hover {
+  background-color: var(--jp-teal-strong) !important;
+}
+
+.jp-btn--secondary {
+  background-color: var(--jp-surface) !important;
+  color: var(--jp-ink) !important;
+  border-color: var(--jp-rule) !important;
+}
+
+.jp-btn--secondary:hover {
+  background-color: var(--jp-paper) !important;
+}
+
+.jp-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: var(--radius-badge);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.jp-badge--0 { background-color: var(--jp-amber-soft); color: var(--jp-amber); border: 1px solid rgba(200, 135, 27, 0.2); }
+.jp-badge--1 { background-color: var(--jp-success-bg); color: var(--jp-success); border: 1px solid rgba(30, 158, 106, 0.2); }
+.jp-badge--2 { background-color: var(--jp-teal-soft); color: var(--jp-teal); border: 1px solid rgba(14, 143, 121, 0.2); }
+.jp-badge--9 { background-color: var(--jp-danger-bg); color: var(--jp-danger); border: 1px solid rgba(192, 68, 46, 0.2); }
+
+.jp-stat-tile {
+  background-color: var(--jp-surface);
+  border: 1px solid var(--jp-rule);
+  border-radius: var(--radius-card);
+  padding: 24px;
+}
+
+.jp-stat-tile__value {
+  font-family: var(--jp-font-heading);
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: var(--jp-ink);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+  margin-bottom: 4px;
+}
+
+.jp-stat-tile__label {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--jp-ink);
+  margin-bottom: 4px;
+}
+
+.jp-stat-tile__caption {
+  font-size: 0.75rem;
+  color: var(--jp-ink-subtle);
+}
+
+/* Utilities */
+.u-text-center { text-align: center; }
+.u-mt-sm { margin-top: 12px; }
+.u-mt-md { margin-top: 16px; }
+.u-mt-lg { margin-top: 24px; }
+.u-mt-xl { margin-top: 32px; }
+.u-mb-sm { margin-bottom: 12px; }
+.u-mb-md { margin-bottom: 16px; }
+.u-mb-lg { margin-bottom: 24px; }
+.u-mb-xl { margin-bottom: 32px; }

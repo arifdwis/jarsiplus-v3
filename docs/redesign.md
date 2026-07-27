@@ -1,238 +1,428 @@
-# Redesign Blade — JARSIPLUS 2026
+# Redesign Frontend — JARSIPLUS 2026
 
-**Dokumen**: Spesifikasi desain, arsitektur presentasi, dan langkah implementasi
-**Versi**: 3.0
-**Tanggal**: 2026-07-27
-**Rujukan**: `PRD.md`, `SRS.md`, `plan.md`, `checklist.md`, dan `design.md`
-**Cakupan**: semua frontend publik dan portal pemohon di `Modules/Template/resources/views`
-**Platform**: Laravel Blade + CSS + JavaScript progresif. **Tidak menggunakan Vue.js atau Inertia.**
+**Spesifikasi Desain, Arsitektur Presentasi & Rencana Implementasi**
+Frontend Publik & Portal Pemohon · Pure Laravel Blade (Buildless)
 
-> Hallmark · pre-emit critique: Philosophy 5 · Hierarchy 5 · Execution 5 · Specificity 5 · Restraint 5 · Variety 4
-
----
-
-## 1. Keputusan arsitektur dan batas keras
-
-Redesign dilakukan di atas aplikasi Blade yang sudah ada. Semua controller tetap mengembalikan `view()`, form tetap menggunakan Laravel Collective/HTML yang ada, pagination tetap server-rendered, dan AJAX pembahasan tetap memakai endpoint serta pola jQuery yang sudah berjalan. Tidak ada migrasi ke Vue, Inertia, Vite, SPA, atau perubahan kontrak data.
-
-| Area | Keputusan |
-| --- | --- |
-| Publik | Redesign penuh: beranda, informasi, statistik, FAQ, maintenance |
-| Pemohon | Redesign penuh: daftar permohonan, buat, detail, indikator, berkas, pembahasan, riwayat, finish, dan settings |
-| E-panel/Nue | Tidak disentuh: tidak ada edit markup, CSS, route, controller, atau asetnya |
-| Backend | Tidak disentuh: route, middleware, SSO, controller, model, query, validasi, payload, dan storage tetap parity |
-| JavaScript | Vanilla JS/jQuery yang sudah ada; interaksi baru harus progressive enhancement |
-
-Dokumen ini menggantikan arahan frontend Vue/Inertia pada `docs/redesign.md` versi sebelumnya. Jika `PRD.md`, `SRS.md`, atau `plan.md` masih menyebut port frontend ke Vue/Inertia, catat sebagai keputusan yang dibatalkan sebelum implementasi agar dokumentasi proyek konsisten.
+| | |
+|---|---|
+| **Versi** | 3.0 |
+| **Tanggal** | 2026-07-27 |
+| **Design system** | `design.md` — *Mahakam Civic Innovation* |
+| **Token existing** | `public/css/jarsiplus-tokens.css` (prefix `--jp-*`) |
+| **Rujukan** | PRD.md · SRS.md · plan.md |
+| **Lingkup** | `Modules/Template` (publik + pemohon). **Epanel/Nue TIDAK disentuh.** |
+| **Stack** | Laravel 12 · PHP 8.4 · Blade · CSS/JS statis — **tanpa Vite/Node/Vue** |
 
 ---
 
-## 2. Referensi, orisinalitas, dan arah elegan
-
-`design.md` dipakai sebagai referensi prinsip: kepemimpinan visual yang tegas, permukaan yang disiplin, dan CTA yang jelas. Implementasi JARSIPLUS tidak boleh menyalin elemen, aset, atau susunan Intel. Hasil akhirnya adalah sistem desain **Mahakam Civic Atelier**: layanan pemerintahan yang berwibawa, terang, tenang, dan terasa dibuat untuk perjalanan inovasi daerah.
-
-| Prinsip yang dipelajari | Terjemahan orisinal JARSIPLUS |
-| --- | --- |
-| Hierarki konten yang kuat | Hero berbentuk briefing layanan, bukan hero promosi produk atau carousel |
-| Kontras terang-gelap yang terkendali | Warm paper dan ink navy; bidang gelap hanya pada penekanan strategis |
-| CTA jelas dan ringkas | Aksi `Ajukan Inovasi` dan `Pelajari Alur` dengan bahasa layanan publik |
-| Disiplin ruang dan tipografi | Plus Jakarta Sans + Inter, ritme 4 px, garis Mahakam sebagai pembatas |
-
-### Larangan anti-plagiarisme
-
-- Jangan memakai logo, font, warna cyan/blue khas, copy, gambar, card news, footer, mega-menu, atau struktur carousel Intel.
-- Jangan membuat ulang komposisi halaman Intel dalam warna berbeda.
-- Jangan menggunakan gradient teks, glow neon, glassmorphism, mock browser/device, atau animasi autoplay.
-- Jangan membuat metrik, testimoni, penghargaan, atau foto Samarinda yang tidak tersedia secara resmi.
-- Jangan menggunakan foto stok sebagai bukti visual layanan pemerintah. Sebelum aset resmi tersedia, gunakan motif SVG/CSS orisinal yang abstrak.
-
----
-
-## 3. Sistem desain: Mahakam Civic Atelier
-
-**Genre**: modern-minimal civic editorial.
-**Nada**: profesional, elegan, hening, kredibel, dan hangat.
-**Metafora**: aliran Sungai Mahakam—garis rute sebagai perjalanan usulan, simpul sebagai bukti dan keputusan, ruang lega sebagai transparansi proses.
-
-Motif Mahakam dibuat sendiri sebagai SVG garis tipis dan titik node; sifatnya dekoratif (`aria-hidden="true"`) dan hanya muncul pada hero publik, pembatas section, footer, serta maintenance. Area kerja pemohon berfokus pada informasi dan tindakan, tanpa dekorasi hero.
-
-### Keluarga layout
-
-| Keluarga | Struktur | Halaman |
-| --- | --- | --- |
-| Civic briefing | Pesan utama → aksi → angka aktual → alur → tindakan lanjutan | Beranda |
-| Long document | Judul → konteks/navigasi → isi terbaca → CTA | Informasi, FAQ |
-| Public ledger | Ringkasan data → status → definisi data | Statistik |
-| Applicant workbench | Breadcrumb → status/konteks → aksi → data atau form | Seluruh pemohon |
+## Daftar Isi
+1. Ringkasan Eksekutif
+2. Prinsip & Batasan
+3. Arsitektur Informasi (Sitemap)
+4. Sistem Desain (Foundations)
+5. Arsitektur CSS & Penamaan
+6. Katalog Komponen
+7. Kerangka Layout (Shell)
+8. Beranda — Rancangan per Section (data nyata)
+9. Halaman Publik Lain
+10. Portal Pemohon (parity)
+11. Pola Interaksi & Status (toast, loading, empty, error)
+12. Aksesibilitas
+13. Responsif
+14. Performa & SEO
+15. Yang Dihapus (dead code & mobile-kit)
+16. Struktur Berkas & Aset
+17. Rencana Implementasi (fase + Definition of Done)
+18. Verifikasi & QA
+19. Risiko
+20. Keputusan Tertunda · Glosarium
 
 ---
 
-## 4. Token visual dan aturan CSS
+## 1. Ringkasan Eksekutif
 
-Satu file token Blade-only dibuat di `Modules/Template/Resources/assets/css/tokens.css` atau, bila aset template tetap di `public`, di `public/css/jarsiplus-tokens.css`. `layouts/master.blade.php` memuatnya setelah stylesheet legacy. Semua CSS redesign memakai token, bukan hex/font literal yang tersebar di view.
+Frontend publik JARSIPLUS saat ini dibangun di atas **mobile-UI-kit** (`#appCapsule`, `custom.css`
+150KB, jQuery 3.4 + Bootstrap 4.5 + ionicons + OwlCarousel via CDN) sehingga tampil sebagai aplikasi
+mobile, bukan situs pemerintahan. Lapisan **Vue 3 + Inertia + Vite** yang sempat dipasang **tidak
+pernah tersambung** — nol pemakaian `Inertia::render`; seluruh controller sudah mengembalikan Blade
+(`return view('template::...')`).
 
-| Peran | Token | Nilai | Penggunaan |
-| --- | --- | --- | --- |
-| Kanvas | `--jp-paper` | `#F7F5F0` | Latar terang utama |
-| Permukaan | `--jp-surface` | `#FFFFFF` | Panel, kartu, menu |
-| Ink | `--jp-ink` | `#14202B` | Heading dan teks penting |
-| Ink sekunder | `--jp-ink-muted` | `#52616B` | Body dan metadata |
-| Garis | `--jp-rule` | `#DED8CD` | Border dan divider |
-| Brand | `--jp-teal` | `#0E8F79` | CTA utama, link, focus |
-| Brand gelap | `--jp-teal-strong` | `#075D50` | Hover/active |
-| Brand lembut | `--jp-teal-soft` | `#E7F4F0` | Latar informatif |
-| Aksen | `--jp-amber` | `#C8871B` | Highlight terbatas dan peringatan |
-| Permukaan tegas | `--jp-ink-surface` | `#14202B` | Footer atau section penutup |
+Redesign ini merombak total tampilan depan menjadi **situs editorial ber-section** yang profesional,
+elegan, dan proporsional, mengikuti design system **Mahakam Civic Innovation** (kanvas terang, teal
+Mahakam, aksen amber), dijalankan **murni Blade + CSS/JS statis tanpa proses build**. Beranda diisi
+**data nyata** (statistik permohonan, banner event dari tabel `slider`, informasi dari `laman`, FAQ)
+agar hidup dan informatif. Seluruh fungsi & data pemohon dipertahankan (parity). Panel admin (Nue)
+tidak disentuh sama sekali.
 
-- Font display/UI: Plus Jakarta Sans; font body: Inter. Keduanya dipasang sebagai satu import/font-source terpusat dalam layout, bukan per halaman.
-- Spasi menggunakan token 4 px (`--space-3xs` sampai `--space-4xl`); section 56 px mobile dan 96 px desktop.
-- Radius: kartu 16 px; input dan tombol 10 px; chip/badge 8 px. Radius pill hanya untuk status kecil.
-- Shadow netral dan ringan; hover meningkatkan elevasi, bukan kontras warna secara berlebihan.
-- `html, body { overflow-x: clip; }`; judul panjang wajib `overflow-wrap: anywhere`.
-- Durasi 180/240/320 ms dengan easing bernama. `prefers-reduced-motion` menghapus gerak spasial.
+**Hasil yang diharapkan**: situs cepat (tanpa bundle JS berat), identitas visual orisinal (bukan
+jiplakan), mudah dirawat (satu bahasa: Blade + token CSS), dan konsisten lintas halaman.
 
 ---
 
-## 5. Struktur Blade dan komponen partial
+## 2. Prinsip & Batasan
 
-### Layout publik/pemohon
+### 2.1 Prinsip desain
+1. **Editorial, resmi, hangat** — kanvas terang, lapang, hierarki kuat. Bukan dark-tech, bukan mobile-app.
+2. **Identitas lokal Samakan (Mahakam)** — palet & motif sungai khas Samarinda; orisinal.
+3. **Kejelasan > dekorasi** — tipografi & whitespace memimpin; efek berat (blur, gradient bertumpuk) dihindari.
+4. **Proporsional** — ritme vertikal & grid konsisten (skala 4px), rasio tipografi major-third.
+5. **Aksesibel** — WCAG 2.1 AA; keyboard-first; `prefers-reduced-motion`.
+6. **Buildless & ringan** — CSS/JS statis; anggaran performa ketat (Bab 14).
 
-`template::layouts.master` menjadi shell untuk frontend Blade, tetapi markup layout diperbarui tanpa mengganti route atau kontrol server:
-
-- Header: wordmark JARSIPLUS, Beranda, Informasi, Statistik, FAQ, CTA Portal Pemohon, dan tautan E-Panel Admin yang jelas sebagai area terpisah.
-- Mobile: tombol menu semantik dengan `aria-expanded`, `aria-controls`, Escape untuk menutup, dan fokus terlihat.
-- Main: container responsif, breadcrumb opsional, flash notification Laravel yang tidak memblokir navigasi.
-- Footer: pernyataan ringkas Pemerintah Kota Samarinda serta link layanan; bukan sitemap besar atau footer ala korporasi teknologi.
-
-### Partial reusable
-
-| Partial/komponen Blade | Tanggung jawab |
-| --- | --- |
-| `components/button.blade.php` | Varian primary, secondary, quiet, destructive; ukuran sm/md; disabled/loading |
-| `components/card.blade.php` | Surface default, quiet, interactive; tanpa shadow berlebihan |
-| `components/status-badge.blade.php` | Status berbasis teks+warna; dapat dipakai seluruh permohonan |
-| `components/empty-state.blade.php` | Pesan kosong, tindakan kontekstual, tanpa ilustrasi generik |
-| `components/form-field.blade.php` | Label, bantuan, error, required marker, dan ID aksesibel |
-| `components/flow-motif.blade.php` | SVG motif Mahakam dekoratif |
-| `components/accordion-item.blade.php` | Tombol FAQ/informasi dengan atribut ARIA dan fallback konten terbuka |
-| `components/page-heading.blade.php` | Eyebrow opsional, heading, deskripsi, dan slot aksi |
-
-Partial bersifat tambahan dan dipanggil dengan `@include`/`@component`; view lama dapat dimigrasikan satu per satu. Tidak ada penghapusan massal view atau perombakan controller.
-
-### State interaksi
-
-Setiap kontrol memiliki default, hover, `:focus-visible`, active, disabled, loading, error, dan success bila berlaku. JavaScript hanya meningkatkan pengalaman:
-
-- Menu mobile dan accordion tetap menampilkan konten yang dapat dijangkau tanpa JavaScript.
-- Error validasi server Laravel tetap menjadi sumber kebenaran; JS tidak menduplikasi validasi bisnis.
-- Tombol submit menampilkan status proses dan mencegah klik ganda, tetapi form tetap dapat disubmit tanpa JavaScript.
+### 2.2 Batasan keras
+| # | Batasan |
+|---|---|
+| B1 | Tanpa Node/npm/Vite/Vue/Inertia. Tidak ada langkah build. |
+| B2 | Pure Blade via `template::layouts.master`. |
+| B3 | **Epanel/Nue off-limits** (lihat daftar Bab 16). |
+| B4 | Buang total mobile-kit (`#appCapsule`, `custom.css/js`, jQuery/BS4/ionicons). |
+| B5 | Layout web ber-section full-width, bukan kartu aplikasi mobile. |
+| B6 | Beranda & section pendukung memakai data nyata. |
+| B7 | Orisinal — adaptasi disiplin, bukan tata letak/aset referensi. |
 
 ---
 
-## 6. Spesifikasi per halaman
+## 3. Arsitektur Informasi (Sitemap)
 
-### Beranda — `template::index`
+```
+Publik (tanpa login)
+├─ /                  Beranda (hero, banner event, statistik, alur, informasi, FAQ, CTA)
+├─ /informasi         Daftar & detail Laman (berita/pengumuman)
+├─ /statistik         Dashboard publik (KPI + tren)
+├─ /faq               Pertanyaan umum (accordion + cari)
+├─ /maintenance       Halaman pemeliharaan
+└─ /login (auth)      Masuk SSO pemohon
 
-1. Hero civic briefing: wordmark/identitas, judul layanan, deskripsi singkat, CTA `Ajukan Inovasi Daerah`, CTA sekunder `Pelajari Alur`, dan `flow-motif` orisinal.
-2. Jika tidak login, fokus pada orientasi layanan. Jika login, gunakan sapaan singkat dan tindakan sesuai role tanpa mengubah aturan role yang ada.
-3. Ringkasan proses menampilkan tiga tahap: daftarkan, lengkapi bukti, verifikasi dan pemetaan—dengan satu alur garis, bukan tiga kartu SaaS identik.
-4. Statistik hanya ditampilkan bila controller menyediakan data aktual; bila tidak, beranda tidak menciptakan angka.
+Portal Pemohon (auth SSO) — parity fungsi lama
+├─ /permohonan                 Daftar permohonan (status)
+├─ /permohonan/create          Form pengajuan (stepper multi-segmen)
+├─ /permohonan/{uuid}/detail   Ringkasan + timeline
+├─ /permohonan/{uuid}/berkas   Bukti dukung per indikator
+├─ /permohonan/{uuid}/indikator, /pembahasan, /riwayat, /finish, /persetujuan, /kirim
+├─ /settings/{account,profile,corporate}
+└─ /beimbai/**                 (reskin; penjurian sudah dihapus)
 
-### Informasi — `template::informasi`
-
-- Ubah accordion legacy menjadi dokumen layanan yang elegan: heading, ringkasan tujuan, daftar isi ringkas, dan panel informasi yang dapat dibuka.
-- Isi `Laman` tetap berasal dari entity yang sama dan ditampilkan dengan tipografi long-form, heading semantik, tabel responsif, serta sanitasi output yang telah ada.
-- Pada layar kecil, navigasi konteks berada di atas isi; tidak ada sidebar sempit.
-
-### Statistik — `template::statistik.index`
-
-- Header menerangkan bahwa angka berasal dari rekam usulan sistem.
-- Kartu statistik menggunakan data controller yang sudah tersedia: proses, setuju, tolak, selesai, permohonan, dan pemohon.
-- Grafik per hari/per bulan yang sudah disediakan controller boleh dirapikan sebagai SVG/Chart.js ringan; tidak menambah endpoint maupun mengarang data.
-- Sertakan legenda status agar warna tidak menjadi satu-satunya pembeda.
-
-### FAQ — `template::faq.index`
-
-- Intro singkat, accordion satu kolom, serta marker fokus yang jelas.
-- Satu item terbuka sebagai default, pengguna dapat membuka atau menutup item lain. Pagination tetap memakai data server yang sekarang.
-- Pencarian dan kategori hanya ditambahkan setelah model/controller memberi data yang diperlukan.
-
-### Maintenance — `template::maintenance`
-
-- Pesan layanan yang singkat, aksi kembali ke beranda, dan motif Mahakam minimal.
-- Tidak menyebut estimasi pemulihan atau penyebab yang tidak diberikan operator.
-
-### Pemohon — `template::permohonan.*`
-
-| View | Arah visual | Perilaku yang wajib tetap |
-| --- | --- | --- |
-| `index` | Workbench dengan heading, legenda status sebagai panel ringkas, kartu permohonan berisi kode/status/judul/aksi | Logika biodata, periode pendaftaran, pengecualian user, modal penutupan, dan route tetap |
-| `create` + `form/*` | Breadcrumb, step header yang tenang, field terkelompok, sticky action hanya desktop | `Form::open`, field names, upload, select2, validasi dan route store tetap |
-| `show`/`detail` | Header usulan dan status, ringkasan metadata, navigasi konteks ke indikator/berkas/pembahasan/riwayat | Data `$data`, komentar juri, dan semua action lama tetap |
-| `indikator/*`, `berkas/*`, `data/*` | Daftar kerja dengan status bukti, area upload jelas, empty/error state | Payload upload, route, dan validasi file tetap |
-| `pembahasan/*` | Percakapan berjarak baik dengan identitas/waktu jelas; field balasan selalu terlihat | AJAX chat dan partial render controller tetap |
-| `riwayat`, `finish`, `penjadwalan` | Timeline dan summary status yang terbaca | Query/controller/action lama tetap |
-| `settings/*` | Form akun/profil/korporasi dengan label dan pesan error konsisten | Resource route serta update controller tetap |
+Admin (Nue) — DI LUAR LINGKUP
+└─ /jarsiplus/*  ·  /sikerja/*  ·  Nue auth   → tidak diubah
+```
+**Navigasi utama**: Beranda · Informasi · Statistik · FAQ. **CTA**: "Masuk Portal Pemohon".
+Tautan diskret "E-Panel Admin" → `/jarsiplus/...` (admin, terpisah).
 
 ---
 
-## 7. Langkah implementasi
+## 4. Sistem Desain (Foundations)
 
-1. **Sinkronkan keputusan dokumen**
-   - Tetapkan Blade sebagai frontend target dan perbarui referensi Vue/Inertia pada `PRD.md`, `SRS.md`, `plan.md`, serta `checklist.md` agar tidak kontradiktif.
-   - Perbarui `design.md` agar menjelaskan Mahakam Civic Atelier dan menghapus token/font/rujukan Intel yang akan dipakai implementasi.
+Selaras dengan token yang **sudah ada** di `jarsiplus-tokens.css` (prefix `--jp-*`). Redesign
+**memperluas & merapikan**, bukan mengganti nama.
 
-2. **Audit batas e-panel dan baseline**
-   - Catat screenshot/state e-panel sebelum mulai; exclude `resources/views/layouts/*`, `Modules/*` selain `Modules/Template/resources/views`, dan aset Nue dari perubahan.
-   - Jalankan smoke test publik dan pemohon sebagai baseline sebelum mengubah presentasi.
+### 4.1 Warna & peran
+| Token | Nilai | Peran | Kontras (teks) |
+|---|---|---|---|
+| `--jp-paper` | `#F7F5F0` | Kanvas utama | ink 900 = AAA |
+| `--jp-surface` | `#FFFFFF` | Permukaan kartu | ink 900 = AAA |
+| `--jp-surface-strong` | `#14202B` | Footer / band gelap | putih = AAA |
+| `--jp-ink` | `#14202B` | Judul & teks utama | — |
+| `--jp-ink-muted` | `#52616B` | Teks sekunder | AA di paper |
+| `--jp-ink-subtle` | `#71808A` | Metadata | AA (≥16px) |
+| `--jp-rule` | `#DED8CD` | Garis/border | — |
+| `--jp-teal` | `#0E8F79` | CTA utama, link | putih = AA |
+| `--jp-teal-strong` | `#075D50` | Hover CTA | putih = AAA |
+| `--jp-teal-soft` | `#E7F4F0` | Latar lembut/aktif | — |
+| `--jp-amber` | `#C8871B` | Aksen, highlight | putih = AA |
+| `--jp-success/danger` (+ `-bg`) | — | Status | — |
 
-3. **Buat fondasi CSS Blade**
-   - Tambahkan token, typography, grid, responsive rules, focus ring, reduced motion, dan pola komponen ke stylesheet publik baru.
-   - Muat stylesheet/font satu kali dari `template::layouts.master`; pertahankan stylesheet legacy sampai setiap view selesai dimigrasikan.
-   - Hindari CDN baru bila aset dapat dilayani lokal; tidak perlu memasang framework frontend baru.
+**Aturan status permohonan** (kode DB nyata): `0 → Proses` (info), `1 → Disetujui` (success),
+`2 → Selesai` (teal), `9 → Ditolak` (danger). Dipakai `x-badge`.
 
-4. **Refactor shell dan partial**
-   - Redesign `layouts/master.blade.php`, header, footer, bottom navigation, dan notifikasi hanya untuk area template publik/pemohon.
-   - Tambahkan partial komponen; pindahkan markup berulang secara inkremental tanpa mengubah variabel Blade yang dipakai view.
+### 4.2 Tipografi
+- **Heading**: Plus Jakarta Sans 600–800. **Body**: Inter 400–700, `line-height 1.6`.
+- **Self-host** woff2 (buang `@import` Google Fonts di `jarsiplus-tokens.css` → `@font-face` lokal).
+- Skala major-third:
 
-5. **Migrasikan halaman publik**
-   - Urutan: Beranda → Informasi → Statistik → FAQ → Maintenance.
-   - Satu halaman per commit; lakukan visual QA dan cek route/HTML sebelum melanjutkan.
+| Token | Ukuran | Pemakaian |
+|---|---|---|
+| `--t-display` | 3.75rem | Hero (desktop) |
+| `--t-4xl` | 3rem | Judul halaman |
+| `--t-3xl` | 2.25rem | Judul section |
+| `--t-2xl` | 1.875rem | Sub-judul |
+| `--t-xl` | 1.5rem | Judul kartu |
+| `--t-lg` | 1.25rem | Lead |
+| `--t-md` | 1.125rem | Body besar |
+| `--t-base` | 1rem | Body |
+| `--t-sm` | .875rem | Caption |
+| `--t-xs` | .75rem | Eyebrow/label |
 
-6. **Migrasikan workbench pemohon**
-   - Urutan: Index → Create/form segments → Show/detail → indikator/berkas → pembahasan → riwayat/finish/penjadwalan → settings.
-   - Pertahankan semua `name`, `id`, route helper, CSRF, selector JavaScript, data attributes, dan partial yang dipakai controller/AJAX.
+Angka statistik: `font-variant-numeric: tabular-nums`, berat 800.
 
-7. **Hapus legacy visual secara aman**
-   - Setelah semua view memakai sistem baru, hapus hanya CSS/JS legacy yang sudah dibuktikan tidak direferensikan oleh publik atau pemohon.
-   - Setiap penghapusan file/asset harus dibahas dan disetujui terpisah; e-panel dilarang menjadi target cleanup.
+### 4.3 Spasi, grid, elevasi, motion
+- **Grid 4px** (`--space-*` sudah ada). **Ritme section**: `--space-3xl`(64) mobile → 96px desktop.
+- **Layout**: container `max-width 1200px`, gutter 24px, 12-col fluid (CSS grid).
+- **Radius**: kartu 16, input 10, badge 8 (`--radius-*`).
+- **Elevasi**: `--shadow-soft` (default), `--shadow-hover`. Tanpa glow warna.
+- **Motion**: `--dur` 240ms, `--ease-out`. Animasi masuk halus (fade/translate 8px), hormati reduced-motion.
 
-8. **QA, aksesibilitas, dan rilis**
-   - Uji route, validasi server, upload, pagination, modal penutupan, AJAX chat, SSO, dan flash notification.
-   - Uji 320, 375, 414, 768, dan desktop; keyboard-only; zoom 200%; reduced motion; serta kontras WCAG AA.
-   - Bandingkan e-panel dengan baseline: tampilan dan fungsi harus identik.
+### 4.4 Ikonografi & motif
+- **Ikon**: SVG sprite garis tunggal `img/icons/sprite.svg` (`<svg><use href="#nama"></svg>`), stroke seragam.
+- **FlowMotif**: garis alur Sungai Mahakam (SVG orisinal) sebagai pembatas section & tekstur hero/footer.
 
 ---
 
-## 8. Kriteria penerimaan
+## 5. Arsitektur CSS & Penamaan
 
-- [ ] Tidak ada Vue, Inertia, SPA, atau toolchain frontend baru yang ditambahkan untuk redesign ini.
-- [ ] Semua route publik dan pemohon tetap `view()` Blade serta seluruh form/action mempertahankan kontrak backend.
-- [ ] E-panel/Nue tidak berubah pada diff, screenshot, dan smoke test.
-- [ ] Beranda tidak memiliki carousel/autoplay, angka fiktif, atau elemen yang meniru Intel.
-- [ ] CSS baru memakai token dan tidak menyebarkan warna/font literal baru ke berbagai view.
-- [ ] Navigasi, accordion, modal, form, upload, dan chat tetap dapat dioperasikan keyboard serta tetap memiliki fallback tanpa JavaScript.
-- [ ] Tidak ada horizontal scroll pada 320/375/414/768 px; CTA, breadcrumb, dan tautan navigasi tidak pecah dua baris.
-- [ ] `php artisan route:list`, test suite, dan smoke test publik/pemohon/SSO tetap hijau.
-- [ ] Kontras teks dan focus indicator memenuhi WCAG AA; target kontrol utama minimal 44 × 44 px bila ruang memungkinkan.
+- **Buildless**: dua file — `jarsiplus-tokens.css` (variabel, `@font-face`) + `jarsiplus.css` (base+layout+komponen).
+  Selaras/menggantikan `jarsiplus-tokens.css`/`jarsiplus.css` yang ada (pertahankan nama `jarsiplus*`
+  bila ingin minim ubah referensi `master.blade`).
+- **Lapisan** (ITCSS ringkas): `1) tokens → 2) base/reset → 3) layout (l-*) → 4) komponen (jp-*) → 5) utilities (u-*)`.
+- **Penamaan BEM prefiks `jp-`**: `.jp-card`, `.jp-card__title`, `.jp-card--featured`. Utilities pendek:
+  `.u-mt-lg`, `.u-text-center`. **Tak ada hex hardcoded** — semua `var(--jp-*)`.
+- Blade Components (`<x-...>`) membungkus markup; kelas CSS tetap `jp-*`.
 
 ---
 
-## 9. Urutan commit yang disarankan
+## 6. Katalog Komponen
 
-1. `docs: define Blade-first Mahakam redesign`
-2. `style: add public Blade design tokens and foundations`
-3. `refactor: rebuild public Blade shell and partials`
-4. `feat: redesign public Blade pages`
-5. `feat: redesign applicant Blade workbench`
-6. `test: verify Blade frontend parity and accessibility`
+Lokasi: `Modules/Template/Resources/views/components/`. Tiap komponen: anatomi + varian + state.
+
+| Komponen | Varian | State | Catatan |
+|---|---|---|---|
+| `x-btn` | primary, secondary, quiet, accent · sm/md/lg | hover, active, focus-visible, disabled, loading | radius 10; ikon opsional |
+| `x-card` | default, featured, media | hover-lift | `--shadow-soft`→`--shadow-hover` |
+| `x-stat-tile` | plain, trend | — | angka tabular, label, delta ±% |
+| `x-badge` | status(0/1/2/9), neutral | — | teks + titik warna |
+| `x-section` | light, soft(teal-soft), strong(dark) | — | eyebrow+judul+lead+slot; pengatur ritme |
+| `x-field` | text, textarea, select, file | default, focus, error, disabled | label+helper+error; `aria-describedby` |
+| `x-file-drop` | single, multi | drag-over, uploading | progres; validasi tipe/ukuran |
+| `x-accordion(-item)` | — | open/closed | `button`+`aria-expanded`; keyboard |
+| `x-stepper` | horizontal, vertical(mobile) | current/done/todo | tahap form permohonan |
+| `x-timeline` | — | — | riwayat & pembahasan (ganti chat kit) |
+| `x-carousel` | — | manual, pause-on-hover | banner event; tanpa autoplay |
+| `x-empty` / `x-skeleton` | — | — | kondisi kosong/loading |
+| `x-toast` | success, error, info | auto-dismiss | ganti dialog jQuery `notify()` |
+| `x-icon` | — | — | wrapper sprite |
+
+---
+
+## 7. Kerangka Layout (Shell)
+
+`master.blade.php` dirombak — buang `#appCapsule`, CDN kit, dialog jQuery. Struktur baru:
+
+```blade
+<!doctype html><html lang="id"><head>
+  <meta viewport ...>  <title>@yield('title', config('app.name'))</title>
+  <meta name="description" ...>  {{-- SEO Bab 14 --}}
+  <link rel="icon" href="img/brand/favicon.svg">
+  <link rel="stylesheet" href="css/jarsiplus-tokens.css?v=APP_VERSION">
+  <link rel="stylesheet" href="css/jarsiplus.css?v=APP_VERSION">
+  @stack('css')
+</head><body class="jp-site">
+  @include('template::layouts.partials.topbar')   {{-- instansi/kontak, tipis --}}
+  @include('template::layouts.partials.header')    {{-- .jp-header sticky: logo, nav, CTA --}}
+  <main id="main">@yield('content')</main>
+  @include('template::layouts.partials.footer')    {{-- .jp-footer statement, surface-strong --}}
+  <x-toast/>                                        {{-- render kondisional dari notify() --}}
+  <script defer src="js/jarsiplus.js?v=APP_VERSION"></script>
+  @stack('js')
+</body></html>
+```
+
+**Header** (desktop): logo kiri · nav horizontal (Beranda/Informasi/Statistik/FAQ) · kanan CTA
+"Masuk Portal Pemohon" + link "E-Panel Admin". Sticky, shadow muncul saat scroll. **Mobile**: tombol
+menu → drawer (`role="dialog"`, focus-trap, Esc), **tanpa bottom-nav**.
+**Footer**: pernyataan brand + kontak instansi + tautan penting + motif; **bukan** sitemap 7 kolom.
+
+---
+
+## 8. Beranda — Rancangan per Section (data nyata)
+
+`TemplateController@index` diperkaya query (model sudah ada). Wireframe & sumber data tiap section:
+
+**S1 · Hero**
+```
+┌───────────────────────────────────────────────┐
+│ [eyebrow] PEMERINTAH KOTA SAMARINDA            │
+│  Jaringan Inovasi Plus Daerah                  │   ~ FlowMotif sungai (SVG)
+│  Ajukan & pantau inovasi daerah Anda.          │
+│  [ Ajukan Inovasi ]  [ Pelajari Alur ]         │
+└───────────────────────────────────────────────┘
+```
+Data: statis + `config('app.name')`.
+
+**S2 · Banner Event / Pengumuman** — `x-carousel` manual, pause-on-hover.
+Data: `Modules\Core\Entities\Slider::latest()->take(5)` → field `judul`, `label`, `file` (gambar),
+`slug`. Kosong → sembunyikan section.
+
+**S3 · Statistik Ringkas** — baris `x-stat-tile`.
+Data (pola sama `StatistikController`): `Permohonan::count()` (Total), `where('status',1)` (Disetujui),
+`where('status',0)` (Proses), `Pemohon::count()` (Inovator). Angka tabular + ikon.
+
+**S4 · Alur Pengajuan** — 4 langkah bernomor + ikon sprite.
+`Daftar/Login SSO → Isi indikator & unggah bukti → Pembahasan & validasi → Persetujuan`. Statis.
+
+**S5 · Informasi Terbaru** — grid `x-card` (3–6).
+Data: `Laman::where('status',1)->latest()->take(6)` → `label`, ringkasan `content` (strip+limit),
+`slug` → link `/informasi/{slug}`.
+
+**S6 · Inovasi Terbaru/Unggulan** *(opsional, konfirmasi)* — grid kartu.
+Data: `Permohonan::where('status',1)->latest()->take(6)` (judul, kategori, pemohon).
+
+**S7 · FAQ Ringkas** — `x-accordion` 4–5 + tautan `/faq`.
+Data: tabel `faq` (`Faq::take(5)` / `DB::table('faq')`).
+
+**S8 · CTA Penutup** — band `--jp-teal-soft`, ajakan masuk portal.
+
+**S9 · Footer** — lihat Bab 7.
+
+> Setiap section memakai `x-section` (eyebrow+judul+lead) untuk ritme & proporsi konsisten. Section
+> tanpa data menampilkan `x-empty` atau disembunyikan — beranda tidak pernah tampak sepi.
+
+---
+
+## 9. Halaman Publik Lain
+
+| Halaman | View | Rancangan | Data |
+|---|---|---|---|
+| Informasi | `template::informasi` | Daftar artikel + detail; kolom baca max 72ch, LH 1.6; sidebar daftar isi; breadcrumb | `Laman` (status 1) |
+| Statistik | `template::statistik.index` | KPI `x-stat-tile` + **tren CSS/SVG murni** (bar 7-hari & 12-bulan) + tabel 10 pemohon terbaru | `StatistikController` (sudah menyediakan `permohonanPerHari/Bulan`, `pemohon`, count status) |
+| FAQ | `template::faq.index` | `x-accordion` + pencarian client-side (vanilla) + chip kategori | tabel `faq` |
+| Maintenance | `template::maintenance` | Layar tenang ber-motif, pesan + estimasi | statis |
+| Login | `resources/views/auth/login.blade.php` | Reskin `x-field`; alur SSO tetap | — |
+
+Grafik statistik **tanpa library**: bar chart = elemen `<div>`/`<rect>` SVG tinggi proporsional dari
+array `counts`; aksesibel via `<title>`/tabel pendamping.
+
+---
+
+## 10. Portal Pemohon (parity, buang appCapsule)
+
+Reskin ke Mahakam; logika/route/props tetap. Semua `@extends('template::layouts.master')` baru.
+
+| Alur | View | Rancangan |
+|---|---|---|
+| Daftar | `permohonan/index` | Tabel/kartu + `x-badge` status (0/1/2/9), filter status, `x-empty` |
+| Buat | `permohonan/create` + `form/segment_{1,2,3}` | `x-stepper` 3 segmen, `x-field`/`x-file-drop`, ringkasan pra-kirim |
+| Detail | `permohonan/detail` | Header status + `x-timeline` riwayat + panel berkas & indikator |
+| Berkas | `permohonan/berkas/**` | `x-file-drop` per indikator, daftar bukti |
+| Indikator | `permohonan/indikator/**`, `indikator/data/**` | Form penilaian mandiri + unggah |
+| Pembahasan | `permohonan/pembahasan/**` | `x-timeline` diskusi (ganti chat kit); realtime REST/Reverb-ready |
+| Pengaturan | `settings/{account,profile,corporate}/form` | `x-field` |
+| Roles | `roles/{pemohon,tksd,null}` | Reskin state |
+| Beimbai | `beimbai/permohonan/**` | Reskin sama (penjurian sudah dihapus) |
+
+---
+
+## 11. Pola Interaksi & Status
+
+- **Toast** (`x-toast`): ganti dialog modal jQuery. Render dari `notify()` server → elemen statis
+  `role="status"`, auto-dismiss 4s, dismissible, stack kanan-atas. Tanpa BS4/jQuery.
+- **Loading**: `x-skeleton` untuk kartu/daftar (bila ada fetch); form submit → tombol state `loading`.
+- **Empty**: `x-empty` (ikon + pesan + aksi). **Error**: banner inline `--jp-danger-bg`.
+- **Validasi form**: pesan Laravel → `x-field` error + `aria-invalid`, fokus ke field pertama gagal.
+
+`jarsiplus.js` (vanilla, ±1 file) menangani: drawer, accordion, carousel manual, toast dismiss,
+counter angka statistik, pencarian FAQ, sticky header. Tanpa dependensi.
+
+---
+
+## 12. Aksesibilitas (WCAG 2.1 AA)
+- Kontras teks ≥ 4.5:1 (≥3:1 teks besar) — pasangan warna Bab 4.1 lulus.
+- `:focus-visible` ring `--jp-teal` 2px + offset; tak ada `outline:none` tanpa pengganti.
+- Landmark: `header/nav/main/footer`; `main#main` + skip-link "Lewati ke konten".
+- Drawer/accordion/carousel: pola ARIA benar, operable keyboard, `aria-expanded/controls`.
+- Gambar `alt` bermakna; ikon dekoratif `aria-hidden`. Target sentuh ≥44px.
+- Hormati `prefers-reduced-motion` (matikan animasi non-esensial). Bahasa `lang="id"`.
+
+## 13. Responsif
+| Breakpoint | Lebar | Perilaku |
+|---|---|---|
+| Mobile | ≤640px | 1 kolom; nav→drawer; stepper vertikal; stat 2×2 |
+| Tablet | 641–1024 | 2 kolom; container padding 24 |
+| Desktop | ≥1025 | 12-col; container 1200; ritme 96px |
+
+Fluida, `max-width:100%` media, tabel lebar `overflow-x:auto`; **body tanpa horizontal scroll**.
+
+## 14. Performa & SEO
+- **Anggaran**: CSS ≤ 60KB, JS ≤ 20KB (jarsiplus.js), **0 dependensi CDN**, font self-host `font-display:swap`.
+  Gambar `loading="lazy"` + dimensi eksplisit; hero image `preload`.
+- Tanpa bundle Vue (hemat ±252KB JS lama). Cache-bust `?v=config('app.version')`.
+- **SEO/meta**: `<title>` per halaman, meta description dinamis, Open Graph (`og:title/description/image`),
+  canonical, `robots`, data terstruktur `GovernmentOrganization` (JSON-LD) di beranda. `sitemap.xml`.
+
+## 15. Yang Dihapus
+
+**Scaffold Vue/Inertia/Vite (dead code):** `package*.json`, `vite.config.js`, `node_modules/`,
+`public/build/`, `resources/js/**`, `resources/css/{app,tokens}.css`, `resources/views/app.blade.php`,
+`app/Http/Middleware/HandleInertiaRequests.php` (+ `app/Http/Kernel.php:44`), composer
+`inertiajs/inertia-laravel` (→ `composer update`, `php artisan optimize:clear`), stub Mix
+`Modules/{Template,Pemohon}/webpack.mix.js`+`package.json`+`Resources/assets/**`.
+
+**Mobile-kit lama:** di `master.blade.php` — `#appCapsule`, `custom.css`, `custom.js`, CDN jQuery/BS4/
+ionicons/lity/OwlCarousel/mobile-detect/circle-progress, dialog `$('#dialog-box').modal`, favicon
+`logo-mobile/...`. Partial orphan `layouts/partials/{bottom,homescreen,notification,sidebar}.blade.php`.
+Aset `public_html/css/custom.css`, `public_html/js/{custom,chat,map,permohonan}.js`, `images/logo-mobile/**`.
+
+## 16. Struktur Berkas & Aset
+
+**Web root**: tetapkan `public_html/` tunggal; sinkron `public/` (symlink). Aset baru:
+```
+public_html/
+  css/  jarsiplus-tokens.css  jarsiplus.css
+  js/   jarsiplus.js
+  fonts/  PlusJakartaSans-*.woff2  Inter-*.woff2
+  img/  brand/ (logo,favicon)  motif/ (flow.svg)  icons/sprite.svg
+```
+**Diubah:** `Modules/Template/Resources/views/layouts/{master,partials/*}.blade.php`,
+`components/**` (baru), `{index,informasi,statistik/index,faq/index,maintenance}.blade.php`,
+`{permohonan,settings,roles,beimbai}/**`, `Http/Controllers/{TemplateController,StatistikController}.php`,
+`resources/views/auth/login.blade.php`.
+
+**JANGAN sentuh (Epanel/Nue):** `resources/views/layouts/app.blade.php` & `layouts/*` admin,
+`resources/views/dashboard.blade.php`, `packages/nue*`, `Modules/{Formulir,Pemohon(admin),Kategori,Wilayah,Core,Faq}`
+sisi admin, `app/Http/Controllers/HomeController.php`, route `epanel.*` / Nue.
+
+## 17. Rencana Implementasi (fase + Definition of Done)
+
+| Fase | Isi | DoD |
+|---|---|---|
+| **R0 Cabut build** | Hapus scaffold Vue/Inertia (Bab 15), buang composer inertia, `optimize:clear` | App jalan, semua route publik/pemohon OK, tak ada `@vite`/`@inertia` |
+| **R1 Fondasi** | Tokens+`@font-face` self-host, `jarsiplus.css` base, `jarsiplus.js`, sprite, FlowMotif, satu web root | Halaman apa pun render dgn token; 0 CDN; Lighthouse a11y ≥95 pada shell |
+| **R2 Shell & komponen** | `master` baru, topbar/header/footer, `x-*` (Bab 6) | Header sticky + drawer aksesibel; toast gantikan modal; komponen terpakai |
+| **R3 Beranda** | Perkaya `TemplateController@index`, 9 section (Bab 8) | Beranda berisi data nyata (slider/statistik/laman/faq); responsif; tanpa section sepi |
+| **R4 Publik lain** | Informasi, Statistik (grafik SVG), FAQ, Maintenance, Login | Parity data; grafik akurat dari `StatistikController` |
+| **R5 Pemohon** | Reskin `permohonan/**`, `settings/**`, `roles/**`, `beimbai/**` | Alur end-to-end parity; tanpa kelas kit |
+| **R6 QA & bersih** | Hapus partial/aset lama; audit; uji | Bab 18 semua hijau |
+
+Prinsip: satu section/halaman = satu commit; parity diverifikasi sebelum lanjut.
+
+## 18. Verifikasi & QA
+- [ ] Tanpa `node_modules`/`vite`/`vue`/inertia; cukup `composer install`; tidak ada `npm`.
+- [ ] Beranda ber-section berisi data nyata (banner `slider`, statistik, `laman`, FAQ) — tidak sepi.
+- [ ] Tak ada `#appCapsule`, `custom.css/js`, jQuery/BS4/ionicons, atau aset CDN eksternal.
+- [ ] Alur pemohon parity (ajukan → unggah → pembahasan → kirim → riwayat).
+- [ ] Epanel Nue tak berubah — `/jarsiplus/*` visual & fungsi sama.
+- [ ] Statistik cocok dengan angka `StatistikController` (status 0/1/2/9, tren 7h/12bln).
+- [ ] Audit desain: kanvas terang, tanpa gradient-clip/glassmorphism; kontras AA; keyboard OK.
+- [ ] Responsif 360–1440px tanpa horizontal scroll; Lighthouse Perf ≥90, A11y ≥95.
+
+## 19. Risiko
+| Risiko | Dampak | Mitigasi |
+|---|---|---|
+| View pemohon banyak pakai kelas kit | Reskin makan waktu | Kerjakan per alur, komponen `x-*` reusable |
+| `notify()` bergantung modal BS4 | Flash message rusak | `x-toast` statis membaca `notify()` |
+| Split `public/` vs `public_html/` | Aset 404 | Satukan web root di R1 |
+| Grafik tanpa lib | Effort tren chart | SVG sederhana dari array `counts` |
+| Font self-host lisensi | Legal | Pakai font open-source (Plus Jakarta Sans & Inter, OFL) |
+
+## 20. Keputusan Final · Glosarium
+
+**Dikunci (mengikuti rekomendasi):**
+| Keputusan | Pilihan final |
+|---|---|
+| Section S6 Inovasi Unggulan | **Dipakai** (data `Permohonan` status 1) |
+| Grafik statistik | **SVG/CSS murni** (buildless, dari array `counts`) |
+| Interaktivitas | **Vanilla JS** satu file `jarsiplus.js` (tanpa Alpine/npm) |
+| Banner event | **Tabel `slider`** yang ada (tanpa entitas baru) |
+| Nama file aset | **Pertahankan** `jarsiplus-tokens.css` / `jarsiplus.css` / `jarsiplus.js` |
+
+**Glosarium:** *Epanel* = panel admin Nue · *Laman* = konten halaman/berita (`Modules\Core`) ·
+*Slider* = banner (`Modules\Core`) · *Permohonan* status: 0 Proses·1 Disetujui·2 Selesai·9 Ditolak ·
+*FlowMotif* = motif garis sungai Mahakam · *Buildless* = tanpa proses kompilasi aset.
