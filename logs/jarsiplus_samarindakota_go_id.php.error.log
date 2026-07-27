@@ -1,0 +1,20 @@
+[12-May-2023 17:44:30 UTC] PHP Fatal error:  Cannot redeclare Modules\Template\Http\Controllers\IndikatorController::update() in /home/jarsiplus/Modules/Template/Http/Controllers/IndikatorController.php on line 64
+[17-May-2023 19:11:29 UTC] PHP Fatal error:  Cannot declare class Modules\Formulir\Entities\Kategori, because the name is already in use in /home/jarsiplus/Modules/Formulir/Entities/Urusan.php on line 10
+[18-May-2023 17:47:04 UTC] PHP Fatal error:  Namespace declaration statement has to be the very first statement or after any declare call in the script in /home/jarsiplus/Modules/Formulir/Http/Controllers/ParameterController.php on line 4
+[18-May-2023 17:51:00 UTC] PHP Fatal error:  Namespace declaration statement has to be the very first statement or after any declare call in the script in /home/jarsiplus/Modules/Formulir/Http/Controllers/ParameterController.php on line 4
+[18-May-2023 17:52:36 UTC] PHP Fatal error:  Namespace declaration statement has to be the very first statement or after any declare call in the script in /home/jarsiplus/Modules/Formulir/Http/Controllers/ParameterController.php on line 4
+[21-May-2023 16:57:09 UTC] PHP Fatal error:  Cannot use App\Observers\PenjadwalanObserver as PenjadwalanObserver because the name is already in use in /home/jarsiplus/app/Providers/AppServiceProvider.php on line 17
+[24-May-2023 09:41:48 UTC] PHP Fatal error:  Cannot redeclare Modules\Formulir\Entities\DataDukung::permohonan() in /home/jarsiplus/Modules/Formulir/Entities/DataDukung.php on line 114
+[24-May-2023 09:50:00 UTC] PHP Fatal error:  Cannot redeclare tgl_indo() (previously declared in /home/jarsiplus/Modules/Core/Helpers/Enterwind.php:156) in /home/jarsiplus/Modules/Core/Helpers/Enterwind.php on line 191
+[25-May-2023 07:44:13 UTC] PHP Fatal error:  Namespace declaration statement has to be the very first statement or after any declare call in the script in /home/jarsiplus/Modules/Core/Http/Controllers/FileController.php on line 3
+[26-May-2023 06:56:14 UTC] PHP Parse error:  Unmatched '}' in /home/jarsiplus/app/Helpers/Enterwind.php on line 182
+[26-May-2023 06:56:16 UTC] PHP Parse error:  Unmatched '}' in /home/jarsiplus/app/Helpers/Enterwind.php on line 182
+[26-May-2023 06:56:19 UTC] PHP Parse error:  Unmatched '}' in /home/jarsiplus/app/Helpers/Enterwind.php on line 182
+[26-May-2023 06:56:20 UTC] PHP Parse error:  Unmatched '}' in /home/jarsiplus/app/Helpers/Enterwind.php on line 182
+[26-May-2023 06:56:22 UTC] PHP Parse error:  Unmatched '}' in /home/jarsiplus/app/Helpers/Enterwind.php on line 182
+[26-May-2023 06:56:38 UTC] PHP Parse error:  Unmatched '}' in /home/jarsiplus/app/Helpers/Enterwind.php on line 182
+[26-May-2023 06:56:45 UTC] PHP Parse error:  Unmatched '}' in /home/jarsiplus/app/Helpers/Enterwind.php on line 182
+[26-May-2023 06:56:45 UTC] PHP Parse error:  Unmatched '}' in /home/jarsiplus/app/Helpers/Enterwind.php on line 182
+[26-May-2023 06:56:57 UTC] PHP Parse error:  Unmatched '}' in /home/jarsiplus/app/Helpers/Enterwind.php on line 182
+[26-May-2023 06:56:58 UTC] PHP Parse error:  Unmatched '}' in /home/jarsiplus/app/Helpers/Enterwind.php on line 182
+[26-May-2023 06:56:59 UTC] PHP Parse error:  Unmatched '}' in /home/jarsiplus/app/Helpers/Enterwind.php on line 182

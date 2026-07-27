@@ -1,0 +1,114 @@
+@extends('layouts.blank')
+@section('title', __('Confirm Password'))
+
+@section('js')
+    <script>
+        window.onload = function () {
+            new HSTogglePassword('.js-toggle-password')
+        }
+    </script>
+@endsection
+
+@section('content')
+    <main id="content" role="main" class="main pt-0">
+        <div class="container-fluid px-3">
+            <div class="row">
+                <div class="col-lg-8 d-lg-flex justify-content-center align-items-center min-vh-lg-100 position-relative bg-light px-0">
+                    <div class="position-absolute top-0 start-0 end-0 mt-3 mx-3">
+                        <div class="d-flex justify-content-between">
+                            <a href="/">
+                                <img class="w-100" height="50" src="{{ config('nue.brand.logo.default.light') }}" alt="" data-hs-theme-appearance="default" style="min-width: 7rem; max-width: 7rem;">
+                                <img class="w-100" height="50" src="{{ config('nue.brand.logo.default.dark') }}" alt="" data-hs-theme-appearance="dark" style="min-width: 7rem; max-width: 7rem;">
+                            </a>
+                            <div class="dropdown dropup zi-2">
+                                <button type="button" class="btn btn-ghost-secondary btn-icon rounded-circle" id="selectThemeDropdown" data-bs-toggle="dropdown" aria-expanded="false" data-bs-dropdown-animation></button>
+                                <div class="dropdown-menu navbar-dropdown-menu navbar-dropdown-menu-borderless" aria-labelledby="selectThemeDropdown">
+                                    <a class="dropdown-item" href="#" data-icon="bi-moon-stars" data-value="auto">
+                                        <i class="bi-moon-stars me-2"></i>
+                                        <span class="text-truncate" title="Auto (system default)">Auto (system default)</span>
+                                    </a>
+                                    <a class="dropdown-item" href="#" data-icon="bi-brightness-high" data-value="default">
+                                        <i class="bi-brightness-high me-2"></i>
+                                        <span class="text-truncate" title="Default (light mode)">Default (light mode)</span>
+                                    </a>
+                                    <a class="dropdown-item active" href="#" data-icon="bi-moon" data-value="dark">
+                                        <i class="bi-moon me-2"></i>
+                                        <span class="text-truncate" title="Dark">Dark</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-none d-lg-block" style="max-width: 23rem;">
+                        <div class="text-center mb-5">
+                            <img class="img-fluid" src="https://cdn.btekno.id/templates/v2/svg/illustrations/oc-chatting.svg" alt="" style="width: 12rem;" data-hs-theme-appearance="default">
+                            <img class="img-fluid" src="https://cdn.btekno.id/templates/v2/svg/illustrations-light/oc-chatting.svg" alt="" style="width: 12rem;" data-hs-theme-appearance="dark">
+                        </div>
+                        <div class="mb-5">
+                            <h2 class="display-5">Build digital products with:</h2>
+                        </div>
+                        <ul class="list-checked list-checked-lg list-checked-primary list-py-2">
+                            <li class="list-checked-item">
+                                <span class="d-block fw-semi-bold mb-1">All-in-one tool</span>
+                                Build, run, and scale your apps - end to end
+                            </li>
+                            <li class="list-checked-item">
+                                <span class="d-block fw-semi-bold mb-1">Easily add &amp; manage your services</span>
+                                It brings together your tasks, projects, timelines, files and more
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-4 d-flex justify-content-center align-items-center min-vh-lg-100">
+                    <div class="w-100 content-space-t-4 content-space-t-lg-2 content-space-b-1" style="max-width: 25rem;">
+                        <form method="POST" action="{{ route('password.confirm') }}" novalidate>
+                            @csrf
+                            <div class="mb-5">
+                                <h1 class="display-4">{{ __('Confirm Password') }}</h1>
+                                <p>{{ __('Please confirm your password before continuing.') }}</p>
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label w-100" for="password" tabindex="0">
+                                    <span class="d-flex justify-content-between align-items-center">
+                                        <span>{{ __('Password') }}</span>
+                                        @if (Route::has('password.request') && config('nue.username') == 'email')
+                                            <a class="form-label-link mb-0" href="{{ route('password.request') }}">
+                                                {{ __('Forgot Password?') }}
+                                            </a>
+                                        @endif
+                                    </span>
+                                </label>
+                                <div class="input-group input-group-merge @error('password') is-invalid @enderror" data-hs-validation-validate-class>
+                                    <input type="password" class="js-toggle-password form-control form-control-lg" name="password" id="password" autocomplete="current-password" data-hs-toggle-password-options='{
+                                        "target": "#changePassTarget",
+                                        "defaultClass": "bi-eye-slash",
+                                        "showClass": "bi-eye",
+                                        "classChangeTarget": "#changePassIcon"
+                                    }'>
+                                    <a id="changePassTarget" class="input-group-append input-group-text" href="javascript:;">
+                                        <i id="changePassIcon" class="bi-eye"></i>
+                                    </a>
+                                </div>
+                                @error('password')
+                                    <span class="invalid-feedback" role="alert">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="d-grid mb-1">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    {{ __('Confirm Password') }}
+                                </button>
+                            </div>
+                            @if(Route::has('password.request'))
+                                <div class="text-center">
+                                    <a class="btn btn-link" href="{{ route('password.request') }}">
+                                        {{ __('Forgot Your Password?') }}
+                                    </a>
+                                </div>
+                            @endif
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+@endsection

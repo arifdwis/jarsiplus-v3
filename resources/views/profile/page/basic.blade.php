@@ -1,0 +1,64 @@
+{!! Form::model(me(), ['method' => 'PUT', 'files' => true]) !!}
+    <div class="card">
+        @if(Novay\Nue\Features::enabled(Novay\Nue\Features::profilePhoto()))
+            <div class="profile-cover">
+                <div class="profile-cover-img-wrapper">
+                    <img id="profileCoverImg" class="profile-cover-img" src="https://cdn.btekno.id/templates/v2/img/1920x400/img2.jpg" alt="">
+                </div>
+            </div>
+            <label class="avatar avatar-xxl avatar-circle avatar-uploader profile-cover-avatar" for="editAvatarUploaderModal">
+                <img id="editAvatarImgModal" class="avatar-img" src="{{ me()->photo_url }}" alt="">
+                <input type="file" class="js-file-attach avatar-uploader-input" id="editAvatarUploaderModal" name="photo" data-hs-file-attach-options='{
+                    "textTarget": "#editAvatarImgModal",
+                    "mode": "image",
+                    "targetAttr": "src",
+                    "allowTypes": [".png", ".jpeg", ".jpg"]
+                }'>
+                <span class="avatar-uploader-trigger">
+                    <i class="bi-pencil-fill avatar-uploader-icon shadow-sm"></i>
+                </span>
+            </label>
+            <x-nue::error for="photo" class=" text-center mt-1" />
+        @else
+            <div class="card-header">
+                <h3 class="card-title mb-1">{{ __('Profile Information') }}</h3>
+                <p class="text-muted d-block mb-0">
+                    {{ __('Update your account\'s profile information and email address.') }}
+                </p>
+            </div>
+        @endif
+        <div class="card-body">
+            <div class="row mb-3">                
+                <label for="name" class="col-sm-3 col-form-label">
+                    {{ __('Name') }} <span class="text-danger">*</span>
+                </label>
+                <div class="col-sm-9">
+                    {{ Form::text('name', null, ['class' => 'form-control' . $errors->first('name', ' is-invalid'), 'placeholder' => __('Enter your name')]) }}
+                    <x-nue::error for="name" class="mt-1" />
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="name" class="col-sm-3 col-form-label">
+                    {{ __('Email') }}
+                </label>
+                <div class="col-sm-9">
+                    {{ Form::text('email', null, ['class' => 'form-control bg-light', 'placeholder' => __('Enter your email address'), 'readonly']) }}
+                    <x-nue::error for="email" class="mt-2" />
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="phone" class="col-sm-3 col-form-label">
+                    {{ __('Phone') }} <span class="form-label-secondary">{{ __('(Optional)') }}</span>
+                </label>
+                <div class="col-sm-9">
+                    {{ Form::text('phone', null, ['class' => 'form-control', 'placeholder' => __('Enter your phone number')]) }}
+                </div>
+            </div>
+            <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-primary">
+                    {{ __('Save changes') }}
+                </button>
+            </div>
+        </div>
+    </div>
+{!! Form::close() !!}
