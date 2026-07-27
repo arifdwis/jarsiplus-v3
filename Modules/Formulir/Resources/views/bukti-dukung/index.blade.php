@@ -85,7 +85,7 @@
                 scrollX: false,
                 autoWidth: false,
                 ajax: {
-                    url: '{!! request()->fullUrl() !!}',
+                    url: '{!! request()->fullUrlWithQuery(["datatable" => "true"]) !!}',
                     data: function(d) {
                         d.datatable = true;
                         d.jenis_filter = selectedJenisFilter;

@@ -5,7 +5,7 @@
     <script>
         var table = Nue.components.NueDatatables.init('.js-datatable', {
             scrollY: 'calc(100vh - 250px)',
-            ajax : '{!! request()->fullUrl() !!}?datatable=true', 
+            ajax : '{!! request()->fullUrlWithQuery(["datatable" => "true"]) !!}', 
             columns: [
                 { data: 'pilihan', name: 'pilihan', className: 'pe-0 text-center', orderable: false, searchable: false },
                 { data: 'id', name: 'id', className: 'text-center' },

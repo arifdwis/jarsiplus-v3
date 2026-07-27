@@ -67,7 +67,7 @@
             scrollY: 'calc(100vh - 250px)',
             scrollX: false,
             autoWidth: false,
-            ajax: '{!! request()->fullUrl() !!}?datatable=true',
+            ajax: '{!! request()->fullUrlWithQuery(["datatable" => "true"]) !!}',
             columns: [
                 { data: 'pilihan', name: 'pilihan', className: 'text-center col-check', orderable: false, searchable: false, width: '30px' },
                 { data: 'pemohon', name: 'pemohon' },

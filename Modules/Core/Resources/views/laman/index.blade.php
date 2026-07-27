@@ -5,7 +5,7 @@
 <script>
     var table = HSCore.components.HSDatatables.init('.js-datatable', {
         scrollY: 'calc(100vh - 250px)',
-        ajax : '{!! request()->fullUrl() !!}?datatable=true', 
+        ajax : '{!! request()->fullUrlWithQuery(["datatable" => "true"]) !!}', 
         columns: [
             { data: 'pilihan', name: 'pilihan', className: 'text-center', orderable: false, searchable: false },
             { data: 'label', name: 'label' },

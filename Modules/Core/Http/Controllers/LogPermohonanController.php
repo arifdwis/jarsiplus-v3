@@ -118,7 +118,7 @@ class LogPermohonanController extends Controller
                     </div>';
             })
             ->editColumn('user', function($data) {
-                return $data->operator->name;
+                return $data->operator?->name ?? 'System';
             })
             ->editColumn('deskripsi', function($data) {
                 return '<label class="badge bg-primary">'.$data->deskripsi.'</label>';
