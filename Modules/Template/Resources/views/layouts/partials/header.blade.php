@@ -10,9 +10,12 @@
 
             @if(Nue::user())
             
-            <a href="{{ route('sso.logout') }}" class="headerButton">
+            <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('header-logout-form').submit();" class="headerButton text-danger" title="Logout">
                 <ion-icon name="log-out-outline"></ion-icon>
             </a>
+            <form id="header-logout-form" action="{{ route('logout') }}" method="POST" style="display:none;">
+                @csrf
+            </form>
 
             @else
 

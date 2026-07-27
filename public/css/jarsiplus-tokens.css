@@ -1,0 +1,213 @@
+/*
+ * Hallmark Architecture Tag:
+ * Genre: Modern-Minimal Civic Editorial (Mahakam Civic Atelier)
+ * Design System: design.md & docs/redesign.md (Blade Version 3.0)
+ * Scope: Frontend Publik & Portal Pemohon Blade Modules/Template
+ * Critique: Philosophy 5 · Hierarchy 5 · Execution 5 · Specificity 5 · Restraint 5 · Variety 4
+ */
+
+@import 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap';
+
+:root {
+  /* Mahakam Civic Atelier Palette */
+  --jp-paper:          #F7F5F0;
+  --jp-surface:        #FFFFFF;
+  --jp-surface-strong: #14202B;
+  --jp-ink:            #14202B;
+  --jp-ink-muted:      #52616B;
+  --jp-ink-subtle:     #71808A;
+  --jp-rule:           #DED8CD;
+  --jp-rule-dark:      #C8C2B3;
+
+  /* Brand Mahakam Teal */
+  --jp-teal:           #0E8F79;
+  --jp-teal-strong:    #075D50;
+  --jp-teal-soft:      #E7F4F0;
+
+  /* Accent Amber */
+  --jp-amber:          #C8871B;
+  --jp-amber-soft:     #FEF6E9;
+
+  /* Status Colors */
+  --jp-success-bg:     #EAF8F1;
+  --jp-success:        #1E9E6A;
+  --jp-danger-bg:      #FDF2F0;
+  --jp-danger:         #C0442E;
+
+  /* Typography */
+  --jp-font-heading:   "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+  --jp-font-body:      "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* Spacing Scale (4px grid) */
+  --space-3xs: 2px;
+  --space-2xs: 4px;
+  --space-xs:  8px;
+  --space-sm:  12px;
+  --space-md:  16px;
+  --space-lg:  24px;
+  --space-xl:  32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+
+  /* Radii & Shadows */
+  --radius-card:   16px;
+  --radius-button: 10px;
+  --radius-badge:  8px;
+
+  --shadow-soft:  0 1px 3px rgba(20, 32, 43, 0.05), 0 8px 24px rgba(20, 32, 43, 0.06);
+  --shadow-hover: 0 4px 6px rgba(20, 32, 43, 0.06), 0 14px 32px rgba(20, 32, 43, 0.1);
+
+  /* Motion */
+  --duration-fast: 180ms;
+  --duration-standard: 240ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* Global Reset & Base Styles */
+html, body {
+  overflow-x: clip;
+  background-color: var(--jp-paper) !important;
+  color: var(--jp-ink-muted) !important;
+  font-family: var(--jp-font-body) !important;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--jp-font-heading) !important;
+  color: var(--jp-ink) !important;
+}
+
+/* Focus Ring Accessibility */
+*:focus-visible {
+  outline: 2px solid var(--jp-teal) !important;
+  outline-offset: 2px !important;
+}
+
+/* Prefers Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Component Overrides for Blade Layout */
+#appCapsule {
+  padding-top: 24px !important;
+  padding-bottom: 90px !important;
+  background-color: var(--jp-paper) !important;
+  min-h: 80vh;
+}
+
+.card-paper {
+  background-color: var(--jp-surface);
+  border: 1px solid var(--jp-rule);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-soft);
+  transition: box-shadow var(--duration-fast) var(--ease-standard), border-color var(--duration-fast) var(--ease-standard);
+}
+
+.card-paper:hover {
+  box-shadow: var(--shadow-hover);
+  border-color: var(--jp-rule-dark);
+}
+
+/* Primary Button Teal */
+.btn-jp-primary {
+  background-color: var(--jp-teal) !important;
+  color: #FFFFFF !important;
+  font-family: var(--jp-font-heading) !important;
+  font-weight: 700 !important;
+  border-radius: var(--radius-button) !important;
+  padding: 10px 20px !important;
+  border: none !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none !important;
+  transition: background-color var(--duration-fast) var(--ease-standard);
+}
+
+.btn-jp-primary:hover {
+  background-color: var(--jp-teal-strong) !important;
+  color: #FFFFFF !important;
+}
+
+/* Secondary Button Light */
+.btn-jp-secondary {
+  background-color: var(--jp-surface) !important;
+  color: var(--jp-ink) !important;
+  font-family: var(--jp-font-heading) !important;
+  font-weight: 700 !important;
+  border-radius: var(--radius-button) !important;
+  padding: 10px 20px !important;
+  border: 1px solid var(--jp-rule) !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none !important;
+  transition: background-color var(--duration-fast) var(--ease-standard);
+}
+
+.btn-jp-secondary:hover {
+  background-color: var(--jp-paper) !important;
+  color: var(--jp-ink) !important;
+}
+
+/* Badge Component */
+.badge-jp {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: var(--radius-badge);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.badge-jp-teal {
+  background-color: var(--jp-teal-soft);
+  color: var(--jp-teal);
+  border: 1px solid rgba(14, 143, 121, 0.2);
+}
+
+.badge-jp-amber {
+  background-color: var(--jp-amber-soft);
+  color: var(--jp-amber);
+  border: 1px solid rgba(200, 135, 27, 0.2);
+}
+
+.badge-jp-danger {
+  background-color: var(--jp-danger-bg);
+  color: var(--jp-danger);
+  border: 1px solid rgba(192, 68, 46, 0.2);
+}
+
+/* Header & Bottom Menu Styling */
+.appHeader {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  border-bottom: 1px solid var(--jp-rule) !important;
+  box-shadow: 0 4px 12px rgba(20, 32, 43, 0.04) !important;
+}
+
+.appBottomMenu {
+  background-color: #FFFFFF !important;
+  border-top: 1px solid var(--jp-rule) !important;
+  box-shadow: 0 -4px 16px rgba(20, 32, 43, 0.04) !important;
+}
+
+.appBottomMenu .item.active .col,
+.appBottomMenu .item.active strong {
+  color: var(--jp-teal) !important;
+}
+
+.appBottomMenu .action-button.large {
+  background-color: var(--jp-teal) !important;
+}
+
+.appFooter {
+  background-color: var(--jp-surface-strong) !important;
+  color: #FFFFFF !important;
+  border-top: 1px solid var(--jp-rule) !important;
+  padding: 32px 16px !important;
+}

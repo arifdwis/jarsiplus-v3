@@ -16,6 +16,7 @@
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/lity/2.4.1/lity.css">
     <link rel="stylesheet" href="{{template('pwa/css/style.css')}}">
     <link rel="stylesheet" href="{{asset('css/custom.css?v='.env('APP_VERSION'))}}">
+    <link rel="stylesheet" href="{{asset('css/jarsiplus-tokens.css?v='.env('APP_VERSION', '1.0'))}}">
 
     @if(env('PWA_DEBUG') == false)
     @laravelPWA

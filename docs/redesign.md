@@ -1,236 +1,238 @@
-# Redesign Frontend — JARSIPLUS 2026
+# Redesign Blade — JARSIPLUS 2026
 
-**Dokumen**: Spesifikasi desain dan langkah implementasi
-**Versi**: 2.0
+**Dokumen**: Spesifikasi desain, arsitektur presentasi, dan langkah implementasi
+**Versi**: 3.0
 **Tanggal**: 2026-07-27
-**Rujukan**: `PRD.md`, `SRS.md`, `plan.md`, `checklist.md`
-**Cakupan**: frontend publik dan portal pemohon berbasis Inertia + Vue 3.
-**Batas keras**: e-panel admin/Nue (Blade), route admin, API, SSO, controller, dan model tidak diubah.
+**Rujukan**: `PRD.md`, `SRS.md`, `plan.md`, `checklist.md`, dan `design.md`
+**Cakupan**: semua frontend publik dan portal pemohon di `Modules/Template/resources/views`
+**Platform**: Laravel Blade + CSS + JavaScript progresif. **Tidak menggunakan Vue.js atau Inertia.**
 
 > Hallmark · pre-emit critique: Philosophy 5 · Hierarchy 5 · Execution 5 · Specificity 5 · Restraint 5 · Variety 4
 
 ---
 
-## 1. Tujuan dan batasan
+## 1. Keputusan arsitektur dan batas keras
 
-Redesign ini membuat JARSIPLUS terasa sebagai layanan digital Pemerintah Kota Samarinda: jelas, tenang, dapat dipercaya, dan mudah digunakan untuk mengajukan serta memantau inovasi daerah. Redesign hanya mengganti lapisan visual dan interaksi frontend; seluruh perilaku bisnis harus tetap parity.
+Redesign dilakukan di atas aplikasi Blade yang sudah ada. Semua controller tetap mengembalikan `view()`, form tetap menggunakan Laravel Collective/HTML yang ada, pagination tetap server-rendered, dan AJAX pembahasan tetap memakai endpoint serta pola jQuery yang sudah berjalan. Tidak ada migrasi ke Vue, Inertia, Vite, SPA, atau perubahan kontrak data.
 
-### Dalam cakupan
-
-- Halaman publik: Beranda, Informasi, Statistik, FAQ, dan Maintenance.
-- Portal pemohon: daftar permohonan, buat permohonan, detail, serta pola visual yang dapat dipakai halaman pemohon lanjutan.
-- Shell aplikasi, token CSS, komponen Vue bersama, state interaksi, aksesibilitas, dan responsivitas.
-
-### Di luar cakupan
-
-- Visual, markup, route, maupun alur e-panel `jarsiplus/*` yang masih memakai Nue/Blade.
-- Perubahan kontrak props Inertia, endpoint, autentikasi SSO, validasi server, payload form, atau struktur data.
-- Penambahan angka, testimoni, penghargaan, foto, atau klaim yang tidak tersedia dari data resmi.
-
----
-
-## 2. Rujukan dan aturan anti-plagiarisme
-
-Intel dipakai sebagai referensi publik untuk membaca prinsip, bukan sebagai sumber desain yang disalin. Yang diadopsi hanya: hierarki konten yang tegas, kontras permukaan yang disiplin, CTA yang jelas, dan perhatian pada konten terkini. Implementasi JARSIPLUS wajib memiliki bentuk, identitas, dan interaksi sendiri.
-
-| Boleh dipelajari | Wajib berbeda pada JARSIPLUS |
+| Area | Keputusan |
 | --- | --- |
-| Urutan perhatian: pesan utama → aksi → informasi pendukung | Hero menjadi komposisi dokumen sipil dengan motif Mahakam, bukan carousel promosi produk |
-| Penggunaan permukaan terang/gelap sebagai penekanan | Palet teal Mahakam, amber, dan ink navy; bukan Intel blue/cyan dan hitam Intel |
-| Kerapian navigasi serta CTA | Header kompak layanan pemerintahan, bukan mega-menu atau navigasi produk Intel |
-| Disiplin tipografi dan whitespace | Plus Jakarta Sans + Inter; bukan Intel One atau pengaturan tipografi Intel |
+| Publik | Redesign penuh: beranda, informasi, statistik, FAQ, maintenance |
+| Pemohon | Redesign penuh: daftar permohonan, buat, detail, indikator, berkas, pembahasan, riwayat, finish, dan settings |
+| E-panel/Nue | Tidak disentuh: tidak ada edit markup, CSS, route, controller, atau asetnya |
+| Backend | Tidak disentuh: route, middleware, SSO, controller, model, query, validasi, payload, dan storage tetap parity |
+| JavaScript | Vanilla JS/jQuery yang sudah ada; interaksi baru harus progressive enhancement |
 
-### Larangan eksplisit
-
-- Tidak memakai logo, foto, copy, nama produk, font, warna, tombol, layout, footer, kartu berita, atau carousel Intel.
-- Tidak memakai autoplay carousel, mega-menu, hero gambar produk, pseudo browser/device frame, glow neon, glassmorphism, atau gradient teks.
-- Tidak membuat metrik fiktif. Statistik selalu memakai props backend; data yang belum ada menampilkan `—` dengan konteks yang jujur.
-- Tidak menggunakan aset foto stok sebagai representasi resmi Samarinda. Visual utama memakai motif abstrak orisinal sampai aset resmi disediakan.
+Dokumen ini menggantikan arahan frontend Vue/Inertia pada `docs/redesign.md` versi sebelumnya. Jika `PRD.md`, `SRS.md`, atau `plan.md` masih menyebut port frontend ke Vue/Inertia, catat sebagai keputusan yang dibatalkan sebelum implementasi agar dokumentasi proyek konsisten.
 
 ---
 
-## 3. Konsep: Mahakam Civic Innovation
+## 2. Referensi, orisinalitas, dan arah elegan
+
+`design.md` dipakai sebagai referensi prinsip: kepemimpinan visual yang tegas, permukaan yang disiplin, dan CTA yang jelas. Implementasi JARSIPLUS tidak boleh menyalin elemen, aset, atau susunan Intel. Hasil akhirnya adalah sistem desain **Mahakam Civic Atelier**: layanan pemerintahan yang berwibawa, terang, tenang, dan terasa dibuat untuk perjalanan inovasi daerah.
+
+| Prinsip yang dipelajari | Terjemahan orisinal JARSIPLUS |
+| --- | --- |
+| Hierarki konten yang kuat | Hero berbentuk briefing layanan, bukan hero promosi produk atau carousel |
+| Kontras terang-gelap yang terkendali | Warm paper dan ink navy; bidang gelap hanya pada penekanan strategis |
+| CTA jelas dan ringkas | Aksi `Ajukan Inovasi` dan `Pelajari Alur` dengan bahasa layanan publik |
+| Disiplin ruang dan tipografi | Plus Jakarta Sans + Inter, ritme 4 px, garis Mahakam sebagai pembatas |
+
+### Larangan anti-plagiarisme
+
+- Jangan memakai logo, font, warna cyan/blue khas, copy, gambar, card news, footer, mega-menu, atau struktur carousel Intel.
+- Jangan membuat ulang komposisi halaman Intel dalam warna berbeda.
+- Jangan menggunakan gradient teks, glow neon, glassmorphism, mock browser/device, atau animasi autoplay.
+- Jangan membuat metrik, testimoni, penghargaan, atau foto Samarinda yang tidak tersedia secara resmi.
+- Jangan menggunakan foto stok sebagai bukti visual layanan pemerintah. Sebelum aset resmi tersedia, gunakan motif SVG/CSS orisinal yang abstrak.
+
+---
+
+## 3. Sistem desain: Mahakam Civic Atelier
 
 **Genre**: modern-minimal civic editorial.
-**Karakter**: terang, formal tanpa kaku, lokal tanpa ornamen berlebihan, dan fungsional untuk pekerjaan administrasi.
+**Nada**: profesional, elegan, hening, kredibel, dan hangat.
+**Metafora**: aliran Sungai Mahakam—garis rute sebagai perjalanan usulan, simpul sebagai bukti dan keputusan, ruang lega sebagai transparansi proses.
 
-Sistem visual memakai analogi aliran Mahakam: jalur tipis mewakili perjalanan usulan, titik/simpul mewakili bukti dan tahapan, serta bidang solid mewakili keputusan. Motif dibuat sebagai SVG atau CSS sederhana; ia hanya muncul pada hero publik, pembatas section, dan maintenance—bukan pada form kerja pemohon.
+Motif Mahakam dibuat sendiri sebagai SVG garis tipis dan titik node; sifatnya dekoratif (`aria-hidden="true"`) dan hanya muncul pada hero publik, pembatas section, footer, serta maintenance. Area kerja pemohon berfokus pada informasi dan tindakan, tanpa dekorasi hero.
 
-### Keluarga struktur halaman
+### Keluarga layout
 
-| Keluarga | Bentuk | Dipakai pada |
+| Keluarga | Struktur | Halaman |
 | --- | --- | --- |
-| Civic briefing | Hero naratif, ringkasan data, jalur proses, tindakan berikutnya | Beranda |
-| Long document | Judul, navigasi konteks, isi terbaca, CTA penutup | Informasi dan FAQ |
-| Public ledger | Ringkasan angka, status, penjelasan data | Statistik |
-| Applicant workbench | Header konteks, tindakan, status, data/field bertahap | Semua halaman pemohon |
+| Civic briefing | Pesan utama → aksi → angka aktual → alur → tindakan lanjutan | Beranda |
+| Long document | Judul → konteks/navigasi → isi terbaca → CTA | Informasi, FAQ |
+| Public ledger | Ringkasan data → status → definisi data | Statistik |
+| Applicant workbench | Breadcrumb → status/konteks → aksi → data atau form | Seluruh pemohon |
 
 ---
 
-## 4. Sistem token
+## 4. Token visual dan aturan CSS
 
-`resources/css/tokens.css` adalah sumber nilai kanonis. Halaman Vue dan komponen tidak boleh memakai warna atau font literal; gunakan token atau utility Tailwind yang memetakan token tersebut.
+Satu file token Blade-only dibuat di `Modules/Template/Resources/assets/css/tokens.css` atau, bila aset template tetap di `public`, di `public/css/jarsiplus-tokens.css`. `layouts/master.blade.php` memuatnya setelah stylesheet legacy. Semua CSS redesign memakai token, bukan hex/font literal yang tersebar di view.
 
-### 4.1 Warna
-
-| Peran | Token | Nilai | Pemakaian |
+| Peran | Token | Nilai | Penggunaan |
 | --- | --- | --- | --- |
-| Kanvas | `--paper` | `#F7F5F0` | Latar utama terang |
-| Permukaan | `--surface` | `#FFFFFF` | Kartu, panel, menu |
-| Permukaan gelap | `--surface-strong` | `#14202B` | Jalur penekanan dan footer |
-| Teks utama | `--ink-900` | `#14202B` | Heading dan isi penting |
-| Teks sekunder | `--ink-600` | `#3E4C57` | Isi dan label |
-| Teks redup | `--ink-400` | `#71808A` | Caption dan metadata |
-| Garis | `--line` | `#E5E1D8` | Border dan pembatas |
-| Brand | `--brand-500` | `#0E8F79` | CTA utama, tautan, fokus konteks |
-| Brand hover | `--brand-600` | `#0A6E5D` | Hover/active CTA utama |
-| Brand lembut | `--brand-50` | `#E9F6F2` | Latar status/panel ringan |
-| Aksen | `--accent-400` | `#F2B441` | Highlight terbatas, bukan CTA utama global |
-| Fokus | `--color-focus` | `#0E8F79` | Ring keyboard minimal 2px |
+| Kanvas | `--jp-paper` | `#F7F5F0` | Latar terang utama |
+| Permukaan | `--jp-surface` | `#FFFFFF` | Panel, kartu, menu |
+| Ink | `--jp-ink` | `#14202B` | Heading dan teks penting |
+| Ink sekunder | `--jp-ink-muted` | `#52616B` | Body dan metadata |
+| Garis | `--jp-rule` | `#DED8CD` | Border dan divider |
+| Brand | `--jp-teal` | `#0E8F79` | CTA utama, link, focus |
+| Brand gelap | `--jp-teal-strong` | `#075D50` | Hover/active |
+| Brand lembut | `--jp-teal-soft` | `#E7F4F0` | Latar informatif |
+| Aksen | `--jp-amber` | `#C8871B` | Highlight terbatas dan peringatan |
+| Permukaan tegas | `--jp-ink-surface` | `#14202B` | Footer atau section penutup |
 
-Status menggunakan token yang telah ada (`success`, `warning`, `danger`, `info`) dengan pasangan latar masing-masing. Warna status tidak menjadi satu-satunya pembeda: setiap badge memiliki label teks.
-
-### 4.2 Tipografi dan ruang
-
-- Display/UI: `--font-heading`: Plus Jakarta Sans, bobot 600–800, roman saja.
-- Body: `--font-body`: Inter, bobot 400–700, line-height long-form minimal 1.6.
-- Angka statistik memakai `font-variant-numeric: tabular-nums`.
-- Skala ruang: kelipatan 4 px. Tambahkan token `--space-3xs` sampai `--space-4xl`; section memakai 56 px pada mobile dan 96 px pada desktop.
-- Radius: kartu 16 px, input/tombol 10 px, badge 8 px. Radius pill hanya untuk status/penanda kecil, bukan seluruh UI.
-- Bayangan: ringan dan netral; elevasi bertambah saat interaksi tanpa glow berwarna.
-
-### 4.3 Motion dan responsif
-
-- Durasi: 180 ms cepat, 240 ms standar, 320 ms maksimum; gunakan token easing yang bernama.
-- Hanya `transform`, `opacity`, dan warna yang bertransisi. Tidak ada scroll-jacking atau autoplay.
-- Pada `prefers-reduced-motion`, hilangkan perpindahan spasial; gunakan perubahan opacity maksimal 150 ms.
-- `html` dan `body` memakai `overflow-x: clip`. Verifikasi lebar 320, 375, 414, dan 768 px.
+- Font display/UI: Plus Jakarta Sans; font body: Inter. Keduanya dipasang sebagai satu import/font-source terpusat dalam layout, bukan per halaman.
+- Spasi menggunakan token 4 px (`--space-3xs` sampai `--space-4xl`); section 56 px mobile dan 96 px desktop.
+- Radius: kartu 16 px; input dan tombol 10 px; chip/badge 8 px. Radius pill hanya untuk status kecil.
+- Shadow netral dan ringan; hover meningkatkan elevasi, bukan kontras warna secara berlebihan.
+- `html, body { overflow-x: clip; }`; judul panjang wajib `overflow-wrap: anywhere`.
+- Durasi 180/240/320 ms dengan easing bernama. `prefers-reduced-motion` menghapus gerak spasial.
 
 ---
 
-## 5. Shell dan komponen bersama
+## 5. Struktur Blade dan komponen partial
 
-### AppLayout
+### Layout publik/pemohon
 
-- Header floating yang ringkas di atas kanvas: wordmark JARSIPLUS, navigasi Beranda/Informasi/Statistik/FAQ, CTA Portal Pemohon, dan tautan teks E-Panel Admin.
-- E-Panel Admin ditampilkan sebagai tautan keluar yang jelas dan tidak menyerap gaya atau markup e-panel.
-- Mobile memakai tombol menu berlabel aksesibel, `aria-expanded`, `aria-controls`, fokus yang dapat ditutup dengan Escape, dan menu satu kolom.
-- Footer memakai pernyataan institusi ringkas, tautan layanan, dan copyright. Tidak ada mega-footer atau sitemap berkolom.
+`template::layouts.master` menjadi shell untuk frontend Blade, tetapi markup layout diperbarui tanpa mengganti route atau kontrol server:
 
-### Primitive Vue
+- Header: wordmark JARSIPLUS, Beranda, Informasi, Statistik, FAQ, CTA Portal Pemohon, dan tautan E-Panel Admin yang jelas sebagai area terpisah.
+- Mobile: tombol menu semantik dengan `aria-expanded`, `aria-controls`, Escape untuk menutup, dan fokus terlihat.
+- Main: container responsif, breadcrumb opsional, flash notification Laravel yang tidak memblokir navigasi.
+- Footer: pernyataan ringkas Pemerintah Kota Samarinda serta link layanan; bukan sitemap besar atau footer ala korporasi teknologi.
 
-| Komponen | Tanggung jawab |
+### Partial reusable
+
+| Partial/komponen Blade | Tanggung jawab |
 | --- | --- |
-| `Card` | Permukaan data berborder, elevasi ringan; varian `default`, `quiet`, `interactive` |
-| `StatTile` | Nilai aktual, label, caption; mendukung status kosong `—` |
-| `Badge` | Status dengan label, warna, dan ikon opsional yang tidak berdiri sendiri |
-| `Button` | Varian primary, secondary, quiet/destructive; ukuran sm/md; loading dan disabled |
-| `EmptyState` | Keadaan kosong tanpa ilustrasi generik; CTA hanya bila aksi tersedia |
-| `Field` | Label, petunjuk, pesan error, dan state validasi yang konsisten |
-| `Accordion` | FAQ dengan tombol semantik, `aria-expanded`, panel terhubung, keyboard operasional |
-| `FlowMotif` | Motif SVG/CSS abstrak Mahakam; hanya dekoratif (`aria-hidden`) |
+| `components/button.blade.php` | Varian primary, secondary, quiet, destructive; ukuran sm/md; disabled/loading |
+| `components/card.blade.php` | Surface default, quiet, interactive; tanpa shadow berlebihan |
+| `components/status-badge.blade.php` | Status berbasis teks+warna; dapat dipakai seluruh permohonan |
+| `components/empty-state.blade.php` | Pesan kosong, tindakan kontekstual, tanpa ilustrasi generik |
+| `components/form-field.blade.php` | Label, bantuan, error, required marker, dan ID aksesibel |
+| `components/flow-motif.blade.php` | SVG motif Mahakam dekoratif |
+| `components/accordion-item.blade.php` | Tombol FAQ/informasi dengan atribut ARIA dan fallback konten terbuka |
+| `components/page-heading.blade.php` | Eyebrow opsional, heading, deskripsi, dan slot aksi |
 
-Komponen interaktif harus memiliki state default, hover, focus-visible, active, disabled, loading, error, dan success bila relevan. Loading tidak memindahkan tata letak; error ditautkan ke field dengan `aria-describedby`.
+Partial bersifat tambahan dan dipanggil dengan `@include`/`@component`; view lama dapat dimigrasikan satu per satu. Tidak ada penghapusan massal view atau perombakan controller.
+
+### State interaksi
+
+Setiap kontrol memiliki default, hover, `:focus-visible`, active, disabled, loading, error, dan success bila berlaku. JavaScript hanya meningkatkan pengalaman:
+
+- Menu mobile dan accordion tetap menampilkan konten yang dapat dijangkau tanpa JavaScript.
+- Error validasi server Laravel tetap menjadi sumber kebenaran; JS tidak menduplikasi validasi bisnis.
+- Tombol submit menampilkan status proses dan mencegah klik ganda, tetapi form tetap dapat disubmit tanpa JavaScript.
 
 ---
 
-## 6. Spesifikasi per route
+## 6. Spesifikasi per halaman
 
-### Beranda — `Pages/Welcome.vue`
+### Beranda — `template::index`
 
-1. Hero civic briefing: judul layanan, deskripsi singkat, CTA `Ajukan Inovasi Daerah`, CTA sekunder `Pelajari Alur`, dan `FlowMotif` pada sisi/belakang komposisi.
-2. Ringkasan angka dari props `permohonanCount`, `prosesCount`, dan `setujuCount`; semua nilai tetap dari backend.
-3. Jalur tiga tahap: daftarkan → lengkapi bukti → verifikasi dan pemetaan. Gunakan garis alur, bukan tiga kartu SaaS seragam.
-4. Penutup ajakan menuju portal pemohon dengan penjelasan singkat tentang kesiapan dokumen.
+1. Hero civic briefing: wordmark/identitas, judul layanan, deskripsi singkat, CTA `Ajukan Inovasi Daerah`, CTA sekunder `Pelajari Alur`, dan `flow-motif` orisinal.
+2. Jika tidak login, fokus pada orientasi layanan. Jika login, gunakan sapaan singkat dan tindakan sesuai role tanpa mengubah aturan role yang ada.
+3. Ringkasan proses menampilkan tiga tahap: daftarkan, lengkapi bukti, verifikasi dan pemetaan—dengan satu alur garis, bukan tiga kartu SaaS identik.
+4. Statistik hanya ditampilkan bila controller menyediakan data aktual; bila tidak, beranda tidak menciptakan angka.
 
-### Informasi — `Pages/Informasi/Index.vue`
+### Informasi — `template::informasi`
 
-- Bentuk long document: intro, daftar tahap, konten pedoman, dan CTA portal pemohon.
-- Pada desktop, navigasi konteks boleh tetap dekat judul; pada mobile menjadi daftar ringkas di atas isi, tanpa sidebar kecil yang tidak terbaca.
-- Konten `Laman` dinamis di masa depan memakai container baca dengan panjang baris nyaman, heading semantik, dan tabel responsif.
+- Ubah accordion legacy menjadi dokumen layanan yang elegan: heading, ringkasan tujuan, daftar isi ringkas, dan panel informasi yang dapat dibuka.
+- Isi `Laman` tetap berasal dari entity yang sama dan ditampilkan dengan tipografi long-form, heading semantik, tabel responsif, serta sanitasi output yang telah ada.
+- Pada layar kecil, navigasi konteks berada di atas isi; tidak ada sidebar sempit.
 
-### Statistik — `Pages/Statistik/Index.vue`
+### Statistik — `template::statistik.index`
 
-- Hero singkat yang menjelaskan asal data dan waktu cakupan bila props tersedia.
-- Grid StatTile menampilkan total usulan, proses, tervalidasi, dan jumlah pemohon tanpa grafik baru yang belum didukung data.
-- Keterangan status menjelaskan arti setiap angka supaya statistik tidak menjadi dekorasi angka semata.
+- Header menerangkan bahwa angka berasal dari rekam usulan sistem.
+- Kartu statistik menggunakan data controller yang sudah tersedia: proses, setuju, tolak, selesai, permohonan, dan pemohon.
+- Grafik per hari/per bulan yang sudah disediakan controller boleh dirapikan sebagai SVG/Chart.js ringan; tidak menambah endpoint maupun mengarang data.
+- Sertakan legenda status agar warna tidak menjadi satu-satunya pembeda.
 
-### FAQ — `Pages/Faq/Index.vue`
+### FAQ — `template::faq.index`
 
-- Intro singkat dan daftar accordion satu kolom.
-- Satu item terbuka dalam satu waktu sebagai default; pengguna dapat menutupnya kembali.
-- Pencarian/kategori hanya ditambahkan jika data FAQ dan kebutuhan filter memang tersedia dari backend.
+- Intro singkat, accordion satu kolom, serta marker fokus yang jelas.
+- Satu item terbuka sebagai default, pengguna dapat membuka atau menutup item lain. Pagination tetap memakai data server yang sekarang.
+- Pencarian dan kategori hanya ditambahkan setelah model/controller memberi data yang diperlukan.
 
-### Maintenance — `Pages/Maintenance.vue`
+### Maintenance — `template::maintenance`
 
-- Satu pesan layanan, alasan singkat yang tidak spekulatif, dan CTA kembali ke beranda.
-- Motif Mahakam dipakai minimal sebagai pembeda visual, tanpa informasi waktu pemulihan yang tidak diberikan.
+- Pesan layanan yang singkat, aksi kembali ke beranda, dan motif Mahakam minimal.
+- Tidak menyebut estimasi pemulihan atau penyebab yang tidak diberikan operator.
 
-### Permohonan — `Pages/Permohonan/*.vue`
+### Pemohon — `template::permohonan.*`
 
-| Route/view | Bentuk redesign | Data dan aksi yang dipertahankan |
+| View | Arah visual | Perilaku yang wajib tetap |
 | --- | --- | --- |
-| Index | Header workbench, tombol tambah jelas, daftar kartu responsif dengan badge status dan metadata | `permohonan`, link detail, link create |
-| Create | Breadcrumb, penjelasan sebelum mulai, field terkelompok, action bar stabil | `useForm`, payload dan POST ke `/permohonan` |
-| Detail | Header judul + status, metadata, panel deskripsi, slot perluasan indikator/riwayat | prop `item`, link kembali |
-
-Halaman pemohon tidak menggunakan hero dekoratif. Prioritasnya adalah orientasi, status, field, dan tindakan berikutnya.
+| `index` | Workbench dengan heading, legenda status sebagai panel ringkas, kartu permohonan berisi kode/status/judul/aksi | Logika biodata, periode pendaftaran, pengecualian user, modal penutupan, dan route tetap |
+| `create` + `form/*` | Breadcrumb, step header yang tenang, field terkelompok, sticky action hanya desktop | `Form::open`, field names, upload, select2, validasi dan route store tetap |
+| `show`/`detail` | Header usulan dan status, ringkasan metadata, navigasi konteks ke indikator/berkas/pembahasan/riwayat | Data `$data`, komentar juri, dan semua action lama tetap |
+| `indikator/*`, `berkas/*`, `data/*` | Daftar kerja dengan status bukti, area upload jelas, empty/error state | Payload upload, route, dan validasi file tetap |
+| `pembahasan/*` | Percakapan berjarak baik dengan identitas/waktu jelas; field balasan selalu terlihat | AJAX chat dan partial render controller tetap |
+| `riwayat`, `finish`, `penjadwalan` | Timeline dan summary status yang terbaca | Query/controller/action lama tetap |
+| `settings/*` | Form akun/profil/korporasi dengan label dan pesan error konsisten | Resource route serta update controller tetap |
 
 ---
 
 ## 7. Langkah implementasi
 
-1. **Sinkronkan dokumen desain**
-   - Jadikan dokumen ini referensi implementasi.
-   - Ganti isi `design.md` lama yang masih membawa DNA Intel dengan sistem Mahakam Civic Innovation ini.
-   - Pastikan `design.md`, `docs/redesign.md`, `tokens.css`, dan Tailwind tidak memiliki palet/font yang saling bertentangan.
+1. **Sinkronkan keputusan dokumen**
+   - Tetapkan Blade sebagai frontend target dan perbarui referensi Vue/Inertia pada `PRD.md`, `SRS.md`, `plan.md`, serta `checklist.md` agar tidak kontradiktif.
+   - Perbarui `design.md` agar menjelaskan Mahakam Civic Atelier dan menghapus token/font/rujukan Intel yang akan dipakai implementasi.
 
-2. **Bangun fondasi token**
-   - Rapikan `resources/css/tokens.css` menjadi token semantik lengkap: warna, font, ruang, radius, shadow, motion, dan focus.
-   - Perbarui `resources/css/app.css` untuk base style, reset responsif, focus ring, reduced motion, dan utility komponen; jangan menghapus directive Tailwind.
-   - Selaraskan `tailwind.config.js` dengan token Mahakam agar utility yang baru tidak membawa hex/font inline.
+2. **Audit batas e-panel dan baseline**
+   - Catat screenshot/state e-panel sebelum mulai; exclude `resources/views/layouts/*`, `Modules/*` selain `Modules/Template/resources/views`, dan aset Nue dari perubahan.
+   - Jalankan smoke test publik dan pemohon sebagai baseline sebelum mengubah presentasi.
 
-3. **Refactor shell dan primitive**
-   - Perbarui `AppLayout.vue`, `Card.vue`, `StatTile.vue`, dan `Badge.vue` terlebih dahulu.
-   - Tambahkan primitive hanya saat dipakai (`Button`, `EmptyState`, `Field`, `Accordion`, `FlowMotif`) agar tidak menciptakan library kosong.
-   - Pisahkan kelas presentasi dari markup halaman dan pertahankan public API props komponen yang ada.
+3. **Buat fondasi CSS Blade**
+   - Tambahkan token, typography, grid, responsive rules, focus ring, reduced motion, dan pola komponen ke stylesheet publik baru.
+   - Muat stylesheet/font satu kali dari `template::layouts.master`; pertahankan stylesheet legacy sampai setiap view selesai dimigrasikan.
+   - Hindari CDN baru bila aset dapat dilayani lokal; tidak perlu memasang framework frontend baru.
 
-4. **Redesign halaman publik**
-   - Urutan: Welcome → Informasi → Statistik → FAQ → Maintenance.
-   - Terapkan struktur pada Bab 6, hubungkan CTA ke route yang sudah ada, dan jangan mengubah controller/props.
-   - Uji setiap route sebelum melanjutkan ke route berikutnya.
+4. **Refactor shell dan partial**
+   - Redesign `layouts/master.blade.php`, header, footer, bottom navigation, dan notifikasi hanya untuk area template publik/pemohon.
+   - Tambahkan partial komponen; pindahkan markup berulang secara inkremental tanpa mengubah variabel Blade yang dipakai view.
 
-5. **Redesign portal pemohon**
-   - Urutan: Index → Create → Detail.
-   - Pertahankan `useForm`, URL submit, props `permohonan`/`item`, dan perilaku link.
-   - Tambahkan state kosong, invalid, processing, sukses, dan error melalui kemampuan Inertia yang sudah ada—tanpa mengubah kontrak backend.
+5. **Migrasikan halaman publik**
+   - Urutan: Beranda → Informasi → Statistik → FAQ → Maintenance.
+   - Satu halaman per commit; lakukan visual QA dan cek route/HTML sebelum melanjutkan.
 
-6. **QA dan penguncian sistem**
-   - Jalankan build, cek mobile/keyboard/kontras, serta smoke test pengajuan.
-   - Verifikasi e-panel Nue secara visual dan fungsional tidak berubah.
-   - Tambahkan komentar cap sistem desain pada stylesheet setelah hasil lolos audit.
+6. **Migrasikan workbench pemohon**
+   - Urutan: Index → Create/form segments → Show/detail → indikator/berkas → pembahasan → riwayat/finish/penjadwalan → settings.
+   - Pertahankan semua `name`, `id`, route helper, CSRF, selector JavaScript, data attributes, dan partial yang dipakai controller/AJAX.
+
+7. **Hapus legacy visual secara aman**
+   - Setelah semua view memakai sistem baru, hapus hanya CSS/JS legacy yang sudah dibuktikan tidak direferensikan oleh publik atau pemohon.
+   - Setiap penghapusan file/asset harus dibahas dan disetujui terpisah; e-panel dilarang menjadi target cleanup.
+
+8. **QA, aksesibilitas, dan rilis**
+   - Uji route, validasi server, upload, pagination, modal penutupan, AJAX chat, SSO, dan flash notification.
+   - Uji 320, 375, 414, 768, dan desktop; keyboard-only; zoom 200%; reduced motion; serta kontras WCAG AA.
+   - Bandingkan e-panel dengan baseline: tampilan dan fungsi harus identik.
 
 ---
 
 ## 8. Kriteria penerimaan
 
-- [ ] `npm run build` berhasil tanpa perubahan pada route/controller/API/SSO.
-- [ ] Semua halaman publik dan pemohon memakai token bernama; tidak ada warna/font literal baru dalam page component.
-- [ ] Beranda menampilkan hanya statistik dari props dan tidak memiliki carousel/autoplay.
-- [ ] Form pengajuan tetap mengirim payload dan menampilkan state processing/error dengan benar.
-- [ ] Navigasi desktop/mobile, FAQ accordion, badge status, empty state, dan CTA dapat dioperasikan keyboard.
-- [ ] Kontras teks, border, dan focus ring memenuhi WCAG AA; target kontrol sentuh minimal 44 × 44 px bila memungkinkan.
-- [ ] Tidak ada horizontal scroll pada 320/375/414/768 px; CTA, breadcrumb, dan tautan navigasi tidak pecah menjadi dua baris.
-- [ ] E-panel admin Nue tetap sama secara visual dan fungsional.
-- [ ] Tidak ada elemen visual atau copy yang meniru Intel secara langsung.
+- [ ] Tidak ada Vue, Inertia, SPA, atau toolchain frontend baru yang ditambahkan untuk redesign ini.
+- [ ] Semua route publik dan pemohon tetap `view()` Blade serta seluruh form/action mempertahankan kontrak backend.
+- [ ] E-panel/Nue tidak berubah pada diff, screenshot, dan smoke test.
+- [ ] Beranda tidak memiliki carousel/autoplay, angka fiktif, atau elemen yang meniru Intel.
+- [ ] CSS baru memakai token dan tidak menyebarkan warna/font literal baru ke berbagai view.
+- [ ] Navigasi, accordion, modal, form, upload, dan chat tetap dapat dioperasikan keyboard serta tetap memiliki fallback tanpa JavaScript.
+- [ ] Tidak ada horizontal scroll pada 320/375/414/768 px; CTA, breadcrumb, dan tautan navigasi tidak pecah dua baris.
+- [ ] `php artisan route:list`, test suite, dan smoke test publik/pemohon/SSO tetap hijau.
+- [ ] Kontras teks dan focus indicator memenuhi WCAG AA; target kontrol utama minimal 44 × 44 px bila ruang memungkinkan.
 
 ---
 
 ## 9. Urutan commit yang disarankan
 
-1. `docs: define Mahakam civic redesign system`
-2. `style: align public frontend tokens and base styles`
-3. `refactor: rebuild shared public layout primitives`
-4. `feat: redesign public Inertia pages`
-5. `feat: redesign applicant workbench views`
-6. `test: verify responsive accessibility and parity`
+1. `docs: define Blade-first Mahakam redesign`
+2. `style: add public Blade design tokens and foundations`
+3. `refactor: rebuild public Blade shell and partials`
+4. `feat: redesign public Blade pages`
+5. `feat: redesign applicant Blade workbench`
+6. `test: verify Blade frontend parity and accessibility`
