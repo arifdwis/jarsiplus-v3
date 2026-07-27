@@ -18,6 +18,8 @@ use App\Observers\HistoriObserver;
 use App\Observers\PenilaianObserver;
 
 
+use Inertia\Inertia;
+
 class PermohonanController extends Controller
 {
     protected $title = 'Permohonan';
@@ -47,23 +49,14 @@ class PermohonanController extends Controller
 
     public function index()
     {
-        $data = $this->data::where('id_pemohon_0', me()->id)->orWhere('id_pemohon_1', me()->id)->latest()->get();
-        $identityComplete = $this->hasCompleteIdentity();
-        return view("$this->view.index", compact('data', 'identityComplete'));
+        $userId = me()?->id;
+        $data = $this->data::where('id_pemohon_0', $userId)->orWhere('id_pemohon_1', $userId)->latest()->get();
+        return Inertia::render('Permohonan/Index', ['permohonan' => $data]);
     }
 
     public function create(Request $request)
     {
-        if (!$this->hasCompleteIdentity()) {
-            return $this->redirectToBiodata();
-        }
-
-        if (!$this->canBypassDeadline() && pendaftaran_permohonan_ditutup()) {
-            notify()->flash(pendaftaran_inovasi_pesan_tutup(), 'warning');
-            return redirect($this->toIndex);
-        }
-
-        return view("$this->view.create");
+        return Inertia::render('Permohonan/Create');
     }
 
     public function show(Request $request, $kode)

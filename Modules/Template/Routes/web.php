@@ -19,10 +19,7 @@ Route::get('/maintenance','TemplateController@maintenance')->name('maintenance')
 Route::get('/','TemplateController@index')->name('welcome');
 Route::get('/informasi','TemplateController@informasi')->name('informasi.index');
 Route::get('/statistik','StatistikController@index')->name('statistik.index');
-Route::get('/web','TemplateController@maintenance')->name('maintenance');
-Route::get('/faq',function(){
-	return view("template::faq.index");
-})->name('faq.index');
+Route::get('/faq','TemplateController@faq')->name('faq.index');
 
 
 Route::middleware('auth')->group(function() {

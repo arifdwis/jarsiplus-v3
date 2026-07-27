@@ -2,56 +2,40 @@
 
 namespace Modules\Template\Http\Controllers;
 
-use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Inertia\Inertia;
+use Modules\Formulir\Entities\Permohonan;
 
 class TemplateController extends Controller
 {
-     /**
-     * Title for current resource.
-     *
-     * @var string
-     */
     protected $title = 'Home';
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct() 
-    {
-        $this->module = strtolower('Template');
-        $this->entiti = strtolower('Home');
-        
-        view()->share([
-            'title' => $this->title, 
-        ]);
-    }
-
-    /**
-     * Display a listing of the resource.
-     * @return Renderable
-     */
     public function index(Request $request)
     {
-        return view('template::index');
+        $permohonanCount = Permohonan::count();
+        $prosesCount = Permohonan::where('status', 0)->count();
+        $setujuCount = Permohonan::where('status', 1)->count();
+
+        return Inertia::render('Welcome', [
+            'permohonanCount' => $permohonanCount,
+            'prosesCount' => $prosesCount,
+            'setujuCount' => $setujuCount,
+        ]);
     }
 
     public function informasi(Request $request)
     {
-        return view('template::informasi');
+        return Inertia::render('Informasi/Index');
     }
 
-     /**
-     * Display a listing of the resource.
-     * @return Renderable
-     */
+    public function faq()
+    {
+        return Inertia::render('Faq/Index');
+    }
+
     public function maintenance()
     {
-        return view('template::maintenance');
+        return Inertia::render('Maintenance');
     }
-
-   
 }
