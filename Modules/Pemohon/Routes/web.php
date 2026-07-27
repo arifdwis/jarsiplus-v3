@@ -11,10 +11,12 @@
 |
 */
 
-Route::prefix('jarsiplus')->as('epanel.')->middleware(['auth'])->group(function() 
-{
-    Route::resources([
-        'pemohon' => 'PemohonController',
-    ]);
+foreach (['sikerja', 'jarsiplus'] as $prefix) {
+    Route::prefix($prefix)->as('epanel.')->middleware(['auth'])->group(function() 
+    {
+        Route::resources([
+            'pemohon' => 'PemohonController',
+        ]);
 
-});
+    });
+}

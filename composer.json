@@ -8,13 +8,14 @@
         "php": "^8.2|^8.3|^8.4",
         "cviebrock/eloquent-sluggable": "^11.0|^12.0",
         "guzzlehttp/guzzle": "^7.8",
+        "inertiajs/inertia-laravel": "^2.0",
         "intervention/image": "^2.7|^3.0",
         "laravel/framework": "^12.0",
         "laravel/helpers": "^1.7",
         "laravel/sanctum": "^4.0",
         "laravel/socialite": "^5.11",
         "laravel/tinker": "^2.9",
-        "inertiajs/inertia-laravel": "^2.0",
+        "laravelcollective/html": "*",
         "novay/nue": "*",
         "novay/sso-client": "*",
         "nue-extensions/backup": "*",
@@ -26,6 +27,10 @@
         "yajra/laravel-datatables-oracle": "^11.0|^12.0"
     },
     "repositories": [
+        {
+            "type": "path",
+            "url": "packages/html"
+        },
         {
             "type": "path",
             "url": "packages/nue"
@@ -50,7 +55,6 @@
     "replace": {
         "fruitcake/laravel-cors": "*",
         "facade/ignition": "*",
-        "laravelcollective/html": "*",
         "torchlight/torchlight-laravel": "*"
     },
     "autoload": {

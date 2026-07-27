@@ -19,22 +19,24 @@
 //     Route::resource('kategori','KategoriController');
 // });
 
-Route::prefix('jarsiplus')->as('epanel.')->middleware(['auth'])->group(function() 
-{
-    Route::resources([
-        'logpermohonan' => 'LogPermohonanController',
-        'permohonan.file' => 'FileController',
-        'permohonan.persetujuan' => 'PenjadwalanController',
-        'file.pembahasan' => 'PembahasanController',
-        'file.validasi' => 'ValidasiController',
-        'laman' => 'LamanController',
-    ]);
+foreach (['sikerja', 'jarsiplus'] as $prefix) {
+    Route::prefix($prefix)->as('epanel.')->middleware(['auth'])->group(function() 
+    {
+        Route::resources([
+            'logpermohonan' => 'LogPermohonanController',
+            'permohonan.file' => 'FileController',
+            'permohonan.persetujuan' => 'PenjadwalanController',
+            'file.pembahasan' => 'PembahasanController',
+            'file.validasi' => 'ValidasiController',
+            'laman' => 'LamanController',
+        ]);
 
-    Route::get('permohonan.penawaran', 'FileController@penawaran')->name('penawaran.index');
-    Route::get('kesepakatan', 'FileController@kesepakatan')->name('kesepakatan.index');
-    Route::get('perjanjian', 'FileController@perjanjian')->name('perjanjian.index');
+        Route::get('permohonan.penawaran', 'FileController@penawaran')->name('penawaran.index');
+        Route::get('kesepakatan', 'FileController@kesepakatan')->name('kesepakatan.index');
+        Route::get('perjanjian', 'FileController@perjanjian')->name('perjanjian.index');
 
-});
+    });
+}
 
 Route::prefix('support')->as('epanel.')->middleware(['auth'])->group(function() 
 {

@@ -11,19 +11,20 @@
 |
 */
 
-Route::prefix('jarsiplus')->as('epanel.')->middleware(['auth'])->group(function () {
-   Route::get('bukti-dukung', 'BuktiDukungController@index')->name('bukti-dukung.index');
-   Route::get('bukti-dukung/export', 'BuktiDukungController@export')->name('bukti-dukung.export');
-   Route::post('permohonan/{id}/notifikasi-status', 'PermohonanController@notifyStatus')->name('permohonan.notify-status');
-   Route::resources([
-      'permohonan' => 'PermohonanController',
-      'arsip' => 'ArsipController',
-      'permohonan.penilaian' => 'PenilaianController',
-      'penilaian.file' => 'FileController',
-   ]);
-   Route::get('arsip/{id}/penilaian', 'ArsipController@penilaian')->name('arsip.penilaian');
-
-});
+foreach (['sikerja', 'jarsiplus'] as $prefix) {
+    Route::prefix($prefix)->as('epanel.')->middleware(['auth'])->group(function () {
+       Route::get('bukti-dukung', 'BuktiDukungController@index')->name('bukti-dukung.index');
+       Route::get('bukti-dukung/export', 'BuktiDukungController@export')->name('bukti-dukung.export');
+       Route::post('permohonan/{id}/notifikasi-status', 'PermohonanController@notifyStatus')->name('permohonan.notify-status');
+       Route::resources([
+          'permohonan' => 'PermohonanController',
+          'arsip' => 'ArsipController',
+          'permohonan.penilaian' => 'PenilaianController',
+          'penilaian.file' => 'FileController',
+       ]);
+       Route::get('arsip/{id}/penilaian', 'ArsipController@penilaian')->name('arsip.penilaian');
+    });
+}
 
 
 
