@@ -1,6 +1,6 @@
 <script>
     var params = '{!! request()->has('_pjax') ? '&' : '?' !!}datatable=true';
-    var table = Nue.components.NueDatatables.init('.js-datatable', {
+    var table = HSCore.components.HSDatatables.init('.js-datatable', {
         scrollY: 'calc(100vh - 200px)',
         ajax : '{!! request()->fullUrl() !!}' + params, 
         columns: [
