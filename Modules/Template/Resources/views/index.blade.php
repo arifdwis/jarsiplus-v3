@@ -199,7 +199,7 @@
             $slideItems = [
                 [
                     'image' => asset('img/default-slider.png'),
-                    'alt'   => 'Selamat Datang pada Jaringan Aplikasi Inovasi Plus Kota Samarinda',
+                    'alt'   => 'Selamat Datang pada Aplikasi Penjaringan Inovasi Kota Samarinda',
                 ]
             ];
         }
