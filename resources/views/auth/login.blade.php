@@ -5,7 +5,7 @@
 @push('css')
 <style>
 /* ============================================================
-   ZERO-SCROLL & PERFECT HORIZONTAL ALIGNMENT LOGIN PAGE
+   ULTRA-CLEAN ZERO-SCROLL LOGIN PAGE (NO FOOTER LINES)
    ============================================================ */
 html, body {
     height: 100vh !important;
@@ -105,7 +105,7 @@ html, body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: clamp(24px, 3.5vw, 48px) clamp(24px, 4vw, 56px) 0 clamp(24px, 4vw, 56px);
+    padding: clamp(32px, 4vw, 56px) clamp(32px, 4.5vw, 60px);
     box-sizing: border-box;
 }
 
@@ -118,7 +118,7 @@ html, body {
 }
 
 .jp-auth__logo img {
-    height: 44px;
+    height: 48px;
     width: auto;
     display: block;
     filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
@@ -133,38 +133,21 @@ html, body {
 }
 
 .jp-auth__brand-title {
-    font-size: clamp(2rem, 3.2vw, 2.75rem) !important;
+    font-size: clamp(2.2rem, 3.5vw, 3rem) !important;
     font-weight: 800 !important;
     line-height: 1.15 !important;
     letter-spacing: -0.035em !important;
     color: #FFFFFF !important;
-    margin: 0 0 16px 0 !important;
+    margin: 0 0 20px 0 !important;
     text-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
 }
 
 .jp-auth__brand-lead {
     color: #CBD5E1 !important;
-    font-size: 14.5px !important;
-    line-height: 1.65 !important;
+    font-size: 15.5px !important;
+    line-height: 1.7 !important;
     margin: 0 !important;
     font-weight: 400;
-}
-
-.jp-auth__foot-left {
-    position: relative;
-    z-index: 2;
-    height: 64px;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-top: 1px solid rgba(255, 255, 255, 0.12);
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    color: #94A3B8 !important;
-    font-family: var(--font-mono, monospace);
-    font-size: 12px;
 }
 
 /* ------------------------------------------------------------
@@ -185,7 +168,7 @@ html, body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: clamp(24px, 3.5vw, 48px) clamp(24px, 4vw, 56px) 0 clamp(24px, 4vw, 56px);
+    padding: clamp(32px, 4vw, 56px) clamp(32px, 4.5vw, 60px);
     box-sizing: border-box;
 }
 
@@ -356,32 +339,6 @@ html, body {
     font-weight: 700;
 }
 
-.jp-auth__foot-right {
-    height: 64px;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-top: 1px solid #E2E8F0;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-.jp-auth__secure {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    color: #64748B !important;
-    font-family: var(--font-mono, monospace);
-    font-size: 11.5px;
-}
-
-.jp-auth__secure .jp-icon {
-    color: #16A34A;
-}
-
 @media (max-width: 991px) {
     html, body, #main, .jp-auth, .jp-auth__split, .jp-auth__brand, .jp-auth__form-panel, .jp-auth__brand-inner, .jp-auth__form-inner {
         height: auto !important;
@@ -390,7 +347,7 @@ html, body {
     }
     .jp-auth__brand-inner,
     .jp-auth__form-inner {
-        padding: 24px 20px 0 20px;
+        padding: 24px 20px;
     }
 }
 </style>
@@ -420,10 +377,6 @@ html, body {
                         &amp; tata kelola pemerintahan daerah.
                     </p>
                 </div>
-
-                <footer class="jp-auth__foot-left">
-                    <span>// Bapperida Kota Samarinda &copy; {{ date('Y') }}</span>
-                </footer>
             </div>
         </section>
 
@@ -495,13 +448,6 @@ html, body {
                         </div>
                     @endif
                 </div>
-
-                <footer class="jp-auth__foot-right">
-                    <div class="jp-auth__secure">
-                        <x-icon name="shield" size="15" />
-                        <span>Terhubung aman via SSO Pemkot Samarinda</span>
-                    </div>
-                </footer>
             </div>
         </section>
 
