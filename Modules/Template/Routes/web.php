@@ -17,6 +17,7 @@ Route::get('/informasi','TemplateController@informasi')->name('informasi.index')
 Route::get('/statistik','StatistikController@index')->name('statistik.index');
 Route::get('/web','TemplateController@maintenance')->name('maintenance');
 Route::get('/faq','FaqController@index')->name('faq.index');
+Route::post('/chatbot/message','ChatbotController@message')->name('chatbot.message');
 
 // Katalog inovasi publik (tanpa login). Halaman permohonan/{uuid}/detail
 // berada di balik middleware auth dan memuat data pribadi inovator, sehingga

@@ -26,3 +26,5 @@ Route::any('/logout', 'Novay\SSO\Http\Controllers\OAuthController@logout')->name
 Route::get('/informasi', 'Modules\Template\Http\Controllers\TemplateController@informasi')->name('informasi');
 Route::get('/faq', 'Modules\Template\Http\Controllers\FaqController@index')->name('faq');
 Route::get('/statistik', 'Modules\Template\Http\Controllers\StatistikController@index')->name('statistik');
+Route::post('/chatbot/message', 'Modules\Template\Http\Controllers\ChatbotController@message')->name('chatbot.message');
+
