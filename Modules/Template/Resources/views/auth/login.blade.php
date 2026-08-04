@@ -5,7 +5,7 @@
 @push('css')
 <style>
 /* ============================================================
-   PERFECT SYMMETRICAL LOGIN PAGE — JARSIPLUS COBALT
+   CLEAN MINIMALIST LOGIN PAGE — JARSIPLUS COBALT
    ============================================================ */
 .jp-auth {
     min-height: 100vh;
@@ -24,7 +24,7 @@
 
 @media (min-width: 992px) {
     .jp-auth__split {
-        grid-template-columns: 52% 48%;
+        grid-template-columns: 50% 50%;
     }
 }
 
@@ -34,7 +34,7 @@
 .jp-auth__brand {
     position: relative;
     overflow: hidden;
-    background: linear-gradient(165deg, #07111E 0%, #0F2444 55%, #060E1A 100%);
+    background: linear-gradient(160deg, #06111F 0%, #0D213F 55%, #050D19 100%);
     color: #FFFFFF !important;
     display: flex;
     flex-direction: column;
@@ -45,8 +45,8 @@
     position: absolute;
     inset: 0;
     background-image: 
-        linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
     background-size: 40px 40px;
     mask-image: radial-gradient(ellipse at 30% 20%, rgba(0, 0, 0, 0.7) 0%, transparent 75%);
     pointer-events: none;
@@ -63,7 +63,7 @@
     right: -120px;
     width: 480px;
     height: 480px;
-    background: radial-gradient(circle, rgba(2, 132, 199, 0.25) 0%, transparent 65%);
+    background: radial-gradient(circle, rgba(2, 132, 199, 0.22) 0%, transparent 65%);
 }
 
 .jp-auth__glow--2 {
@@ -71,7 +71,7 @@
     left: -100px;
     width: 380px;
     height: 380px;
-    background: radial-gradient(circle, rgba(56, 189, 248, 0.15) 0%, transparent 60%);
+    background: radial-gradient(circle, rgba(56, 189, 248, 0.12) 0%, transparent 60%);
 }
 
 .jp-auth__brand-inner {
@@ -81,35 +81,22 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: clamp(36px, 4.5vw, 64px) clamp(32px, 4.5vw, 64px);
+    padding: clamp(36px, 5vw, 64px) clamp(32px, 5vw, 64px);
     box-sizing: border-box;
 }
 
 .jp-auth__head-left {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 16px;
+    justify-content: flex-start;
     margin-bottom: clamp(32px, 4vw, 56px);
 }
 
 .jp-auth__logo img {
-    height: 46px;
+    height: 52px;
     width: auto;
     display: block;
-    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.3));
-}
-
-.jp-auth__badge-left {
-    background: rgba(2, 132, 199, 0.22);
-    border: 1px solid rgba(56, 189, 248, 0.4);
-    color: #38BDF8 !important;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.6px;
-    padding: 6px 14px;
-    border-radius: 20px;
-    text-transform: uppercase;
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
 }
 
 .jp-auth__main-left {
@@ -117,78 +104,31 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    max-width: 520px;
+    max-width: 480px;
 }
 
 .jp-auth__brand-title {
-    font-size: clamp(2rem, 3.2vw, 2.65rem) !important;
+    font-size: clamp(2.2rem, 3.5vw, 3rem) !important;
     font-weight: 800 !important;
-    line-height: 1.18 !important;
-    letter-spacing: -0.03em !important;
+    line-height: 1.15 !important;
+    letter-spacing: -0.035em !important;
     color: #FFFFFF !important;
-    margin: 0 0 16px 0 !important;
+    margin: 0 0 20px 0 !important;
     text-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
 }
 
 .jp-auth__brand-lead {
     color: #CBD5E1 !important;
-    font-size: 15px !important;
-    line-height: 1.65 !important;
-    margin-bottom: clamp(28px, 3.5vw, 40px) !important;
+    font-size: 15.5px !important;
+    line-height: 1.7 !important;
+    margin: 0 !important;
     font-weight: 400;
-}
-
-.jp-auth__features {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-}
-
-.jp-auth__feature {
-    display: flex;
-    align-items: flex-start;
-    gap: 16px;
-    padding: 16px 18px;
-    border-radius: 14px;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(8px);
-    transition: all 0.24s ease;
-}
-
-.jp-auth__feature-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
-    background: rgba(56, 189, 248, 0.18);
-    border: 1px solid rgba(56, 189, 248, 0.35);
-    color: #38BDF8 !important;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-
-.jp-auth__feature-title {
-    display: block;
-    color: #FFFFFF !important;
-    font-weight: 700 !important;
-    font-size: 14.5px;
-    line-height: 1.35;
-    margin-bottom: 2px;
-}
-
-.jp-auth__feature-desc {
-    display: block;
-    color: #94A3B8 !important;
-    font-size: 12.5px;
-    line-height: 1.45;
 }
 
 .jp-auth__foot-left {
     position: relative;
     z-index: 2;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
     padding-top: 20px;
     margin-top: 32px;
     color: #94A3B8 !important;
@@ -210,29 +150,15 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: clamp(36px, 4.5vw, 64px) clamp(32px, 4.5vw, 64px);
+    padding: clamp(36px, 5vw, 64px) clamp(32px, 5vw, 64px);
     box-sizing: border-box;
 }
 
 .jp-auth__head-right {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 16px;
+    justify-content: flex-end;
     margin-bottom: clamp(32px, 4vw, 56px);
-}
-
-.jp-auth__badge-right {
-    display: inline-block;
-    background: #E0F2FE;
-    border: 1px solid #BAE6FD;
-    color: #0284C7 !important;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    padding: 6px 14px;
-    border-radius: 20px;
-    text-transform: uppercase;
 }
 
 .jp-auth__back-link {
@@ -242,7 +168,7 @@
     align-items: center;
     gap: 6px;
     font-weight: 600;
-    font-size: 13px;
+    font-size: 13.5px;
     transition: color 0.18s ease;
 }
 
@@ -255,32 +181,32 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    max-width: 440px;
+    max-width: 420px;
     margin: 0 auto;
     width: 100%;
 }
 
 .jp-auth__heading-title {
-    font-size: clamp(1.8rem, 2.6vw, 2.2rem) !important;
+    font-size: clamp(2rem, 2.8vw, 2.4rem) !important;
     font-weight: 800 !important;
     color: #0F172A !important;
     letter-spacing: -0.03em !important;
-    margin: 0 0 8px 0 !important;
-    line-height: 1.25 !important;
+    margin: 0 0 10px 0 !important;
+    line-height: 1.2 !important;
 }
 
 .jp-auth__heading-sub {
     color: #64748B !important;
     font-size: 14.5px !important;
     line-height: 1.55 !important;
-    margin: 0 0 32px 0 !important;
+    margin: 0 0 36px 0 !important;
 }
 
 .jp-auth__actions {
     display: flex;
     flex-direction: column;
     gap: 14px;
-    margin-bottom: 24px;
+    margin-bottom: 28px;
 }
 
 .jp-auth__sso-btn {
@@ -346,7 +272,7 @@
     display: flex;
     align-items: center;
     gap: 14px;
-    margin-bottom: 24px;
+    margin-bottom: 28px;
     color: #94A3B8;
     font-size: 12px;
     font-weight: 500;
@@ -436,45 +362,17 @@
             <div class="jp-auth__brand-inner">
                 <div class="jp-auth__head-left">
                     <a href="{{ url('/') }}" class="jp-auth__logo">
-                        <img
-                            src="{{ asset(file_exists(public_path('img/brand/logo-white.svg')) ? 'img/brand/logo-white.svg' : (file_exists(public_path('img/brand/logo-jarsiplus.svg')) ? 'img/brand/logo-jarsiplus.svg' : 'images/logo-jarsiplus.svg')) }}"
-                            alt="Logo JARSIPLUS"
-                            style="{{ !file_exists(public_path('img/brand/logo-white.svg')) ? 'filter: brightness(0) invert(1);' : '' }}"
-                        >
+                        <img src="{{ asset('img/brand/logo-white.svg') }}" alt="Logo JARSIPLUS">
                     </a>
-                    <span class="jp-auth__badge-left">PEMERINTAH KOTA SAMARINDA</span>
                 </div>
 
                 <div class="jp-auth__main-left">
                     <h1 class="jp-auth__brand-title">Jaringan Inovasi Plus Daerah</h1>
-
                     <p class="jp-auth__brand-lead">
                         Platform resmi Bapperida Kota Samarinda untuk pengelolaan,
                         evaluasi, dan publikasi usulan inovasi pelayanan publik
                         &amp; tata kelola pemerintahan daerah.
                     </p>
-
-                    <div class="jp-auth__features">
-                        <div class="jp-auth__feature">
-                            <span class="jp-auth__feature-icon">
-                                <x-icon name="check" size="20" />
-                            </span>
-                            <div>
-                                <span class="jp-auth__feature-title">Pengajuan Standar IGA</span>
-                                <span class="jp-auth__feature-desc">Kriteria Indeks Inovasi Daerah Kementerian Dalam Negeri</span>
-                            </div>
-                        </div>
-
-                        <div class="jp-auth__feature">
-                            <span class="jp-auth__feature-icon">
-                                <x-icon name="info" size="20" />
-                            </span>
-                            <div>
-                                <span class="jp-auth__feature-title">Pelacakan Berkas Real-Time</span>
-                                <span class="jp-auth__feature-desc">Pantau progres pembahasan oleh Tim Kerja Sama Daerah (TKSD)</span>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
                 <footer class="jp-auth__foot-left">
@@ -487,7 +385,6 @@
         <section class="jp-auth__form-panel">
             <div class="jp-auth__form-inner">
                 <div class="jp-auth__head-right">
-                    <span class="jp-auth__badge-right">PORTAL INOVATOR</span>
                     <a href="{{ url('/') }}" class="jp-auth__back-link">
                         <x-icon name="arrow-left" size="14" />
                         Kembali ke Beranda
