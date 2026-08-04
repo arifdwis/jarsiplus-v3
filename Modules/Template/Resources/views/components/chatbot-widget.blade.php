@@ -1,3 +1,4 @@
+@if(!request()->is('login*') && !request()->is('auth*'))
 {{-- CHATBOT WIDGET ASISTEN AI JARSIPLUS --}}
 <div id="jp-chatbot-container" style="position: fixed; bottom: 24px; right: 24px; z-index: 9999; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
 
@@ -261,3 +262,4 @@
         100% { opacity: 0.2; }
     }
 </style>
+@endif
