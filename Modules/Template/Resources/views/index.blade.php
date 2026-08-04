@@ -181,12 +181,10 @@
         </div>
     </section>
 
-    {{-- Sorotan / slider.
-         Sebelumnya bagian ini menampilkan tiga berita contoh dengan foto stok
-         dari Unsplash yang tampak seperti pengumuman resmi. Sekarang isinya
-         diambil dari data Slider; bila kosong, seksi ini tidak ditampilkan. --}}
-    @if(isset($sliders) && $sliders->count() > 0)
-        @php
+    {{-- Sorotan / slider --}}
+    @php
+        $slideItems = [];
+        if (isset($sliders) && $sliders->count() > 0) {
             $slideItems = $sliders->map(function ($s) {
                 return [
                     'image' => $s->file ? asset($s->file) : null,
@@ -194,16 +192,25 @@
                     'desc'  => $s->label ?? null,
                 ];
             })->filter(fn ($s) => !empty($s['image']))->values()->all();
-        @endphp
+        }
 
-        @if(count($slideItems) > 0)
-            <section class="jp-section jp-section--sm jp-section--sunken">
-                <div class="l-container">
-                    <x-carousel id="sliderBeranda" :items="$slideItems" data-interval="6000" />
-                </div>
-            </section>
-        @endif
-    @endif
+        // Slider Default jika data slider di database kosong / dihapus seluruhnya
+        if (empty($slideItems)) {
+            $slideItems = [
+                [
+                    'image' => asset('baimbai/Banner Lomba Baimbai 2026.jpeg'),
+                    'title' => 'Selamat Datang pada Jaringan Aplikasi Inovasi Plus Kota Samarinda',
+                    'desc'  => 'Portal Resmi JARSIPLUS — Pusat Informasi, Statistik & Tata Kelola Inovasi Daerah Kota Samarinda',
+                ]
+            ];
+        }
+    @endphp
+
+    <section class="jp-section jp-section--sm jp-section--sunken">
+        <div class="l-container">
+            <x-carousel id="sliderBeranda" :items="$slideItems" data-interval="6000" />
+        </div>
+    </section>
 
     {{-- Agenda & poster --}}
     @if(isset($events) && $events->count() > 0)
