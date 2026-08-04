@@ -60,7 +60,7 @@
                     </svg>
                 </div>
                 <div style="background: #FFFFFF; border: 1px solid #E2E8F0; padding: 12px 15px; border-radius: 4px 14px 14px 14px; max-width: 82%; font-size: 13px; color: #1E293B; line-height: 1.5; box-shadow: 0 1px 3px rgba(15,23,42,0.05);">
-                    Halo! 👋 Saya <strong>Asisten AI Resmi JARSIPLUS</strong>. Ada yang bisa saya bantu seputar pendaftaran <strong>Lomba BAIMBAI 2026</strong>, indikator penilaian, atau layanan inovasi daerah Kota Samarinda?
+                    Halo! 👋 Saya <strong>Asisten AI Resmi JARSIPLUS</strong> Kota Samarinda. Ada yang bisa saya bantu seputar Sistem JARSIPLUS, tata cara pengajuan inovasi, atau indikator penilaian daerah?
                 </div>
             </div>
 
@@ -70,9 +70,9 @@
                         style="background: #FFFFFF; border: 1px solid #CBD5E1; color: #0284C7; padding: 6px 12px; border-radius: 20px; font-size: 11.5px; font-weight: 500; cursor: pointer; transition: all 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.03);">
                     💡 Apa itu JARSIPLUS?
                 </button>
-                <button type="button" onclick="sendJarsiChatSuggestion('Bagaimana cara mendaftar Lomba Inovasi BAIMBAI 2026?')" 
+                <button type="button" onclick="sendJarsiChatSuggestion('Bagaimana langkah pengajuan dan pendaftaran inovasi daerah?')" 
                         style="background: #FFFFFF; border: 1px solid #CBD5E1; color: #0284C7; padding: 6px 12px; border-radius: 20px; font-size: 11.5px; font-weight: 500; cursor: pointer; transition: all 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.03);">
-                    🏆 Cara Daftar Lomba BAIMBAI
+                    📝 Cara Pengajuan Inovasi
                 </button>
                 <button type="button" onclick="sendJarsiChatSuggestion('Apa saja berkas pendukung dan parameter indikator inovasi?')" 
                         style="background: #FFFFFF; border: 1px solid #CBD5E1; color: #0284C7; padding: 6px 12px; border-radius: 20px; font-size: 11.5px; font-weight: 500; cursor: pointer; transition: all 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.03);">
