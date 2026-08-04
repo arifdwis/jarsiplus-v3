@@ -198,9 +198,8 @@
         if (empty($slideItems)) {
             $slideItems = [
                 [
-                    'image' => asset('baimbai/Banner Lomba Baimbai 2026.jpeg'),
-                    'title' => 'Selamat Datang pada Jaringan Aplikasi Inovasi Plus Kota Samarinda',
-                    'desc'  => 'Portal Resmi JARSIPLUS — Pusat Informasi, Statistik & Tata Kelola Inovasi Daerah Kota Samarinda',
+                    'image' => asset('img/default-slider.png'),
+                    'alt'   => 'Selamat Datang pada Jaringan Aplikasi Inovasi Plus Kota Samarinda',
                 ]
             ];
         }

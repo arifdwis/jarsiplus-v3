@@ -5,7 +5,7 @@
         @foreach($items as $index => $item)
             <div class="jp-carousel__slide @if($index === 0) is-active @endif">
                 @if($item['image'] ?? null)
-                    <img src="{{ $item['image'] }}" alt="{{ $item['alt'] ?? ($item['title'] ?? '') }}" class="jp-carousel__img" loading="{{ $index === 0 ? 'eager' : 'lazy' }}" onerror="this.onerror=null; this.src='{{ asset('baimbai/Banner Lomba Baimbai 2026.jpeg') }}';">
+                    <img src="{{ $item['image'] }}" alt="{{ $item['alt'] ?? ($item['title'] ?? '') }}" class="jp-carousel__img" loading="{{ $index === 0 ? 'eager' : 'lazy' }}" onerror="this.onerror=null; this.src='{{ asset('img/default-slider.png') }}';">
                 @endif
                 @if($item['title'] ?? null)
                     <div class="jp-carousel__overlay">
