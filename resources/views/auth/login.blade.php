@@ -5,8 +5,13 @@
 @push('css')
 <style>
 /* ============================================================
-   CLEAN MINIMALIST LOGIN PAGE — JARSIPLUS COBALT
+   EXACT HORIZONTAL ALIGNMENT LOGIN PAGE — JARSIPLUS
    ============================================================ */
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
 .jp-auth {
     min-height: 100vh;
     min-height: 100dvh;
@@ -78,22 +83,25 @@
     position: relative;
     z-index: 2;
     height: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    padding: clamp(36px, 5vw, 64px) clamp(32px, 5vw, 64px);
+    padding: clamp(32px, 4vw, 56px) clamp(32px, 4.5vw, 60px) 0 clamp(32px, 4.5vw, 60px);
     box-sizing: border-box;
 }
 
 .jp-auth__head-left {
+    height: 56px;
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    margin-bottom: clamp(32px, 4vw, 56px);
+    flex-shrink: 0;
+    margin-bottom: 24px;
 }
 
 .jp-auth__logo img {
-    height: 52px;
+    height: 48px;
     width: auto;
     display: block;
     filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
@@ -128,9 +136,15 @@
 .jp-auth__foot-left {
     position: relative;
     z-index: 2;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-    padding-top: 20px;
-    margin-top: 32px;
+    height: 72px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
     color: #94A3B8 !important;
     font-family: var(--font-mono, monospace);
     font-size: 12px;
@@ -147,18 +161,21 @@
 
 .jp-auth__form-inner {
     height: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    padding: clamp(36px, 5vw, 64px) clamp(32px, 5vw, 64px);
+    padding: clamp(32px, 4vw, 56px) clamp(32px, 4.5vw, 60px) 0 clamp(32px, 4.5vw, 60px);
     box-sizing: border-box;
 }
 
 .jp-auth__head-right {
+    height: 56px;
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    margin-bottom: clamp(32px, 4vw, 56px);
+    flex-shrink: 0;
+    margin-bottom: 24px;
 }
 
 .jp-auth__back-link {
@@ -199,14 +216,14 @@
     color: #64748B !important;
     font-size: 14.5px !important;
     line-height: 1.55 !important;
-    margin: 0 0 36px 0 !important;
+    margin: 0 0 32px 0 !important;
 }
 
 .jp-auth__actions {
     display: flex;
     flex-direction: column;
     gap: 14px;
-    margin-bottom: 28px;
+    margin-bottom: 24px;
 }
 
 .jp-auth__sso-btn {
@@ -272,7 +289,7 @@
     display: flex;
     align-items: center;
     gap: 14px;
-    margin-bottom: 28px;
+    margin-bottom: 24px;
     color: #94A3B8;
     font-size: 12px;
     font-weight: 500;
@@ -321,9 +338,15 @@
 }
 
 .jp-auth__foot-right {
-    border-top: 1px solid #F1F5F9;
-    padding-top: 20px;
-    margin-top: 32px;
+    height: 72px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-top: 1px solid #E2E8F0;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 .jp-auth__secure {
@@ -343,7 +366,7 @@
 @media (max-width: 991px) {
     .jp-auth__brand-inner,
     .jp-auth__form-inner {
-        padding: clamp(28px, 5vw, 44px) clamp(20px, 4.5vw, 36px);
+        padding: 28px 20px 0 20px;
         min-height: auto;
     }
 }
