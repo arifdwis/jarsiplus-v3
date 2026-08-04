@@ -4,7 +4,7 @@
             komentar <span class="text-danger">*</span>
         </label>
         <div class="col-sm-9">
-            {!! Form::textarea('komentar', null, ['class' => 'form-control form-style' . $errors->first('komentar', ' is-invalid')]) !!}
+            {!! Form::textarea('komentar', null, ['class' => 'form-control' . $errors->first('komentar', ' is-invalid')]) !!}
             {!! $errors->first('komentar', ' <span class="invalid-feedback">:message</span>') !!}
         </div>
     </div>

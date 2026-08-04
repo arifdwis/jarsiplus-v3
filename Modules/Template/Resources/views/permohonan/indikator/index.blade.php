@@ -1,130 +1,276 @@
 @extends('template::layouts.master')
 
-@section('css')
-    <link rel="stylesheet" type="text/css"
-        href="{{asset('assets/datetimepicker/datetimepicker.css?v=' . env('APP_VERSION'))}}">
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <style>
-        .select2-container {
-            display: block !important;
-        }
-    </style>
-
-    <style type="text/css">
-        .card.product-card {
-            height: 100%;
-        }
-
-        .card.product-card .card-body {
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .card.product-card .title {
-            margin-bottom: 0;
-        }
-
-        .h5 {
-            color: white;
-            text-transform: uppercase;
-            font-size: 12px;
-            font-weight: 700;
-            padding-left: 1em;
-            padding-right: 1em;
-        }
-
-        .card-equal-height {
-            display: flex;
-            align-items: stretch;
-        }
-    </style>
-@endsection
-@section('bottom')
-@endsection
+@section('title', 'Indikator Inovasi — ' . config('app.name', 'JARSIPLUS Samarinda'))
 
 @section('content')
-    <section class="page-header">
-        <div class="header-light text-center">
-            <h1 class="title"> Indikator Inovasi </h1>
-            <h4 class="subtitle">{{$parent->label}}</h4>
-            <a href="{{ route('permohonan.show', $parent->uuid) }}" style="display: inline-block; margin-top: 10px; padding: 6px 16px; background: rgba(255,255,255,0.2); color: #fff; border-radius: 20px; font-size: 13px; text-decoration: none; border: 1px solid rgba(255,255,255,0.4);">
-                ← Kembali ke Permohonan
-            </a>
-        </div>
-    </section>
+@php
+    $totalFilesCount = 0;
+    $approvedFilesCount = 0;
+    foreach($data as $pItem) {
+        if ($pItem->files) {
+            $totalFilesCount += $pItem->files->count();
+            $approvedFilesCount += $pItem->files->where('status', 1)->count();
+        }
+    }
+    $pendingFilesCount = $totalFilesCount - $approvedFilesCount;
+@endphp
 
-    <svg width="100%" height="40px" viewBox="0 0 100 100" version="1.1" preserveAspectRatio="none" class="svg-header">
-        <path d="M0,0 C16.6666667,66 33.3333333,99 50,99 C66.6666667,99 83.3333333,66 100,0 L100,100 L0,100 L0,0 Z"
-            fill="#f9f9f9"></path>
-    </svg>
+<x-page-header
+    badge="INDIKATOR INOVASI"
+    :title="$parent->label"
+    desc="Lengkapi berkas data dukung dan tentukan parameter untuk setiap indikator inovasi daerah."
+    :back="route('permohonan.show', $parent->kode ?? $parent->uuid)"
+    backLabel="Kembali ke Permohonan"
+/>
 
-    <div class="section mt-3 mb-3">
-        <div class="row card-equal-height">
-            @foreach($data as $temp)
-                <div class="col-6 col-lg-3 mb-2">
-                    <a href="#" data-toggle="modal" data-target="#ModalForm{{$temp->id}}">
-
-                        @if($temp->bobot != null)
-
-                            <div class="card" style="height: 100%;">
-                                <div class="kode" style="height: 100%; background: #222831;">
-                                    <iconify-icon icon="solar:lock-broken"></iconify-icon>
-                                    <h5 class="h5 pt-1 pb-1">{{$temp->label_indikator}}</h5>
-                                </div>
-                            </div>
-
-                        @elseif($temp->files->count() != 0)
-
-                            <div class="card" style="height: 100%;">
-                                <div class="kode" style="height: 100%; background: #76ABAE;">
-                                    <iconify-icon icon="grommet-icons:validate"></iconify-icon>
-                                    <h5 class="h5 pt-1 pb-1">{{$temp->label_indikator}}</h5>
-                                </div>
-                            </div>
-
-                        @else
-                            <div class="card" style="height: 100%;">
-                                <div class="kode bg-primary" style="height: 100%;">
-                                    <iconify-icon icon="ic:twotone-mood-bad"></iconify-icon>
-                                    <h5 class="h5 pt-1 pb-1">{{$temp->label_indikator}}</h5>
-                                </div>
-                            </div>
-                        @endif
-                    </a>
-                </div>
-            @endforeach
-        </div>
+<div class="jp-subhead">
+    <div class="l-container jp-subhead__inner">
+        <span class="jp-badge jp-badge--neutral font-mono">KODE: {{ $parent->kode }}</span>
+        <span class="jp-subhead__meta">20 parameter indikator</span>
     </div>
+</div>
+
+<div class="jp-section jp-section--sm">
+    <div class="l-container">
+
+        {{-- Ringkasan berkas --}}
+        <div class="l-grid l-grid--3 u-mb-lg">
+            <x-stat-tile label="Total Berkas Data Dukung" :value="$totalFilesCount"    icon="folder"       accent="var(--c-accent)" />
+            <x-stat-tile label="Berkas Disetujui"         :value="$approvedFilesCount" icon="check-circle" accent="var(--c-success)" />
+            <x-stat-tile label="Belum Disetujui"          :value="$pendingFilesCount"  icon="clock"        accent="var(--c-amber)" />
+        </div>
+
+        {{-- Petunjuk --}}
+        <div class="jp-notice jp-notice--accent u-mb-lg">
+            <span class="jp-notice__icon"><x-icon name="info" size="20" /></span>
+            <div class="jp-notice__body">
+                <strong class="jp-notice__title">Petunjuk pengisian indikator</strong>
+                <p class="jp-notice__text">
+                    Unggah <strong>data dukung</strong> terlebih dahulu untuk setiap indikator sebelum memilih parameter.
+                    Jika bukti dukung belum diunggah, bobot nilai indikator tidak dapat dihitung.
+                </p>
+            </div>
+        </div>
+
+        {{-- Daftar indikator --}}
+        @if(count($data) > 0)
+            <div class="l-grid l-grid--3">
+                @foreach($data as $index => $temp)
+                    @php
+                        $pendaftaranDitutup = role_me() == 4 && pendaftaran_inovasi_ditutup();
+                        $fileIds = $temp->files ? $temp->files->pluck('id')->filter()->toArray() : [];
+                        $fTotal = $temp->files ? $temp->files->count() : 0;
+                        $fApproved = $temp->files ? $temp->files->where('status', 1)->count() : 0;
+
+                        $hasChat = \Modules\Core\Entities\Pembahasan::where('id_histori', $temp->id)
+                                        ->orWhere(function($q) use ($fileIds) {
+                                            if (!empty($fileIds)) {
+                                                $q->whereIn('id_file', $fileIds);
+                                            }
+                                        })->exists();
+
+                        // Indikator dianggap SUDAH DIBAHAS jika:
+                        // 1. Seluruh berkas data dukungnya sudah disetujui (misal 1/1, 2/2)
+                        // 2. Atau bobot nilainya sudah ditetapkan (bobot != null)
+                        // 3. Atau terdapat berkas yang disetujui
+                        // 4. Atau ada histori percakapan pembahasan
+                        $isDiscussed = ($fTotal > 0 && $fApproved == $fTotal) || ($temp->bobot !== null) || $hasChat || ($fApproved > 0);
+
+                        $parameterTerpilih = $temp->label_parameter ?? ($temp->parameters->label ?? null);
+                        $filePercent = $fTotal > 0 ? round(($fApproved / $fTotal) * 100) : 0;
+                    @endphp
+
+                    <article class="jp-record-card {{ $isDiscussed ? 'jp-record-card--success' : 'jp-record-card--amber' }}">
+                        <header class="jp-record-card__head">
+                            <span class="jp-record-card__code">#{{ sprintf('%02d', $index + 1) }}</span>
+                            @if($isDiscussed)
+                                <span class="jp-badge jp-badge--success">
+                                    <x-icon name="check-circle" size="12" /> SUDAH DIBAHAS
+                                </span>
+                            @else
+                                <span class="jp-badge jp-badge--amber">
+                                    <x-icon name="clock" size="12" /> BELUM DIBAHAS
+                                </span>
+                            @endif
+                        </header>
+
+                        <div class="jp-record-card__body">
+                            <h3 class="jp-record-card__title">{{ $temp->label_indikator }}</h3>
+
+                            @if($temp->parameter_id)
+                                <div class="jp-mini-panel">
+                                    <span class="jp-deflist__label">Parameter terpilih</span>
+                                    <strong class="jp-deflist__value">{{ $parameterTerpilih ?? 'Tidak diketahui' }}</strong>
+                                    @if($temp->bobot)
+                                        <span class="font-mono" style="font-size: var(--t-xs); color: var(--c-success); font-weight: 700;">
+                                            Bobot: {{ $temp->bobot }}
+                                        </span>
+                                    @endif
+                                </div>
+                            @else
+                                <p class="jp-card__text jp-clamp-3">
+                                    {{ $temp->indikators->deskripsi ?? 'Pilih parameter dan unggah data dukung untuk indikator ini.' }}
+                                </p>
+                            @endif
+
+                            {{-- Progres berkas --}}
+                            <div class="u-mt-auto">
+                                <div class="u-flex u-justify-between u-align-center u-gap-sm u-mb-2xs">
+                                    <span style="font-size: var(--t-xs); color: var(--c-ink-muted);">Berkas disetujui</span>
+                                    @if($fTotal > 0)
+                                        <strong class="font-mono" style="font-size: var(--t-xs); color: var(--c-ink);">
+                                            {{ $fApproved }}/{{ $fTotal }}
+                                        </strong>
+                                    @else
+                                        <span class="jp-badge jp-badge--neutral">Belum ada data</span>
+                                    @endif
+                                </div>
+                                @if($fTotal > 0)
+                                    <div class="jp-meter">
+                                        <div class="jp-meter__fill {{ $fApproved == $fTotal ? 'jp-meter__fill--success' : '' }}" style="width: {{ $filePercent }}%;"></div>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+
+                        <footer class="jp-record-card__foot">
+                            <a href="{{ route('indikator.data.index', [$temp->uuid]) }}" class="jp-btn jp-btn--ghost jp-btn--sm">
+                                Data Dukung
+                            </a>
+                            <button type="button" class="jp-btn jp-btn--accent jp-btn--sm indikator-trigger" data-id="{{ $temp->id }}">
+                                Parameter <span aria-hidden="true">&rarr;</span>
+                            </button>
+                        </footer>
+                    </article>
+
+                    {{-- Modal parameter --}}
+                    <dialog class="indikator-modal jp-modal" id="modal-{{ $temp->id }}">
+                        <div class="jp-modal__head">
+                            <div style="min-width: 0;">
+                                <span class="jp-badge jp-badge--accent u-mb-xs">INDIKATOR #{{ sprintf('%02d', $index + 1) }}</span>
+                                <h3 class="jp-modal__title">{{ $temp->label_indikator }}</h3>
+                            </div>
+                            <button type="button" class="jp-modal__close md-close" data-close="{{ $temp->id }}" aria-label="Tutup">
+                                <x-icon name="close" size="22" />
+                            </button>
+                        </div>
+
+                        <div class="jp-modal__body">
+                            @if(!empty($temp->indikators->deskripsi))
+                                <p class="jp-card__text u-mb-md">{{ $temp->indikators->deskripsi }}</p>
+                            @endif
+
+                            <div class="jp-notice jp-notice--amber u-mb-md">
+                                <span class="jp-notice__icon"><x-icon name="info" size="18" /></span>
+                                <div class="jp-notice__body">
+                                    <p class="jp-notice__text">
+                                        Unggah <strong>data dukung</strong> terlebih dahulu sebelum memilih parameter.
+                                        Bobot nilai tidak dihitung jika bukti dukung masih kosong.
+                                    </p>
+                                </div>
+                            </div>
+
+                            @if($temp->parameter_id)
+                                <div class="jp-notice jp-notice--success u-mb-md">
+                                    <span class="jp-notice__icon"><x-icon name="check-circle" size="18" /></span>
+                                    <div class="jp-notice__body">
+                                        <strong class="jp-notice__title">Parameter terpilih</strong>
+                                        <p class="jp-notice__text">
+                                            {{ $parameterTerpilih ?? 'Tidak diketahui' }}
+                                            @if($temp->bobot)<br>Bobot nilai: <strong>{{ $temp->bobot }}</strong>@endif
+                                        </p>
+                                    </div>
+                                </div>
+                            @endif
+
+                            @if($pendaftaranDitutup)
+                                <div class="jp-notice jp-notice--danger">
+                                    <span class="jp-notice__icon"><x-icon name="lock" size="18" /></span>
+                                    <div class="jp-notice__body">
+                                        <p class="jp-notice__text">{{ pendaftaran_inovasi_pesan_tutup() }}</p>
+                                    </div>
+                                </div>
+                            @elseif(role_me() == 4)
+                                {!! Form::model($temp, ['route' => ["$prefix.update", $parent->uuid, $temp->id], 'autocomplete' => 'off', 'files' => true, 'method' => 'PUT', 'id' => 'formParameter-'.$temp->id]) !!}
+                                    <div class="jp-field">
+                                        <label class="jp-field__label" for="parameter_id_{{ $temp->id }}">
+                                            Pilih Parameter Indikator <span class="jp-label__required">*</span>
+                                        </label>
+                                        <select class="jp-select no-select2" id="parameter_id_{{ $temp->id }}" name="parameter_id" required>
+                                            <option value="">-- Pilih Salah Satu Parameter --</option>
+                                            @foreach(Modules\Formulir\Entities\Parameter::where('indikator_id', $temp->indikator_id)->orderBy('bobot', 'asc')->get() as $parameter)
+                                                <option value="{{ $parameter->id }}" {{ $temp->parameter_id == $parameter->id ? 'selected' : '' }}>
+                                                    {{ $parameter->label }} (Bobot: {{ $parameter->bobot }})
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                {!! Form::close() !!}
+                            @else
+                                <div class="jp-field">
+                                    <label class="jp-field__label">Parameter Terpilih</label>
+                                    <select class="jp-select no-select2" disabled>
+                                        <option value="">-- Parameter Belum Dipilih --</option>
+                                        @foreach(Modules\Formulir\Entities\Parameter::where('indikator_id', $temp->indikator_id)->orderBy('bobot', 'asc')->get() as $parameter)
+                                            <option value="{{ $parameter->id }}" {{ $temp->parameter_id == $parameter->id ? 'selected' : '' }}>
+                                                {{ $parameter->label }} (Bobot: {{ $parameter->bobot }})
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <p class="jp-field__hint">Hanya pemohon yang dapat mengubah parameter.</p>
+                                </div>
+                            @endif
+                        </div>
+
+                        <div class="jp-modal__foot">
+                            <a href="{{ route('indikator.data.index', [$temp->uuid]) }}" class="jp-btn jp-btn--ghost">
+                                Kelola Data Dukung ({{ $fApproved }}/{{ $fTotal }})
+                            </a>
+                            @if(!$pendaftaranDitutup && role_me() == 4)
+                                <button type="submit" form="formParameter-{{ $temp->id }}" class="jp-btn jp-btn--accent">
+                                    Simpan Parameter
+                                </button>
+                            @else
+                                <button type="button" class="jp-btn jp-btn--ghost md-close" data-close="{{ $temp->id }}">Tutup</button>
+                            @endif
+                        </div>
+                    </dialog>
+                @endforeach
+            </div>
+        @else
+            <x-empty
+                icon="clipboard"
+                title="Belum ada indikator"
+                desc="Daftar indikator untuk usulan ini belum tersedia. Hubungi tim verifikator bila kondisi ini bertahan."
+            />
+        @endif
+
+    </div>
+</div>
 @endsection
 
-
-@section('other')
-    @include("template::permohonan.indikator.modal")
-@endsection
-
-
-@push('scripts')
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script>
-        $('.select2').select2({
-            placeholder: {
-                id: 'null', // the value of the option
-                text: '-- Pilih Salah Satu --'
-            }
+@section('js')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.indikator-trigger').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                var id = this.getAttribute('data-id');
+                var modal = document.getElementById('modal-' + id);
+                if (modal && typeof modal.showModal === 'function') {
+                    modal.showModal();
+                }
+            });
         });
-    </script>
-    <script src="{{asset('js/permohonan.js?v=' . env('APP_VERSION'))}}"></script>
-    <script src="assets/js/lib/popper.min.js"></script>
-    <script src="assets/js/lib/bootstrap.min.js"></script>
-    <script type="module" src="https://unpkg.com/ionicons@5.0.0/dist/ionicons/ionicons.js"></script>
-    <!-- Owl Carousel -->
-    <script src="assets/js/plugins/owl-carousel/owl.carousel.min.js"></script>
-    <!-- jQuery Circle Progress -->
-    <script src="assets/js/plugins/jquery-circle-progress/circle-progress.min.js"></script>
-    <!-- Base Js File -->
-    <script src="assets/js/base.js"></script>
 
-@endpush
+        document.querySelectorAll('.md-close').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                var id = this.getAttribute('data-close');
+                var modal = document.getElementById('modal-' + id);
+                if (modal && typeof modal.close === 'function') {
+                    modal.close();
+                }
+            });
+        });
+    });
+</script>
+@endsection

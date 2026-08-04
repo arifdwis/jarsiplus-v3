@@ -1,77 +1,66 @@
-<section class="page-header">
-    <div class="header-light text-center">
-        @isset($data)
-            @if($data->status == 9)
-                <h3 class="title text-white">Permohonan Ditolak</h3>
-                <h4 class="subtitle">{{$data->alasan_tolak}}.</h4>
-            @endif
-
-            @if($data->status == 1 OR $data->status == 2)
-                <h3 class="title text-white">Permohonan Tervalidasi</h3>
-                <h4 class="subtitle">Permohonan anda telah tervalidasi silahkan melanjutkan ketahap selanjutnya.</h4>
-            @endif
-
-             @if($data->status == 0)
-                <h3 class="title text-white">Menunggu Validasi</h3>
-                <h4 class="subtitle">Permohonan anda sedang menunggu validasi dari admin kami.</h4>
-            @endif
-        
-        @else
-        <h1 class="title">Permohonan</h1>
-        <h4 class="subtitle">Permohonan terdiri dari beberapa form.</h4>
-        @endisset
-    </div>
-    <div class="section">
-        <div class="row">
-            <div class="col-4 px-1">
-                <div class="form-mark-1 text-white rounded d-flex flex-wrap w-100 p-1 active">
-                    <div class="font-weight-bold bg-light rounded w-100 pt-3 pb-3 d-flex justify-content-center f-number">
-                        1
+<div class="jp-section" style="padding-bottom:0">
+    <div class="l-container">
+        @if($parent->status == 0)
+            @if(role_me() == 4)
+                <div class="jp-strip u-mb-xl" style="background:var(--c-amber);color:#fff">
+                    <div class="u-flex u-align-center u-gap-sm">
+                        <x-icon name="alert-triangle" size="20" style="color:#fff" />
+                        <p class="u-mb-0" style="color:#fff;font-weight:600">Menunggu Verifikasi TKSD</p>
                     </div>
-                    <div class="text-white rounded">
-                        <div class="label">
-                            Permohonan
-                        </div>
-                        <div class="description">
-                            Data Permohonan JARSIPLUS
-                        </div>
+                </div>
+            @endif
+        @endif
+
+        @if($parent->status == 1)
+            <div class="jp-strip u-mb-xl" style="background:var(--c-accent);color:#fff">
+                <div class="u-flex u-align-center u-gap-sm">
+                    <x-icon name="check" size="20" style="color:#fff" />
+                    <p class="u-mb-0" style="color:#fff;font-weight:600">Diteruskan ke Operator</p>
+                </div>
+            </div>
+        @endif
+
+        @if($parent->status == 2)
+            <div class="jp-strip u-mb-xl" style="background:var(--c-accent);color:#fff">
+                <div class="u-flex u-align-center u-gap-sm">
+                    <x-icon name="info" size="20" style="color:#fff" />
+                    <p class="u-mb-0" style="color:#fff;font-weight:600">Dalam Proses Verifikasi</p>
+                </div>
+            </div>
+        @endif
+
+        @if($parent->status == 9)
+            <div class="jp-strip u-mb-xl" style="background:var(--c-danger);color:#fff">
+                <div class="u-flex u-align-center u-gap-sm">
+                    <x-icon name="close" size="20" style="color:#fff" />
+                    <p class="u-mb-0" style="color:#fff;font-weight:600">DITOLAK</p>
+                </div>
+            </div>
+        @endif
+
+        <div class="l-grid l-grid--2 u-mb-xl">
+            <div class="jp-card u-p-lg">
+                <div class="jp-data-card" style="margin-bottom:0">
+                    <div class="jp-data-card__bar">
+                        <h1>Kode</h1>
+                    </div>
+                    <div class="jp-data-card__body">
+                        <h1 style="margin:0;font-size:var(--t-2xl);font-weight:700;color:var(--c-accent);font-family:var(--font-heading)">{{ $parent->kode }}</h1>
                     </div>
                 </div>
             </div>
-            <div class="col-4 px-1">
-                <div class="form-mark-2 text-white rounded d-flex flex-wrap w-100 p-1">
-                    <div class="font-weight-bold bg-light rounded w-100 pt-3 pb-3 d-flex justify-content-center f-number">
-                        2
+            <div class="jp-card u-p-lg">
+                <div class="jp-data-card" style="margin-bottom:0">
+                    <div class="jp-data-card__bar">
+                        <h1>Judul</h1>
                     </div>
-                    <div class="text-white rounded">
-                        <div class="label">
-                           Petugas
-                        </div>
-                        <div class="description">
-                            Data Petugas Penginput JARSIPLUS
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-4 px-1">
-                <div class="form-mark-3 text-white rounded d-flex flex-wrap w-100 p-1">
-                    <div class="font-weight-bold bg-light rounded w-100 pt-3 pb-3 d-flex justify-content-center f-number">
-                        3
-                    </div>
-                    <div class="text-white rounded">
-                        <div class="label">
-                            Persiapan
-                        </div>
-                        <div class="description">
-                            Data Deskripsi Inovasi
-                        </div>
+                    <div class="jp-data-card__body">
+                        <h1 style="margin:0;font-size:var(--t-lg);font-weight:700;color:var(--c-text);font-family:var(--font-heading)">{{ $parent->title }}</h1>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
 
-<svg width="100%" height="40px" viewBox="0 0 100 100" version="1.1" preserveAspectRatio="none" class="svg-header">
-    <path d="M0,0 C16.6666667,66 33.3333333,99 50,99 C66.6666667,99 83.3333333,66 100,0 L100,100 L0,100 L0,0 Z" fill="#f9f9f9"></path>
-</svg>
+        <div class="jp-divider u-mb-xl"></div>
+    </div>
+</div>

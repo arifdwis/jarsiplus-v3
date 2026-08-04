@@ -1,60 +1,29 @@
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Site Maintenance</title>
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
-    <style>
-      html, body { padding: 0; margin: 0; width: 100%; height: 100%; }
-      * {box-sizing: border-box;}
-      body { text-align: center; padding: 0; background: #d6433b; color: #fff; font-family: Open Sans; }
-      h1 { font-size: 50px; font-weight: 100; text-align: center;}
-      body { font-family: Open Sans; font-weight: 100; font-size: 20px; color: #fff; text-align: center; display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center; -webkit-box-align: center; -ms-flex-align: center; align-items: center;}
-      article { display: block; width: 700px; padding: 50px; margin: 0 auto; }
-      a { color: #fff; font-weight: bold;}
-      a:hover { text-decoration: none; }
-      svg { width: 75px; margin-top: 1em; }
-  </style>
+@extends('template::layouts.master')
 
-</head>
-<body>
-    <article>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 202.24 202.24"><defs><style>.cls-1{fill:#fff;}</style></defs><title>Asset 3</title><g id="Layer_2" data-name="Layer 2"><g id="Capa_1" data-name="Capa 1"><path class="cls-1" d="M101.12,0A101.12,101.12,0,1,0,202.24,101.12,101.12,101.12,0,0,0,101.12,0ZM159,148.76H43.28a11.57,11.57,0,0,1-10-17.34L91.09,31.16a11.57,11.57,0,0,1,20.06,0L169,131.43a11.57,11.57,0,0,1-10,17.34Z"/><path class="cls-1" d="M101.12,36.93h0L43.27,137.21H159L101.13,36.94Zm0,88.7a7.71,7.71,0,1,1,7.71-7.71A7.71,7.71,0,0,1,101.12,125.63Zm7.71-50.13a7.56,7.56,0,0,1-.11,1.3l-3.8,22.49a3.86,3.86,0,0,1-7.61,0l-3.8-22.49a8,8,0,0,1-.11-1.3,7.71,7.71,0,1,1,15.43,0Z"/></g></g></svg>
-        <h1>We&rsquo;ll be back soon!</h1>
-        
-        <div>
-            <p>Maaf atas ketidaknyamanannya. Pendaftaran inovasi telah ditutup.</p>
-            <p>&mdash; Tim JARSIPLUS</p>
+@section('title', 'Pemeliharaan Sistem — ' . config('app.name', 'JARSIPLUS Samarinda'))
+
+@section('content')
+<section class="jp-section jp-section--graphite" style="min-height:60vh;display:flex;align-items:center">
+    <div class="l-container u-text-center">
+        <div class="jp-data-card" style="max-width:500px;margin:0 auto;text-align:left">
+            <div class="jp-data-card__bar">
+                <span class="jp-data-card__dots" aria-hidden="true"><i></i><i></i><i></i></span>
+                <span class="jp-data-card__file">system.status</span>
+                <span class="jp-data-card__status">
+                    <span class="jp-data-card__status-dot" style="background-color:var(--c-amber)" aria-hidden="true"></span>
+                    maintenance
+                </span>
+            </div>
+            <div class="jp-data-card__body" style="font-family:var(--font-body);text-align:center">
+                <x-icon name="shield" size="48" style="color:var(--c-amber);margin-bottom:12px" />
+                <h2 style="font-size:var(--t-2xl);margin-bottom:8px">Sistem Dalam Pemeliharaan</h2>
+                <p style="color:var(--c-text-muted); font-size:var(--t-sm);line-height:1.7">Kami sedang melakukan peningkatan performa dan pemeliharaan rutin pada platform JARSIPLUS Kota Samarinda untuk memberikan layanan yang lebih baik.</p>
+                <div style="margin-top:16px;padding:12px;border:1px solid var(--c-border);border-radius:var(--r-card);font-size:var(--t-sm)">
+                    <span style="color:var(--c-text-muted)">Estimasi Selesai: <strong style="color:var(--c-text)">Segera</strong></span>
+                </div>
+                <a href="{{ url('/') }}" class="jp-btn jp-btn--accent u-w-100 u-mt-md">Coba Muat Ulang Halaman</a>
+            </div>
         </div>
-    </article>
-
-    <script>
-        "use strict";
-
-        !function() {
-            var t = window.driftt = window.drift = window.driftt || [];
-            if (!t.init) {
-                if (t.invoked) return void (window.console && console.error && console.error("Drift snippet included twice."));
-                t.invoked = !0, t.methods = [ "identify", "config", "track", "reset", "debug", "show", "ping", "page", "hide", "off", "on" ], 
-                t.factory = function(e) {
-                    return function() {
-                        var n = Array.prototype.slice.call(arguments);
-                        return n.unshift(e), t.push(n), t;
-                    };
-                }, t.methods.forEach(function(e) {
-                    t[e] = t.factory(e);
-                }), t.load = function(t) {
-                    var e = 3e5, n = Math.ceil(new Date() / e) * e, o = document.createElement("script");
-                    o.type = "text/javascript", o.async = !0, o.crossorigin = "anonymous", o.src = "https://js.driftt.com/include/" + n + "/" + t + ".js";
-                    var i = document.getElementsByTagName("script")[0];
-                    i.parentNode.insertBefore(o, i);
-                };
-            }
-        }();
-        drift.SNIPPET_VERSION = '0.3.1';
-        drift.load('5vwfr74d2v26');
-    </script>
-    <!-- End of Async Drift Code -->
-</body>
-</html>
-
+    </div>
+</section>
+@endsection

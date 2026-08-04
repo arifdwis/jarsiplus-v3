@@ -17,7 +17,7 @@ class FaqController extends Controller
         $this->view = 'template::';
         $this->prefix = 'faq';
 
-        $this->toIndex = route('faq');
+        $this->toIndex = url('/faq');
         $this->tCreate = "$this->title created successfully!";
 
         view()->share([
@@ -28,8 +28,8 @@ class FaqController extends Controller
      
     public function index()
     {
-        
-        return view("template::faq.index");
+        $faqs = $this->data->get();
+        return view("template::faq.index", compact('faqs'));
     }
    
 }

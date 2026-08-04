@@ -10,7 +10,7 @@
                     @isset($edit)
                         <img id="avatarImg" class="avatar-img" src="{{ $edit->photo_url }}" alt="">
                     @else
-                        <img id="avatarImg" class="avatar-img" src="https://cdn.btekno.id/templates/v2/img/160x160/img1.jpg" alt="">
+                        <img id="avatarImg" class="avatar-img" src="{{ asset('img/default-avatar.jpg') }}" alt="">
                     @endisset
                 </label>
 
@@ -23,7 +23,7 @@
                             "mode": "image",
                             "targetAttr": "src",
                             "resetTarget": ".js-file-attach-reset-img",
-                            "resetImg": "https://cdn.btekno.id/templates/v2/img/160x160/img1.jpg",
+                            "resetImg": "{{ asset("img/default-avatar.jpg") }}",
                             "allowTypes": [".png", ".jpeg", ".jpg"]
                         }'>
                     </div>

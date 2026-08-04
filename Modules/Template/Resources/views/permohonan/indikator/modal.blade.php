@@ -1,95 +1,97 @@
 @foreach($data as $temp)
     @php
         $pendaftaranDitutup = role_me() == 4 && pendaftaran_inovasi_ditutup();
+        $parameterTerpilih = $temp->label_parameter ?? ($temp->parameters->label ?? null);
     @endphp
-    <div class="modal fade modalbox" id="ModalForm{{$temp->id}}" data-backdrop="static" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    @if($pendaftaranDitutup)
-                        <span class="btn btn-secondary disabled">Data Dukung Ditutup</span>
-                    @else
-                        <a href="{{ route("indikator.data.index", [$temp->uuid]) }}" class="btn btn-primary">Data Dukung</a>
-                    @endif
-                    <a href="javascript:;" data-dismiss="modal">Close</a>
 
-                </div>
-                <div class="modal-body">
-                    <div class="login-form">
-                        <div class="section mt-2">
-                            <h1>{{$temp->label_indikator}}</h1>
-                            <h4>Parameter {{$temp->indikators->deskripsi}}</h4>
-                        </div>
+    <dialog class="jp-modal" id="modal-{{$temp->id}}">
+        <div class="jp-modal__head">
+            <div style="min-width: 0;">
+                <span class="jp-modal__eyebrow">INDIKATOR</span>
+                <h3 class="jp-modal__title">{{ $temp->label_indikator }}</h3>
+            </div>
+            <button type="button" class="jp-modal__close" aria-label="Tutup" onclick="this.closest('dialog').close()">
+                <x-icon name="close" size="22" />
+            </button>
+        </div>
 
-                        {{-- Info: upload bukti dukung dulu --}}
-                        <div class="section mt-2">
-                            <div style="background: #fff3cd; border: 1px solid #ffc107; border-radius: 8px; padding: 10px 14px; font-size: 13px; color: #856404;">
-                                <strong><ion-icon name="information-circle-outline"></ion-icon> Penting:</strong>
-                                Upload <b>Data Dukung</b> terlebih dahulu sebelum memilih parameter. Jika bukti dukung
-                                kosong, bobot akan tetap kosong meskipun parameter sudah dipilih.
-                            </div>
-                        </div>
+        <div class="jp-modal__body">
+            @if(filled($temp->indikators->deskripsi ?? null))
+                <p class="jp-card__text u-mb-md">{{ $temp->indikators->deskripsi }}</p>
+            @endif
 
-                        {{-- Tampilkan parameter yang sudah dipilih --}}
-                        @if($temp->parameter_id)
-                            <div class="section mt-2">
-                                <div
-                                    style="background: #e8f5e9; border: 1px solid #4caf50; border-radius: 8px; padding: 10px 14px; font-size: 13px;">
-                                    <strong><ion-icon name="checkmark-circle-outline"></ion-icon> Parameter terpilih:</strong>
-                                    {{ $temp->label_parameter ?? ($temp->parameters->label ?? '-') }}
-                                    @if($temp->bobot)
-                                        <br><strong>Bobot:</strong> {{ $temp->bobot }}
-                                    @endif
-                                </div>
-                            </div>
-                        @endif
-
-                        @if($pendaftaranDitutup)
-                            <div class="section mt-4 mb-5">
-                                <div class="alert alert-warning mb-0">
-                                    {{ pendaftaran_inovasi_pesan_tutup() }}
-                                </div>
-                            </div>
-                        @elseif(role_me() == 4)
-                            <div class="section mt-4 mb-5">
-                                {!! Form::model($temp, ['route' => ["$prefix.update", $parent->uuid, $temp->id], 'autocomplete' => 'off', 'files' => true, 'method' => 'PUT']) !!}
-                                <div class="form-group basic">
-                                    <div class="input-wrapper">
-                                        <label class="require-form label" for="parameter_id_{{$temp->id}}">Parameter</label>
-                                        <select class="form-control custom-select select2 py-2" name="parameter_id"
-                                            id="parameter_id_{{$temp->id}}">
-                                            <option value="">-- Pilih Salah Satu --</option>
-                                            @foreach(Modules\Formulir\Entities\Parameter::where('indikator_id', $temp->indikator_id)->orderBy('bobot', 'asc')->get() as $parameter)
-                                                <option value="{{$parameter->id}}" data-bobot="{{$parameter->bobot}}" {{ $temp->parameter_id == $parameter->id ? 'selected' : '' }}>{{$parameter->label}}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="mt-2">
-                                    <button type="submit" class="btn btn-primary btn-block btn-lg">Submit</button>
-                                </div>
-                                {!! Form::close() !!}
-                            </div>
-                        @else
-                            <div class="form-group basic">
-                                <div class="input-wrapper">
-                                    <label class="require-form label" for="parameter_id_view_{{$temp->id}}">Parameter</label>
-                                    <select class="form-control custom-select select2 py-2" name="parameter_id"
-                                        id="parameter_id_view_{{$temp->id}}" disabled>
-                                        <option value="">-- Pilih Salah Satu --</option>
-                                        @foreach(Modules\Formulir\Entities\Parameter::where('indikator_id', $temp->indikator_id)->orderBy('bobot', 'asc')->get() as $parameter)
-                                            <option value="{{$parameter->id}}" data-bobot="{{$parameter->bobot}}" {{ $temp->parameter_id == $parameter->id ? 'selected' : '' }}>{{$parameter->label}}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-
-                        @endif
-                    </div>
+            <div class="jp-notice jp-notice--amber u-mb-md">
+                <span class="jp-notice__icon"><x-icon name="info" size="18" /></span>
+                <div class="jp-notice__body">
+                    <p class="jp-notice__text">
+                        Unggah <strong>data dukung</strong> terlebih dahulu sebelum memilih parameter.
+                        Jika bukti dukung kosong, bobot tetap kosong meskipun parameter sudah dipilih.
+                    </p>
                 </div>
             </div>
+
+            @if($temp->parameter_id)
+                <div class="jp-notice jp-notice--success u-mb-md">
+                    <span class="jp-notice__icon"><x-icon name="check-circle" size="18" /></span>
+                    <div class="jp-notice__body">
+                        <strong class="jp-notice__title">Parameter terpilih</strong>
+                        <p class="jp-notice__text">
+                            {{ $parameterTerpilih ?? 'Tidak diketahui' }}
+                            @if($temp->bobot)<br>Bobot: <strong>{{ $temp->bobot }}</strong>@endif
+                        </p>
+                    </div>
+                </div>
+            @endif
+
+            @if($pendaftaranDitutup)
+                <div class="jp-notice jp-notice--danger">
+                    <span class="jp-notice__icon"><x-icon name="lock" size="18" /></span>
+                    <div class="jp-notice__body">
+                        <p class="jp-notice__text">{{ pendaftaran_inovasi_pesan_tutup() }}</p>
+                    </div>
+                </div>
+            @elseif(role_me() == 4)
+                {!! Form::model($temp, ['route' => ["$prefix.update", $parent->uuid, $temp->id], 'autocomplete' => 'off', 'files' => true, 'method' => 'PUT', 'id' => 'formModalParameter-'.$temp->id]) !!}
+                    <div class="jp-field">
+                        <label class="jp-label" for="parameter_id_{{$temp->id}}">Parameter</label>
+                        <select class="jp-select" name="parameter_id" id="parameter_id_{{$temp->id}}">
+                            <option value="">-- Pilih Salah Satu --</option>
+                            @foreach(Modules\Formulir\Entities\Parameter::where('indikator_id', $temp->indikator_id)->orderBy('bobot', 'asc')->get() as $parameter)
+                                <option value="{{$parameter->id}}" data-bobot="{{$parameter->bobot}}" {{ $temp->parameter_id == $parameter->id ? 'selected' : '' }}>
+                                    {{$parameter->label}}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                {!! Form::close() !!}
+            @else
+                <div class="jp-field">
+                    <label class="jp-label" for="parameter_id_view_{{$temp->id}}">Parameter</label>
+                    <select class="jp-select" name="parameter_id" id="parameter_id_view_{{$temp->id}}" disabled>
+                        <option value="">-- Pilih Salah Satu --</option>
+                        @foreach(Modules\Formulir\Entities\Parameter::where('indikator_id', $temp->indikator_id)->orderBy('bobot', 'asc')->get() as $parameter)
+                            <option value="{{$parameter->id}}" data-bobot="{{$parameter->bobot}}" {{ $temp->parameter_id == $parameter->id ? 'selected' : '' }}>
+                                {{$parameter->label}}
+                            </option>
+                        @endforeach
+                    </select>
+                    <p class="jp-field__hint">Hanya pemohon yang dapat mengubah parameter.</p>
+                </div>
+            @endif
         </div>
-    </div>
+
+        <div class="jp-modal__foot">
+            @if($pendaftaranDitutup)
+                <span class="jp-btn jp-btn--ghost is-disabled">Data Dukung Ditutup</span>
+            @else
+                <a href="{{ route('indikator.data.index', [$temp->uuid]) }}" class="jp-btn jp-btn--ghost">Data Dukung</a>
+            @endif
+
+            @if(!$pendaftaranDitutup && role_me() == 4)
+                <button type="submit" form="formModalParameter-{{$temp->id}}" class="jp-btn jp-btn--accent">Simpan</button>
+            @else
+                <button type="button" class="jp-btn jp-btn--ghost" onclick="this.closest('dialog').close()">Tutup</button>
+            @endif
+        </div>
+    </dialog>
 @endforeach

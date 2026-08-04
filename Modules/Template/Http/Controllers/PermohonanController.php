@@ -14,6 +14,7 @@ use Modules\Core\Entities\Histori;
 use Modules\Core\Entities\Penilaian;
 use Modules\Core\Entities\Penjadwalan;
 use Modules\Pemohon\Entities\Pemohon;
+use Modules\Pemohon\Entities\Corporate;
 use App\Observers\HistoriObserver;
 use App\Observers\PenilaianObserver;
 
@@ -36,8 +37,8 @@ class PermohonanController extends Controller
         $this->prefix = $this->entiti;
 
         $this->toIndex = route("$this->prefix.index");
-        $this->tCreate = "$this->title created successfully!";
-        $this->tUpdate = "$this->title update successfully!";
+        $this->tCreate = "Permohonan usulan inovasi berhasil dibuat!";
+        $this->tUpdate = "Permohonan usulan inovasi berhasil diperbarui!";
 
         view()->share([
             'view' => $this->view,
@@ -45,10 +46,43 @@ class PermohonanController extends Controller
         ]);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $data = $this->data::where('id_pemohon_0', me()->id)->orWhere('id_pemohon_1', me()->id)->latest()->get();
+        $query = $this->data::query();
+
+        if (role_me() == 4) {
+            $pemohonId = optional(me()->pemohon)->id;
+            $query->where(function($q) use ($pemohonId) {
+                $q->where('id_pemohon_0', me()->id);
+                if ($pemohonId) {
+                    $q->orWhere('id_pemohon_1', $pemohonId);
+                }
+            });
+        }
+
+        if ($request->filled('status') && $request->status !== 'all') {
+            if ($request->status === 'pembahasan') {
+                $query->whereIn('status', [1, 2]);
+            } else {
+                $query->where('status', $request->status);
+            }
+        }
+
+        if ($request->filled('keyword')) {
+            $kw = trim($request->keyword);
+            $query->where(function($q) use ($kw) {
+                $q->where('kode', 'like', "%{$kw}%")
+                  ->orWhere('label', 'like', "%{$kw}%")
+                  ->orWhereHas('pemohon1', function($sub) use ($kw) {
+                      $sub->where('name', 'like', "%{$kw}%")
+                          ->orWhere('unit_kerja', 'like', "%{$kw}%");
+                  });
+            });
+        }
+
+        $data = $query->latest()->get();
         $identityComplete = $this->hasCompleteIdentity();
+
         return view("$this->view.index", compact('data', 'identityComplete'));
     }
 
@@ -63,7 +97,11 @@ class PermohonanController extends Controller
             return redirect($this->toIndex);
         }
 
-        return view("$this->view.create");
+        $provinsis = class_exists('\Modules\Wilayah\Entities\Provinsi') ? \Modules\Wilayah\Entities\Provinsi::with('citys')->orderBy('name','asc')->get() : collect([]);
+        $kategoris = class_exists('\Modules\Formulir\Entities\Kategori') ? \Modules\Formulir\Entities\Kategori::all() : (class_exists('\Modules\Formulir\Entities\UrusanKategori') ? \Modules\Formulir\Entities\UrusanKategori::all() : collect([]));
+        $urusans = class_exists('\Modules\Formulir\Entities\Urusan') ? \Modules\Formulir\Entities\Urusan::all() : collect([]);
+
+        return view("$this->view.create", compact('provinsis', 'kategoris', 'urusans'));
     }
 
     public function show(Request $request, $kode)
@@ -72,7 +110,6 @@ class PermohonanController extends Controller
         $juriComments = $this->getJuriKomentar($data);
         return view("$this->view.show", compact('data', 'juriComments'));
     }
-
 
     public function detail(Request $request, $uuid)
     {
@@ -91,11 +128,8 @@ class PermohonanController extends Controller
     {
         $data = $this->data::where('uuid', $uuid)->firstOrFail();
         $histori = $data->riwayat()->latest()->get();
-        // return $histori;
-
         return view("$this->view.riwayat", compact('data', 'histori'));
     }
-
 
     public function store(Request $request)
     {
@@ -141,7 +175,6 @@ class PermohonanController extends Controller
             $input['anggaran'] = $this->upload($request->file('anggaran'));
         }
 
-        // return $input;
         $permohonan = $this->data::create($input);
         $date = tgl_indo($permohonan->created_at);
 
@@ -161,7 +194,6 @@ class PermohonanController extends Controller
             Pemerintah Kota Samarinda
             EOT;
 
-        // Aktifkan notifikasi untuk semua
         send_group_whatsapp($pesan);
 
         session()->forget($lockKey);
@@ -172,13 +204,22 @@ class PermohonanController extends Controller
     protected function hasCompleteIdentity()
     {
         $pemohon = me()->pemohon;
+        $corporate = Corporate::where('id_operator', me()->id)->first();
 
-        if (!$pemohon) {
+        if (!$pemohon || !$corporate) {
             return false;
         }
 
-        foreach (['name', 'nik', 'nip', 'phone', 'email', 'unit_kerja', 'jabatan'] as $field) {
+        // Mandatory Pemohon fields
+        foreach (['name', 'nik', 'phone', 'email', 'unit_kerja', 'jabatan', 'address'] as $field) {
             if (trim((string) $pemohon->{$field}) === '') {
+                return false;
+            }
+        }
+
+        // Mandatory Corporate fields
+        foreach (['name', 'email', 'phone', 'address'] as $field) {
+            if (trim((string) $corporate->{$field}) === '') {
                 return false;
             }
         }
@@ -188,7 +229,7 @@ class PermohonanController extends Controller
 
     protected function redirectToBiodata()
     {
-        notify()->flash('Silakan lengkapi dan simpan biodata terlebih dahulu sebelum mengajukan inovasi.', 'warning');
+        notify()->flash('Harap lengkapi 100% Profil Diri dan Data Instansi Anda di bawah ini terlebih dahulu sebelum membuat usulan inovasi baru.', 'warning');
         return redirect()->route('settings.profile.index');
     }
 
@@ -197,72 +238,58 @@ class PermohonanController extends Controller
         return me() && in_array(me()->email, ['arifdwi@samarindakota.go.id', 'alfi.haryadi11@gmail.com']);
     }
 
-
     public function persetujuan(Request $request, $uuid)
     {
         $data = $this->data::where('uuid', $uuid)->firstOrFail();
-        // return $data;
-        return view("$this->view.penjadwalan.index", compact('data'));
+        $parent = $data;
+        return view("$this->view.penjadwalan.index", compact('data', 'parent'));
     }
 
     public function kirim(Request $request, $id)
     {
-        $data = $this->data->uuid($id)->firstOrFail();
+        $data = $this->data::where('uuid', $id)->first() ?? $this->data::findOrFail($id);
         $input = $request->all();
 
-        // return $input;
+        // Update status to 2 (Submitted / Menunggu Penilaian TKSD)
+        $input['status'] = 2;
         $data->update($input);
 
+        // Record in Histori Log
+        HistoriObserver::create([
+            'id_permohonan' => $data->id,
+            'deskripsi' => 'Berkas usulan inovasi telah resmi dikirimkan oleh pemohon untuk dinilai oleh Tim TKSD.',
+            'status' => 2
+        ]);
+
         $date = tgl_indo($data->created_at);
+        $number = optional($data->pemohon1)->phone;
 
-        $number = $data->pemohon1->phone;
+        if ($number) {
+            $pesan = <<<EOT
+                *## JARSIPLUS Kota Samarinda ##*
 
-        $pesan = <<<EOT
-            *## JARSIPLUS Kota Samarinda ##*
+                Inovasi anda siap di review.
 
-            Inovasi anda siap di review.
+                Judul : {$data->label}
+                Bidang Inovasi : {$data->kategori->label}
 
-            Judul : {$data->label}
-            Bidang Inovasi : {$data->kategori->label}
+                Nama :  {$data->pemohon1->name}
+                Tanggal : {$date}
+                Instansi : {$data->pemohon1->unit_kerja}
+                   
+                Kami akan segera melihat dan mengevaluasi inovasi yang telah dikirimkan. Terima kasih telah mengirimkan kontribusi Anda.
 
-            Nama :  {$data->pemohon1->name}
-            Tanggal : {$date}
-            Instansi : {$data->pemohon1->unit_kerja}
-               
-            Kami akan segera melihat dan mengevaluasi inovasi yang telah dikirimkan. Terima kasih telah mengirimkan kontribusi Anda, dan kami akan segera memberikan umpan balik setelah proses review selesai.
+                Pemerintah Kota Samarinda
+                EOT;
 
-            Pemerintah Kota Samarinda
-            EOT;
+            try {
+                send_whatshapp($number, $pesan);
+            } catch (\Throwable $e) {}
+        }
 
-        send_whatshapp($number, $pesan);
-
-        $pesan = <<<EOT
-            *## JARSIPLUS Kota Samarinda ##*
-
-            {$data->pemohon1->name} baru saja mengubah status menjadi siap review.
-
-            Judul : {$data->label}
-            Bidang Inovasi : {$data->kategori->label}
-
-            Nama :  {$data->pemohon1->name}
-            Tanggal : {$date}
-            Instansi : {$data->pemohon1->unit_kerja}
-               
-            Mohon untuk segera melakukan tindakan yang diperlukan, Terima kasih.
-            
-            Pemerintah Kota Samarinda
-            EOT;
-
-        send_group_whatsapp($pesan);
-
-        notify()->flash($this->tCreate, 'success');
-        return redirect($this->toIndex);
-
-        notify()->flash($this->tUpdate, 'success');
-        return redirect($this->toIndex);
-
+        notify()->flash('Berkas usulan inovasi telah berhasil dikirimkan ke Tim TKSD untuk dinilai.', 'success');
+        return redirect()->route('permohonan.show', $data->kode);
     }
-
 
     public function upload($file)
     {
@@ -293,7 +320,6 @@ class PermohonanController extends Controller
             ]);
 
             $payload = json_decode((string) $response->getBody(), true);
-
             $items = collect($payload['data'] ?? []);
 
             $matched = $items
@@ -304,21 +330,8 @@ class PermohonanController extends Controller
                 ->values()
                 ->all();
 
-            if (empty($matched) && $items->isNotEmpty()) {
-                \Log::warning('Komentar juri tidak match dengan permohonan', [
-                    'permohonan_id' => $permohonan->id,
-                    'permohonan_status' => $permohonan->status,
-                    'endpoint' => $endpoint,
-                    'sample_id_api' => $items->pluck('id_permohonan')->filter()->take(3)->values()->all(),
-                ]);
-            }
-
             return $matched;
         } catch (\Throwable $e) {
-            \Log::error('Gagal mengambil komentar juri', [
-                'permohonan_id' => $permohonan->id ?? null,
-                'message' => $e->getMessage(),
-            ]);
             return [];
         }
     }

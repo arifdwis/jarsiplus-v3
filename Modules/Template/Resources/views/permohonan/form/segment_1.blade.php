@@ -1,183 +1,164 @@
-<section class="form-1">
+@extends('template::layouts.master',['footer'=>false])
 
-    <div class="form-group boxed">
-        <div class="input-wrapper">
-            <label class="require-form label" for="nama_instansi" >Nama Instansi</label>
-            {!! Form::text('nama_instansi', optional(me()->corporate)->name, ['class' => 'form-control', 'placeholder' => 'Contoh : Dinas Pariwisata', 'required' => 'required']) !!}
-            {!! $errors->first('nama_instansi', '<span class="text-muted"><small>:message</small></span>') !!}
-            <i class="clear-input">
-                <ion-icon name="close-circle"></ion-icon>
-            </i>
-        </div>
-    </div>
+@section('content')
+<div class="jp-section">
+    <div class="l-container">
+        @include('template::permohonan.form.header')
 
-    <div class="form-group boxed">
-        <div class="input-wrapper">
-            <label class="require-form label" for="id_kota">Kabupaten / Kota</label>
-            <select class="form-control custom-select select2 py-2" name="id_kota" id="id_kota" required>
-                <option value="null" selected="">-- Pilih Salah Satu --</option>
-                @foreach(Modules\Wilayah\Entities\Provinsi::orderBy('name','asc')->get() as $i => $temp)
-                
-                <optgroup label="{{$temp->name}}">
-                    @foreach($temp->citys as $n => $child)
-                    @isset($data)
-                    <option {{$data->id_kota == $child->id ? 'selected' : ''}} value="{{$child->id}}">{{$child->name}}</option>
+        <div class="l-grid l-grid--4">
+            <div class="jp-card" style="grid-column:span 1">
+                @include('template::partials.indikator-progress',['percen'=>10])
+            </div>
+            <div class="jp-card" style="grid-column:span 3">
+                @if($data)
+                    <form action="{{ route('permohonan.berkas.store',$data->uuid) }}" method="POST" class="u-flex u-flex-col u-gap-lg" style="padding:var(--p-card) !important" id="myForm">
+                @else
+                    <form action="{{ route('permohonan.berkas.store',$parent->uuid) }}" method="POST" class="u-flex u-flex-col u-gap-lg" style="padding:var(--p-card) !important" id="myForm">
+                @endif
+                    @csrf
+                    @if($parent->status != 0 && role_me() == 4)
+                        @php
+                            $fields = array_column($biodata->toArray(), 'value', 'field');
+                        @endphp
+                        @foreach($indikator as $value)
+                            @if($value->type == 'heading')
+                                <div class="jp-section" style="padding:0">
+                                    <div class="jp-section__head u-mb-md">
+                                        <p class="jp-section__eyebrow">
+                                            <span class="jp-section__eyebrow-dot" aria-hidden="true"></span>
+                                            {{ $value->label }}
+                                        </p>
+                                    </div>
+                                </div>
+                            @endif
+                            @if($value->type == 'field')
+                                @php $val = $fields[$value->name] ?? null; @endphp
+                                @if($value->input == 'text' || $value->input == 'number')
+                                    <x-field
+                                        :id="$value->name"
+                                        :name="$value->name"
+                                        :label="$value->label"
+                                        :value="$val"
+                                        :type="$value->input"
+                                        :required="$value->required == 1"
+                                        :readonly="true"
+                                    />
+                                @endif
+                                @if($value->input == 'select')
+                                    <x-field
+                                        :id="$value->name"
+                                        :name="$value->name"
+                                        :label="$value->label"
+                                        :value="$val"
+                                        :type="$value->input"
+                                        :options="$value->options ?? []"
+                                        :required="$value->required == 1"
+                                        :readonly="true"
+                                    />
+                                @endif
+                                @if($value->input == 'date')
+                                    <x-field
+                                        :id="$value->name"
+                                        :name="$value->name"
+                                        :label="$value->label"
+                                        :value="$val"
+                                        :type="$value->input"
+                                        :required="$value->required == 1"
+                                        :readonly="true"
+                                    />
+                                @endif
+                                @if($value->input == 'file')
+                                    @if($val)
+                                        <div class="jp-field">
+                                            <label class="jp-label">{{ $value->label }}</label>
+                                            <div class="u-flex u-flex-wrap u-gap-sm u-mb-sm">
+                                                @foreach(explode('/storage/',$val) as $b)
+                                                    @if($b)
+                                                        <div class="jp-badge jp-badge--accent u-flex u-gap-xs u-align-center" style="max-width:100%">
+                                                            <span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ $b }}</span>
+                                                            <a href="{{ asset('storage/'.$b) }}" target="_blank" class="jp-btn jp-btn--quiet jp-btn--xs">
+                                                                <x-icon name="eye" size="14" />
+                                                            </a>
+                                                        </div>
+                                                    @endif
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    @endif
+                                @endif
+                                @if($value->input == 'textarea')
+                                    <div class="jp-field">
+                                        <label class="jp-label">{{ $value->label }}</label>
+                                        <div style="padding:12px;background:var(--c-bg);border:1px solid var(--c-border);border-radius:var(--r-card)">
+                                            {!! nl2br(e($val)) !!}
+                                        </div>
+                                    </div>
+                                @endif
+                            @endif
+                        @endforeach
                     @else
-                    <option {{optional(me()->corporate)->kota_id == $child->id ? 'selected' : ''}} value="{{$child->id}}">{{$child->name}}</option>
+                        @foreach($indikator as $value)
+                            @if($value->type == 'heading')
+                                <div class="jp-section" style="padding:0">
+                                    <div class="jp-section__head u-mb-md">
+                                        <p class="jp-section__eyebrow">
+                                            <span class="jp-section__eyebrow-dot" aria-hidden="true"></span>
+                                            {{ $value->label }}
+                                        </p>
+                                    </div>
+                                </div>
+                            @endif
+                            @if($value->type == 'field')
+                                @if($value->input == 'text' || $value->input == 'number')
+                                    <x-field :id="$value->name" :name="$value->name" :label="$value->label" :value="$old[$value->name] ?? null" :type="$value->input" :required="$value->required == 1" :readonly="$value->readonly ?? false" />
+                                @endif
+                                @if($value->input == 'select')
+                                    <x-field :id="$value->name" :name="$value->name" :label="$value->label" :value="$old[$value->name] ?? null" :type="$value->input" :options="$value->options ?? []" :required="$value->required == 1" :readonly="$value->readonly ?? false" />
+                                @endif
+                                @if($value->input == 'date')
+                                    <x-field :id="$value->name" :name="$value->name" :label="$value->label" :value="$old[$value->name] ?? null" :type="$value->input" :required="$value->required == 1" :readonly="$value->readonly ?? false" />
+                                @endif
+                                @if($value->input == 'file')
+                                    <div class="jp-field" style="--field-error:border-color:var(--c-danger)">
+                                        <label class="jp-label">{{ $value->label }}@if($value->required == 1)<span class="jp-label__required">*</span>@endif</label>
+                                        @if($old[$value->name] ?? null)
+                                            <div class="u-flex u-flex-wrap u-gap-sm u-mb-sm">
+                                                @foreach(explode('/storage/',$old[$value->name]) as $b)
+                                                    @if($b)
+                                                        <div class="jp-badge jp-badge--accent u-flex u-gap-xs u-align-center" style="max-width:100%">
+                                                            <span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ $b }}</span>
+                                                            <a href="{{ asset('storage/'.$b) }}" target="_blank" class="jp-btn jp-btn--quiet jp-btn--xs">
+                                                                <x-icon name="eye" size="14" />
+                                                            </a>
+                                                        </div>
+                                                    @endif
+                                                @endforeach
+                                            </div>
+                                        @endif
+                                        <x-file-drop name="{{ $value->name }}[]" multiple accept=".pdf,.jpg,.jpeg,.png" :required="$value->required == 1" />
+                                    </div>
+                                @endif
+                                @if($value->input == 'textarea')
+                                    <div class="jp-field" style="--field-error:border-color:var(--c-danger)">
+                                        <label class="jp-label">{{ $value->label }}@if($value->required == 1)<span class="jp-label__required">*</span>@endif</label>
+                                        <textarea name="{{ $value->name }}" class="jp-textarea" rows="4" @if($value->required == 1) required @endif @if(($value->readonly ?? false)) readonly @endif>{{ $old[$value->name] ?? null }}</textarea>
+                                    </div>
+                                @endif
+                            @endif
+                        @endforeach
                     @endif
-                    @endforeach
-                </optgroup>
-                
-                @endforeach
-            </select>
-        </div>
-    </div>
 
-    <div class="form-group boxed">
-        <div class "input-wrapper">
-            <label class="require-form label" for="label" >Judul</label>
-            {!! Form::text('label', null, ['class' => 'form-control', 'placeholder' => 'Contoh : Aplikasi Satu Data Satu Inovasi', 'required' => 'required']) !!}
-            {!! $errors->first('label', '<span class="text-muted"><small>:message</small></span>') !!}
-            <i class="clear-input">
-                <ion-icon name="close-circle"></ion-icon>
-            </i>
-        </div>
-    </div>
-
-    <div class="form-group boxed">
-        <div class="input-wrapper">
-            <label class="label require-form" for="urusan_utama">Urusan Pemerintahan</label>
-            <select class="form-control custom-select select2 py-2" name="urusan_utama" id="urusan_utama" required>
-                <option value="null" selected="">-- Pilih Salah Satu --</option>
-                @foreach(Modules\Formulir\Entities\Urusan::pluck('label', 'label') as $label => $temp)
-                @isset($data)
-                <option {{$data->urusan_utama == $label ? 'selected' : ''}} value="{{$label}}">{{$temp}}</option>
-                @else
-                <option value="{{$label}}">{{$temp}}</option>
-                @endif
-                @endforeach
-            </select>
-        </div>
-    </div>
-
-    <div class="form-group boxed">
-        <div class="input-wrapper">
-            <label class="label require-form" for="id_kategori">Kategori Urusan</label>
-            <select class="form-control custom-select select2 py-2" name="id_kategori" id="id_kategori" required>
-                <option value="null" selected="">-- Pilih Salah Satu --</option>
-                @foreach(Modules\Formulir\Entities\Kategori::pluck('label', 'id') as $i => $temp)
-                @isset($data)
-                <option {{$data->id_kategori == $i ? 'selected' : ''}} value="{{$i}}">{{$temp}}</option>
-                @else
-                <option value="{{$i}}">{{$temp}}</option>
-                @endif
-                @endforeach
-            </select>
-        </div>
-    </div>
-
-    <div class="form-group boxed">
-        <div class="input-wrapper">
-            <label class="label require-form" for="urusan_lainnya">Urusan Lainnya Yang Berkaitan</label>
-            <select class="form-control custom-select select2 py-2" name="urusan_lainnya" id="urusan_lainnya" required>
-                <option value="null" selected="">-- Pilih Salah Satu --</option>
-                @foreach(Modules\Formulir\Entities\Urusan::pluck('label', 'label') as $label => $temp)
-                @isset($data)
-                <option {{$data->urusan_lainnya == $label ? 'selected' : ''}} value="{{$label}}">{{$temp}}</option>
-                @else
-                <option value="{{$label}}">{{$temp}}</option>
-                @endif
-                @endforeach
-            </select>
-        </div>
-    </div>
-
-    <div class="form-group boxed">
-        <div class="input-wrapper">
-            <label class="label require-form" for="tahapan">Tahapan Inovasi</label>
-            <select class="form-control custom-select select2 py-2" name="tahapan" id="tahapan" required>
-                <option value="null" selected="">-- Pilih Salah Satu --</option>
-                @foreach([1 => 'Inisiatif', 2 => 'Uji Coba', 3 => 'Penerapan'] as $key => $value)
-                @isset($data)
-                <option {{ $data->tahapan == $key ? 'selected' : ''}} value="{{ $key }}">{{ $value }}</option>
-                @else
-                <option value="{{ $key }}">{{ $value }}</option>
-                @endif
-                @endforeach
-            </select>
-        </div>
-    </div>
-
-    <div class="form-group boxed">
-        <div class="input-wrapper">
-            <label class="label require-form" for="inisiator">Inisiator Inovasi Daerah</label>
-            <select class="form-control custom-select select2 py-2" name="inisiator" id="inisiator" required>
-                <option value="null" selected="">-- Pilih Salah Satu --</option>
-                @foreach([1 => 'Kepala Daerah', 2 => 'Anggota DPRD', 3 => 'OPD', 4 => 'ASN', 5 => 'Masyarakat'] as $key => $value)
-                @isset($data)
-                <option {{ $data->inisiator == $key ? 'selected' : ''}} value="{{ $key }}">{{ $value }}</option>
-                @else
-                <option value="{{ $key }}">{{ $value }}</option>
-                @endif
-                @endforeach
-            </select>
-        </div>
-    </div>
-
-    <div class="form-group boxed">
-        <div class="input-wrapper">
-            <label class="label require-form" for="jenis">Jenis Inovasi Daerah</label>
-            <select class="form-control custom-select select2 py-2" name="jenis" id="jenis" required>
-                <option value="null" selected="">-- Pilih Salah Satu --</option>
-                @foreach([1 => 'Digital', 2 => 'Non Digital'] as $key => $value)
-                @isset($data)
-                <option {{ $data->inisiator == $key ? 'selected' : ''}} value="{{ $key }}">{{ $value }}</option>
-                @else
-                <option value="{{ $key }}">{{ $value }}</option>
-                @endif
-                @endforeach
-            </select>
-        </div>
-    </div>
-
-    <div class="row mt-3 mb-3">
-        <div class="col-12 pb-2 d-flex justify-content-center">
-            <div class="custom-control custom-switch p-0 p-1">
-                <input type="checkbox" class="custom-control-input" id="check-form-1" required>
-                <label class="custom-control-label" for="check-form-1"></label>
+                    <div class="jp-divider"></div>
+                    <div class="u-flex u-justify-end u-gap-md">
+                        <button type="button" onclick="history.back()" class="jp-btn jp-btn--ghost">Batal</button>
+                        @if($parent->status != 0 && role_me() == 4)
+                        @else
+                            <button type="submit" class="jp-btn jp-btn--accent">Simpan</button>
+                        @endif
+                    </div>
+                </form>
             </div>
         </div>
-        <div class="col-12">
-            <small>Dengan menggunakan layanan kami, Anda memercayakan informasi Anda kepada kami. Kami paham bahwa melindungi informasi Anda dan memberikan kontrol kepada Anda adalah tanggung jawab yang besar dan memerlukan kerja keras.</small>
-        </div>
     </div>
-
-    <div class="mt-3 mb-1 w-100 d-flex justify-content-end">
-        <button type="button" id="next-button" class="btn btn-primary btn-next-form" readonly>
-            <ion-icon name="arrow-forward-outline"></ion-icon>
-            Selanjutnya
-        </button>
-    </div>
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-$(document).ready(function() {
-    // Initially, disable the "Selanjutnya" button
-    $('#next-button').prop('disabled', true);
-
-    // Listen for changes on the checkbox
-    $('#check-form-1').change(function() {
-        if (this.checked) {
-            // If the checkbox is checked, enable the button
-            $('#next-button').prop('disabled', false);
-        } else {
-            // If the checkbox is not checked, disable the button
-            $('#next-button').prop('disabled', true);
-        }
-    });
-});
-</script>
-
-</section>
-
-
+</div>
+@endsection

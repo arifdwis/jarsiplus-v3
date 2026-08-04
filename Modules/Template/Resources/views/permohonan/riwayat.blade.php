@@ -1,62 +1,89 @@
 @extends('template::layouts.master')
 
-@section('css')
-
-@endsection
+@section('title', 'Log Histori Aktivitas — ' . config('app.name', 'JARSIPLUS Samarinda'))
 
 @section('content')
+<x-page-header
+    :title="$data->label"
+    badge="LOG AKTIVITAS"
+    :back="route('permohonan.show', $data->kode ?? $data->uuid)"
+    backLabel="Kembali ke Rincian Menu"
+/>
 
-<section class="page-header">
-    <div class="text-center">
-        <img class="imaged img-fluid" src="https://jarsiplus.samarindakota.go.id/images/jarsiplus/white.svg" alt="Logo">
+<div class="jp-subhead">
+    <div class="l-container jp-subhead__inner">
+        <span class="jp-badge jp-badge--neutral font-mono">KODE: {{ $data->kode }}</span>
+        <span class="jp-subhead__meta">
+            <x-icon name="user" size="14" />
+            {{ optional($data->pemohon1)->name ?? me()->name }}
+        </span>
+        <span class="jp-subhead__meta font-mono">
+            <x-icon name="calendar" size="14" />
+            {{ $data->created_at ? $data->created_at->format('d M Y') : 'Tanggal tidak tersedia' }}
+        </span>
     </div>
-</section>
-<svg width="100%" height="40px" viewBox="0 0 100 100" version="1.1" preserveAspectRatio="none" class="svg-header">
-    <path d="M0,0 C16.6666667,66 33.3333333,99 50,99 C66.6666667,99 83.3333333,66 100,0 L100,100 L0,100 L0,0 Z" fill="#f9f9f9"></path>
-</svg>
-<div class="section full pt-2 pb-3">
-    <div class="section mt-1 mb-2">
-        <div class="profile-info">
-            <div class=" bio">
-               <b>
-                 <h2 >
-                    Riwayat Pengajuan Inovasi Daerah
-                </h2> 
-               <p class="text-primary"> {{$data->label}} </p>
-            </b> 
+</div>
+
+<div class="jp-section jp-section--sm">
+    <div class="l-container l-container--narrow">
+
+        <div class="jp-section__head u-mb-lg">
+            <h2 class="jp-section__title">Lini Masa Aktivitas Inovasi</h2>
+            <p class="jp-section__desc">
+                Seluruh catatan perubahan status, revisi berkas, dan tindakan verifikator pada usulan ini —
+                diurutkan dari yang terbaru.
+            </p>
         </div>
-    </div>
-</div>
 
-<div class="section full">
-    <div class="wide-block transparent p-0">
-        <ul class="nav nav-tabs lined iconed" role="tablist">
-            <li class="nav-item">
-            </li>
-        </ul>
-    </div>
-</div>
+        @if(isset($histori) && $histori->count() > 0)
+            <div class="jp-timeline">
+                @foreach($histori as $index => $temp)
+                    @php
+                        $stepNumber = $histori->count() - $index;
+                        $formattedDate = $temp->created_at ? $temp->created_at->format('d M Y') : null;
+                        $formattedTime = $temp->created_at ? $temp->created_at->format('H:i') : null;
+                        $isLatest = $index === 0;
+                    @endphp
 
-<!-- tab content -->
-<div class="section full mb-2">
-    <div class="tab-content">
-        <!-- settings -->
-        @foreach($histori as $temp)
-        <div class="wide-block pt-2 pb-2">
-               <b>{{$temp->deskripsi}}</b><br>
-               <small>{{tgl_indo($temp->created_at)}}</small>
+                    <div class="jp-timeline__item {{ $isLatest ? 'is-latest' : '' }}">
+                        <div class="jp-timeline__marker">
+                            <span></span>
+                        </div>
+
+                        <div class="jp-timeline__content">
+                            <div class="u-flex u-justify-between u-align-center u-flex-wrap u-gap-xs u-mb-xs">
+                                <span class="jp-badge {{ $isLatest ? 'jp-badge--accent' : 'jp-badge--neutral' }} font-mono">
+                                    LOG #{{ $stepNumber }}@if($isLatest) &middot; TERBARU @endif
+                                </span>
+
+                                <time class="jp-timeline__time">
+                                    @if($formattedDate)
+                                        {{ $formattedDate }}@if($formattedTime) &middot; {{ $formattedTime }} WITA @endif
+                                    @else
+                                        Waktu tidak tercatat
+                                    @endif
+                                </time>
+                            </div>
+
+                            <p class="jp-timeline__desc {{ filled($temp->deskripsi) ? '' : 'jp-prose--empty' }}">
+                                {{ filled($temp->deskripsi) ? $temp->deskripsi : 'Tidak ada keterangan pada catatan ini.' }}
+                            </p>
+                        </div>
+                    </div>
+                @endforeach
             </div>
-        @endforeach
-        <!-- * settings -->
+        @else
+            <x-empty
+                icon="clock"
+                title="Belum ada riwayat aktivitas"
+                desc="Belum ada catatan perubahan status atau revisi berkas pada usulan permohonan ini. Riwayat akan muncul otomatis setiap kali terjadi tindakan pada usulan Anda."
+            >
+                <a href="{{ route('permohonan.show', $data->kode ?? $data->uuid) }}" class="jp-btn jp-btn--ghost u-mt-sm">
+                    Kembali ke Rincian Permohonan
+                </a>
+            </x-empty>
+        @endif
+
     </div>
 </div>
-@endsection
-
-@section('other')
-
-@endsection
-
-
-@section('js')
-
 @endsection

@@ -28,6 +28,10 @@ class TemplateServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
+
+        if (is_dir(module_path($this->moduleName, 'Resources/views/components'))) {
+            \Illuminate\Support\Facades\Blade::anonymousComponentPath(module_path($this->moduleName, 'Resources/views/components'), '');
+        }
     }
 
     /**

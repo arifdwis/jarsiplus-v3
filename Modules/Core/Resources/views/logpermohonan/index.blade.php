@@ -22,12 +22,12 @@
 
     {!! Form::open(['method' => 'DELETE', 'route' => ["$prefix.destroy", 'hapus-all'], 'id' => 'submit-all']) !!}
 
-        @include('nue::partials.breadcrumb', ['lists' => [
+        @include('layouts.breadcrumb', ['lists' => [
             'Settings' => 'javascript:;', 
             $title => 'active'
         ]])
 
-        @include('nue::partials.datatable.header', [
+        @include('layouts.datatable.header', [
             'title' => 'LOG PERMOHONAN', 
             'description' => 'Here is a list of all your data from your database.', 
             'datatable' => true
@@ -54,7 +54,7 @@
                     </table>
                 </div>
             </div>
-            @include('nue::partials.datatable.footer')
+            @include('layouts.datatable.footer')
         </div>
 
     {!! Form::close() !!}

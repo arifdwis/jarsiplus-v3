@@ -1,105 +1,75 @@
 @extends('template::layouts.master',['footer'=>false])
 
-@section('css')
-<style>
-    .legenda{
-        cursor: pointer;
-    }
-</style>
-@endsection
-
 @section('content')
-<section class="page-header">
-    <div class="header-light text-center mb-3">
-        <h1 class="title">Berkas</h1>
-        <h4 class="subtitle">Riwayat permohonan yang telah anda ajukan.</h4>
-    </div>
-</section>
+<x-page-header
+    badge="BERKAS PERMOHONAN"
+    title="Data Dukung Permohonan"
+    desc="Daftar berkas pendukung yang dilampirkan pada permohonan ini."
+/>
 
-<svg width="100%" height="40px" viewBox="0 0 100 100" version="1.1" preserveAspectRatio="none" class="svg-header">
-    <path d="M0,0 C16.6666667,66 33.3333333,99 50,99 C66.6666667,99 83.3333333,66 100,0 L100,100 L0,100 L0,0 Z" fill="#f9f9f9"></path>
-</svg>
-<div class="section mt-3 mb-3">
-    <div class="row">
-        
-        @if(role_me() == 4)
-        @if($parent->status == 1)
-        <div class="col-6 col-lg-3 mb-2">
-        <a href="{{route('permohonan.berkas.create',$parent->uuid)}}">
-            <div class="card h-100">
-                <div class="card-body text-center card-create pt-2" data-toggle="modal" data-target="#ModalForm">
-                    <ion-icon name="create-outline"></ion-icon>
-                    <h1 class="text-muted">Upload Berkas</h1>
-                </div>
-            </div>
-        </a>
-        </div>
-        @endif
-        @endif
-
-        @if($parent->permohonan)
-
-        @foreach($parent->permohonan as $value)
-        <div class="col-6 col-lg-3 mb-2">
-        <a href="{{route('permohonan.berkas.pembahasan.index',[$parent->uuid,$value->uuid])}}">
-            <div class="card  h-100">
-                <div class="kode bg-primary">
-                    @if($value->status == 0)
-                    <iconify-icon icon="ic:twotone-pending-actions"></iconify-icon>
-                    @elseif($value->status == 1)
-                    <iconify-icon icon="ic:twotone-check-circle"></iconify-icon>
-                    @else
-                    <iconify-icon icon="ic:twotone-pending-actions"></iconify-icon>
-                    @endif
-                    <h2>{{$parent->kode}}</h2>
-                </div>
-                <div class="card-body pt-2">
-                    <h6 class="mb-0">Berkas</h6>
-                    <h5 class="mb-0 text-capitalize">{{$value->label}}</h5>
-                </div>
-            </div>
-        </a>
-        </div>
-        @endforeach
-
-        @endif
-
-    </div>
-
-</div>
-
-<!-- Dialog Block Button -->
-<div class="modal fade dialogbox" id="info_legenda" data-backdrop="static" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title"></h5>
-            </div>
-            <div class="modal-body">
-            </div>
-            <div class="modal-footer">
-                <div class="btn-list">
-                    <a href="#" class="btn btn-text-secondary btn-block" data-dismiss="modal">CLOSE</a>
-                </div>
-            </div>
-        </div>
+<div class="jp-subhead">
+    <div class="l-container jp-subhead__inner">
+        <span class="jp-badge jp-badge--neutral font-mono">KODE: {{ $parent->kode }}</span>
     </div>
 </div>
-<!-- * Dialog Block Button -->
-@endsection
 
+<div class="jp-section jp-section--sm">
+    <div class="l-container">
 
-@section('js')
-<script>
-    
-    $('.legenda').click(function(){
-        var title = $(this).data('title');
-        var description = $(this).data('description');
-        var modal = $('#info_legenda');
-        modal.find('.modal-title').html(title);
-        modal.find('.modal-body').html(description);
-        modal.modal('show');
-    });
+        @if(role_me() == 4 && $parent->status == 1)
+            <div class="jp-notice jp-notice--accent u-mb-lg">
+                <span class="jp-notice__icon"><x-icon name="upload" size="20" /></span>
+                <div class="jp-notice__body">
+                    <strong class="jp-notice__title">Tambahkan berkas dukung</strong>
+                    <p class="jp-notice__text">Unggah dokumen pendukung tambahan untuk melengkapi permohonan Anda.</p>
+                </div>
+                <div class="jp-notice__action">
+                    <a href="{{ route('permohonan.berkas.create', $parent->uuid) }}" class="jp-btn jp-btn--accent">
+                        <x-icon name="upload" size="16" />
+                        Upload Berkas
+                    </a>
+                </div>
+            </div>
+        @endif
 
-</script>
+        @if($parent->permohonan && count($parent->permohonan) > 0)
+            <div class="l-grid l-grid--3">
+                @foreach($parent->permohonan as $value)
+                    <a href="{{ route('permohonan.berkas.pembahasan.index',[$parent->uuid,$value->uuid]) }}" class="jp-record-card jp-record-card--accent" style="text-decoration: none; color: inherit;">
+                        <header class="jp-record-card__head">
+                            <span class="jp-record-card__code">{{ $parent->kode }}</span>
+                            <span class="jp-badge jp-badge--neutral">Berkas</span>
+                        </header>
+
+                        <div class="jp-record-card__body">
+                            <h3 class="jp-record-card__title jp-clamp-2 text-capitalize">
+                                @if(filled($value->label)){{ $value->label }}@else<span class="jp-value-empty"></span>@endif
+                            </h3>
+                        </div>
+
+                        <footer class="jp-record-card__foot u-justify-end">
+                            <span class="jp-link-arrow" style="font-size: var(--t-xs);">
+                                Buka Pembahasan <span aria-hidden="true">&rarr;</span>
+                            </span>
+                        </footer>
+                    </a>
+                @endforeach
+            </div>
+        @else
+            <x-empty
+                icon="folder"
+                title="Belum ada berkas dukung"
+                desc="Permohonan ini belum memiliki berkas data dukung yang dilampirkan."
+            >
+                @if(role_me() == 4 && $parent->status == 1)
+                    <a href="{{ route('permohonan.berkas.create', $parent->uuid) }}" class="jp-btn jp-btn--accent u-mt-sm">
+                        <x-icon name="upload" size="16" />
+                        Upload Berkas Pertama
+                    </a>
+                @endif
+            </x-empty>
+        @endif
+
+    </div>
+</div>
 @endsection

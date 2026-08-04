@@ -2,7 +2,7 @@
 @section('title', $title)
 
 @section('css')
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css">
+	<link rel="stylesheet" href="{{ asset('vendor/nprogress/nprogress.min.css') }}">
 	<style>
 		.output-body {
 			white-space: pre-wrap;
@@ -15,7 +15,7 @@
 @endsection
 
 @section('js')
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+	<script src="{{ asset('vendor/nprogress/nprogress.min.js') }}"></script>
 	<script>
 		$(function () {
 			$(".backup-run").click(function() {

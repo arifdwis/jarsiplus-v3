@@ -36,28 +36,28 @@ return [
     */
     'brand' => [
         
-        'favicon' => 'https://cdn.btekno.id/img/logo.svg', 
+        'favicon' => '/img/logo.svg', 
 
         'logo' => [
 
             'default' => [
 
-                'light' => 'https://cdn.btekno.id/img/logo.svg', 
+                'light' => '/img/logo.svg', 
 
-                'dark' => 'https://cdn.btekno.id/img/logo-inverse.svg'
+                'dark' => '/img/logo.svg'
 
             ],
 
             'mini' => [
 
-                'light' => 'https://cdn.btekno.id/img/logo.svg', 
+                'light' => '/img/logo.svg', 
 
-                'dark' => 'https://cdn.btekno.id/img/logo-inverse.svg'
+                'dark' => '/img/logo.svg'
 
             ],
         ], 
 
-        'default_avatar' => 'https://cdn.btekno.id/templates/v2/img/160x160/img1.jpg'
+        'default_avatar' => '/img/default-avatar.jpg'
     ], 
 
     /*

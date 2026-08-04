@@ -276,3 +276,31 @@ if (!function_exists('send_group_whatsapp')) {
         }
     }
 }
+
+if (! function_exists('jp_isi')) {
+    /**
+     * Normalkan nilai tampilan.
+     *
+     * Banyak kolom lama diisi tanda hubung ("-") atau spasi sebagai penanda
+     * kosong, sehingga filled() menganggapnya berisi dan UI menampilkan "-"
+     * alih-alih penanda "Belum diisi". Fungsi ini mengembalikan null untuk
+     * nilai-nilai semacam itu.
+     *
+     * @param  mixed  $value
+     * @return string|null
+     */
+    function jp_isi($value)
+    {
+        if (is_array($value) || is_object($value)) {
+            return null;
+        }
+
+        $value = trim((string) $value);
+
+        if ($value === '' || in_array($value, ['-', '--', 'null', 'NULL', 'N/A', 'n/a'], true)) {
+            return null;
+        }
+
+        return $value;
+    }
+}

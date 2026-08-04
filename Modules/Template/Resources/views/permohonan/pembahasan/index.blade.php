@@ -1,112 +1,131 @@
-@extends('template::layouts.master', ['footer' => false, 'bottom' => false])
+@extends('template::layouts.master')
 
-@section('css')
-    <style type="text/css">
-
-    </style>
-@endsection
+@section('title', 'Pembahasan & Diskusi Berkas — ' . config('app.name', 'JARSIPLUS Samarinda'))
 
 @section('content')
+<x-page-header
+    badge="PEMBAHASAN BERKAS"
+    :title="$data->label"
+    :back="route('indikator.data.index', $parent->uuid)"
+    backLabel="Kembali ke Data Dukung"
+>
+    @if($data->url)
+        <a href="{{ $data->url }}" target="_blank" rel="noopener" class="jp-btn jp-btn--accent">
+            <x-icon name="link" size="16" />
+            Buka Tautan Berkas
+        </a>
+    @elseif($data->file)
+        <a href="{{ asset($data->file) }}" target="_blank" rel="noopener" class="jp-btn jp-btn--accent">
+            <x-icon name="download" size="16" />
+            Unduh Berkas
+        </a>
+    @endif
+</x-page-header>
 
-    <section class="page-header">
-        {{-- Tampilkan "Berkas Tervalidasi" hanya berdasarkan tabel validasi --}}
-        @isset($data->validasi)
-            @if($data->validasi && $data->validasi->status == 1)
-                <div class="text-center">
-                    <div class="legenda bg-primary" data-title="Selesai" data-description="Permohonan dinyatakan telah selesai ">
-                        <iconify-icon icon="ic:twotone-check-circle"></iconify-icon>
-                        <h6>Berkas Tervalidasi</h6>
+<div class="jp-subhead">
+    <div class="l-container jp-subhead__inner">
+        <span class="jp-badge {{ $data->status == 1 ? 'jp-badge--success' : 'jp-badge--amber' }}">
+            {{ $data->status == 1 ? 'TERVALIDASI' : 'TELAH DIUNGGAH' }}
+        </span>
+        <span class="jp-subhead__meta">
+            <x-icon name="clipboard" size="14" />
+            Indikator: <strong>{{ $parent->label_indikator ?? $parent->label }}</strong>
+        </span>
+        <span class="jp-subhead__meta">
+            <x-icon name="file" size="14" />
+            @if(filled($data->nomor_surat))
+                No. Surat: {{ $data->nomor_surat }}
+            @else
+                <span class="jp-value-empty"></span>
+            @endif
+        </span>
+        <span class="jp-subhead__meta font-mono">
+            <x-icon name="calendar" size="14" />
+            {{ $data->created_at ? $data->created_at->format('d M Y') : 'Tanggal tidak tersedia' }}
+        </span>
+    </div>
+</div>
+
+<div class="jp-section jp-section--sm">
+    <div class="l-container l-container--narrow">
+
+        <div class="jp-card u-p-0" style="overflow: hidden;">
+            <header class="jp-modal__head">
+                <div class="u-flex u-align-center u-gap-sm">
+                    <span class="jp-modal__icon"><x-icon name="chat" size="20" /></span>
+                    <div>
+                        <h2 class="jp-modal__title">Catatan &amp; Diskusi Berkas</h2>
+                        <span class="jp-modal__eyebrow">Riwayat pembahasan antara pemohon dan tim verifikator</span>
                     </div>
                 </div>
-            @endif
-        @endisset
-        <div class="header-light text-center">
-            <h1 class="title">{{$parent->kode}}</h1>
-            <h4 class="subtitle text-capitalize pb-1">Pembahasan {{$parent->label}} dengan berkas {{$data->label}}.</h4>
-            <a href="{{ route('indikator.data.index', $parent->uuid) }}"
-                style="display: inline-block; margin-top: 10px; padding: 6px 16px; background: rgba(255,255,255,0.2); color: #fff; border-radius: 20px; font-size: 13px; text-decoration: none; border: 1px solid rgba(255,255,255,0.4);">
-                ← Kembali ke Data Dukung
-            </a>
+            </header>
+
+            <div id="chat-view" class="jp-chat-feed" style="max-height: 480px;">
+                {{-- Dimuat ulang lewat AJAX setelah kirim pesan --}}
+                @include('template::permohonan.pembahasan.chat')
+            </div>
+
+            {!! Form::open(['route' => ['indikator.data.pembahasan.store', $parent->uuid, $data->uuid], 'autocomplete' => 'off', 'id' => 'form-chat', 'class' => 'jp-chat-compose']) !!}
+                <div class="jp-searchbar">
+                    <label for="input-chat" class="u-sr-only">Tulis komentar</label>
+                    <input type="text" name="komentar" id="input-chat" class="jp-input" required placeholder="Tulis komentar atau catatan penjelasan berkas…">
+                    <button type="submit" class="jp-btn jp-btn--accent">Kirim</button>
+                </div>
+            {!! Form::close() !!}
         </div>
-    </section>
-    <svg width="100%" height="40px" viewBox="0 0 100 100" version="1.1" preserveAspectRatio="none" class="svg-header">
-        <path d="M0,0 C16.6666667,66 33.3333333,99 50,99 C66.6666667,99 83.3333333,66 100,0 L100,100 L0,100 L0,0 Z"
-            fill="#f9f9f9"></path>
-    </svg>
 
-    <div class="section py-5" id="chat-view">
     </div>
+</div>
 @endsection
-
-@section('other')
-
-
-    @if(role_me() == 4)
-        {{-- Pemohon: tampilkan footer perbaikan jika belum tervalidasi --}}
-        @if($data->status != 1)
-            @include("$view.modal.perbaikan")
-            @include("$view.footer")
-        @endif
-    @else
-        {{-- Operator: tampilkan footer validasi jika belum tervalidasi --}}
-        @isset($data->validasi)
-            @if(!$data->validasi || $data->validasi->status != 1)
-                @include("$view.modal.validasi")
-                @include("$view.footer")
-            @endif
-        @else
-            @include("$view.modal.validasi")
-            @include("$view.footer")
-        @endisset
-
-    @endif
-
-
-
-@endsection
-
 
 @section('js')
-    <script type="text/javascript">
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var chatView = document.getElementById('chat-view');
 
-        // setInterval(ajaxCall, 30000); //300000 MS == 5 minutes
-        ajaxCall();
-
-        function ajaxCall() {
-            console.log('call ajax');
-            $.ajax({
-                type: "GET",
-                cache: true,
-                url: '?ajax=true',
-                success: function (data) {
-                    $('#chat-view').html(data);
-                }
-            });
-
-            var elem = document.getElementById('chat-view');
-            elem.scrollTop = elem.scrollHeight;
+    function scrollToBottom() {
+        if (chatView) {
+            chatView.scrollTop = chatView.scrollHeight;
         }
+    }
 
-        $("#form-chat").submit(function (e) {
+    scrollToBottom();
+
+    var formChat = document.getElementById('form-chat');
+    if (formChat) {
+        formChat.addEventListener('submit', function (e) {
             e.preventDefault();
+            var inputChat = document.getElementById('input-chat');
+            var val = inputChat ? inputChat.value.trim() : '';
 
-            var el_input = $('#input-chat');
-            var val_input = el_input.val();
-
-            if (val_input != '') {
-                $.ajax({
-                    type: "POST",
-                    cache: false,
-                    url: $(this).attr('action'),
-                    data: $(this).serialize(),
-                    success: function (data) {
-                        el_input.val(null);
-                        $('#chat-view').append(data);
+            if (val !== '') {
+                var formData = new FormData(this);
+                fetch(this.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
                     }
+                })
+                .then(function(res) { return res.text(); })
+                .then(function(html) {
+                    if (inputChat) inputChat.value = '';
+                    // Muat ulang umpan percakapan
+                    fetch('?ajax=true', { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+                    .then(function(r) { return r.text(); })
+                    .then(function(feedHtml) {
+                        if (chatView) {
+                            chatView.innerHTML = feedHtml;
+                            scrollToBottom();
+                        }
+                    });
+                })
+                .catch(function(err) {
+                    console.error('Chat error:', err);
                 });
             }
-
-
         });
-    </script>
+    }
+});
+</script>
 @endsection

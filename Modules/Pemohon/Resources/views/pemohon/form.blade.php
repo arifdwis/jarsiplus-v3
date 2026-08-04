@@ -5,7 +5,7 @@
             Nama <span class="text-danger">*</span>
         </label>
         <div class="col-sm-9">
-            {!! Form::text('nama', null, ['class' => 'form-control form-style' . $errors->first('nama', ' is-invalid')]) !!}
+            {!! Form::text('nama', null, ['class' => 'form-control' . $errors->first('nama', ' is-invalid')]) !!}
             {!! $errors->first('nama', ' <span class="invalid-feedback">:message</span>') !!}
         </div>
     </div>
@@ -14,14 +14,14 @@
             NIP <span class="text-danger">*</span>
         </label>
         <div class="col-sm-4">
-            {!! Form::text('nip', null, ['class' => 'form-control form-style' . $errors->first('nip', ' is-invalid')]) !!}
+            {!! Form::text('nip', null, ['class' => 'form-control' . $errors->first('nip', ' is-invalid')]) !!}
             {!! $errors->first('nip', ' <span class="invalid-feedback">:message</span>') !!}
         </div>
         <label class="col-sm-1 col-form-label" for="nik">
             NIK <span class="text-danger">*</span>
         </label>
         <div class="col-sm-4">
-            {!! Form::text('nik', null, ['class' => 'form-control form-style' . $errors->first('nik', ' is-invalid')]) !!}
+            {!! Form::text('nik', null, ['class' => 'form-control' . $errors->first('nik', ' is-invalid')]) !!}
             {!! $errors->first('nik', ' <span class="invalid-feedback">:message</span>') !!}
         </div>
     </div>
@@ -30,14 +30,14 @@
             No. HP <span class="text-danger">*</span>
         </label>
         <div class="col-sm-4">
-            {!! Form::text('telepon', null, ['class' => 'form-control form-style' . $errors->first('telepon', ' is-invalid')]) !!}
+            {!! Form::text('telepon', null, ['class' => 'form-control' . $errors->first('telepon', ' is-invalid')]) !!}
             {!! $errors->first('telepon', ' <span class="invalid-feedback">:message</span>') !!}
         </div>
         <label class="col-sm-1 col-form-label" for="email">
             EMAIL <span class="text-danger">*</span>
         </label>
         <div class="col-sm-4">
-            {!! Form::email('email', null, ['class' => 'form-control form-style' . $errors->first('email', ' is-invalid')]) !!}
+            {!! Form::email('email', null, ['class' => 'form-control' . $errors->first('email', ' is-invalid')]) !!}
             {!! $errors->first('email', ' <span class="invalid-feedback">:message</span>') !!}
         </div>
     </div>
@@ -97,7 +97,7 @@
        INSTANSI<span class="text-danger">*</span>
    </label>
    <div class="col-sm-9">
-    {!! Form::text('unit_kerja', null, ['class' => 'form-control form-style' . $errors->first('unit_kerja', ' is-invalid')]) !!}
+    {!! Form::text('unit_kerja', null, ['class' => 'form-control' . $errors->first('unit_kerja', ' is-invalid')]) !!}
     {!! $errors->first('unit_kerja', ' <span class="invalid-feedback">:message</span>') !!}
 </div>
 </div>
@@ -106,7 +106,7 @@
         JABATAN<span class="text-danger">*</span>
     </label>
     <div class="col-sm-9">
-        {!! Form::text('jabatan', null, ['class' => 'form-control form-style' . $errors->first('jabatan', ' is-invalid')]) !!}
+        {!! Form::text('jabatan', null, ['class' => 'form-control' . $errors->first('jabatan', ' is-invalid')]) !!}
         {!! $errors->first('jabatan', ' <span class="invalid-feedback">:message</span>') !!}
     </div>
 </div>

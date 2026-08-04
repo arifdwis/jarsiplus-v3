@@ -28,67 +28,61 @@ class HomeController extends Controller
     /**
      * Show the application dashboard.
      *
-     * @return \Illuminate\Contracts\Support\Renderable
+     * @return \Illuminate\Contracts\Support\Renderable|\Illuminate\Http\RedirectResponse
      */
     public function index()
     {
-        $role_id = Nue::user()->roles->first()->id;
+        $user = Nue::user();
+        $role_id = role_me();
 
-        $envs = [
-            ['name' => 'PHP version',       'value' => 'PHP/'.PHP_VERSION],
-            ['name' => 'Laravel version',   'value' => app()->version() . ' <b>(Nue v'.\Novay\Nue\Nue::VERSION.')</b>'],
-            ['name' => 'CGI',               'value' => php_sapi_name()],
-            ['name' => 'Uname',             'value' => php_uname()],
-            ['name' => 'Server',            'value' => Arr::get($_SERVER, 'SERVER_SOFTWARE')],
+        // Non-admin roles (Pemohon = 4, Pembahas/TKSD = 3) are redirected to main portal beranda
+        if ($role_id == 4 || $role_id == 3) {
+            return redirect('/');
+        }
 
-            ['name' => 'Cache driver',      'value' => config('cache.default')],
-            ['name' => 'Session driver',    'value' => config('session.driver')],
-            ['name' => 'Queue driver',      'value' => config('queue.default')],
+        // Administrator (1) & Superadmin (2) get the Admin E-Panel Dashboard
+        if ($role_id == 1 || $role_id == 2) {
+            $envs = [
+                ['name' => 'PHP version',       'value' => 'PHP/'.PHP_VERSION],
+                ['name' => 'Laravel version',   'value' => app()->version() . ' <b>(Nue v'.\Novay\Nue\Nue::VERSION.')</b>'],
+                ['name' => 'CGI',               'value' => php_sapi_name()],
+                ['name' => 'Uname',             'value' => php_uname()],
+                ['name' => 'Server',            'value' => Arr::get($_SERVER, 'SERVER_SOFTWARE')],
 
-            ['name' => 'Timezone',          'value' => config('app.timezone')],
-            ['name' => 'Locale',            'value' => config('app.locale')],
-            ['name' => 'Env',               'value' => config('app.env')],
-            ['name' => 'URL',               'value' => config('app.url')],
-        ];
+                ['name' => 'Cache driver',      'value' => config('cache.default')],
+                ['name' => 'Session driver',    'value' => config('session.driver')],
+                ['name' => 'Queue driver',      'value' => config('queue.default')],
 
-        $json = file_get_contents(base_path('composer.json'));
-        $dependencies = json_decode($json, true)['require'];
+                ['name' => 'Timezone',          'value' => config('app.timezone')],
+                ['name' => 'Locale',            'value' => config('app.locale')],
+                ['name' => 'Env',               'value' => config('app.env')],
+                ['name' => 'URL',               'value' => config('app.url')],
+            ];
 
-        $extensions = [
-            'backup' => [
-                'name' => 'nue-extensions/backup',
-                'link' => 'https://github.com/nue-extensions/backup',
-                'icon' => 'copy',
-            ],
-            'log-viewer' => [
-                'name' => 'nue-extensions/log-viewer',
-                'link' => 'https://github.com/nue-extensions/log-viewer',
-                'icon' => 'database',
-            ],
-            'api-tester' => [
-                'name' => 'nue-extensions/api-tester',
-                'link' => 'https://github.com/nue-extensions/api-tester',
-                'icon' => 'sliders',
-            ],
-        ];
+            $json = file_get_contents(base_path('composer.json'));
+            $dependencies = json_decode($json, true)['require'];
 
-        switch ($role_id) {
-          
-          case 1:
-            return view('dashboard', compact('envs', 'dependencies', 'extensions'));
-          break;
-          
-          case 3:
-            return view('template::index',compact('role_id'));
-          break;
+            $extensions = [
+                'backup' => [
+                    'name' => 'nue-extensions/backup',
+                    'link' => 'https://github.com/nue-extensions/backup',
+                    'icon' => 'copy',
+                ],
+                'log-viewer' => [
+                    'name' => 'nue-extensions/log-viewer',
+                    'link' => 'https://github.com/nue-extensions/log-viewer',
+                    'icon' => 'database',
+                ],
+                'api-tester' => [
+                    'name' => 'nue-extensions/api-tester',
+                    'link' => 'https://github.com/nue-extensions/api-tester',
+                    'icon' => 'sliders',
+                ],
+            ];
 
-          case 4:
-            return view('template::index',compact('role_id'));
-          break;
-         
-          default:
             return view('dashboard', compact('envs', 'dependencies', 'extensions'));
         }
-        
+
+        return redirect('/');
     }
 }

@@ -42,6 +42,7 @@ Route::prefix('support')->as('epanel.')->middleware(['auth'])->group(function()
 {
     Route::resources([
         'slider' => 'SliderController',
+        'event' => 'EventController',
     ]);
 
 });

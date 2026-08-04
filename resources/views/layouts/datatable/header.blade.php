@@ -23,14 +23,14 @@
         @isset($datatable)
             <div id="datatable-checkbox-info" style="display: none;">
                 <button type="button" class="btn btn-soft-danger btn-sm" id="delete-selected">
-                    <i class="bi bi-trash me-1"></i>
+                    <span class="iconify me-1" data-icon="solar:trash-bin-trash-bold"></span>
                     Delete <span id="datatable-checkbox">0</span> rows
                 </button>
             </div>
             <div class="ms-1">
                 <div class="input-group input-group-merge">
                     <div class="input-group-prepend input-group-text px-2">
-                        <i class="bi-search"></i>
+                        <span class="iconify" data-icon="solar:magnifer-bold"></span>
                     </div>
                     <input id="datatabe-search" type="search" class="form-control form-control-sm ps-5" placeholder="Search" aria-label="Search">
                 </div>
@@ -38,7 +38,7 @@
         @endisset
         @isset($create)
             <a class="btn btn-white btn-sm ms-1" href="{{ $create }}">
-                <i class="bi-plus"></i> New
+                <span class="iconify" data-icon="solar:add-circle-bold"></span> New
             </a>
         @endisset
 

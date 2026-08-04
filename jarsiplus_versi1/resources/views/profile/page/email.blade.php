@@ -1,0 +1,52 @@
+{!! Form::model(me(), ['method' => 'PUT', 'files' => true]) !!}
+    <div id="emailSection" class="card">
+
+        <div class="card-header">
+            <h3 class="card-title mb-1">{{ __('Update Email') }}</h3>
+            <p class="text-muted d-block mb-0">
+                {{ __('Update your email address here if it\'s needed.') }}
+            </p>
+        </div>
+        <div class="alert alert-secondary mb-0 rounded-0">
+            <p class="mb-0">{{ __('Your current email address is') }} <span class="fw-semi-bold">{{ me()->email }}</span></p>
+        </div>
+        <div class="card-body">
+            <div class="row mb-3">
+                <label for="email" class="col-sm-3 col-form-label form-label">
+                    {{ __('New Email') }} <span class="text-danger">*</span>
+                </label>
+                <div class="col-sm-9">
+                    {!! Form::text('email', null, ['class' => 'form-control' . $errors->first('email', ' is-invalid')]) !!}
+                    <x-nue::error for="email" class="mt-1" />
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="old_password" class="col-sm-3 col-form-label form-label">
+                    {{ __('Current Password') }} <span class="text-danger">*</span>
+                </label>
+                <div class="col-sm-9">
+                    <div class="input-group input-group-merge {{ $errors->first('old_password', ' is-invalid') }}" data-hs-validation-validate-class>
+                        <input type="password" class="js-toggle-password form-control" name="old_password" placeholder="{{ __('Enter your current password') }}" aria-label="{{ __('Enter your current password') }}"
+                        data-hs-toggle-password-options='{
+                            "target": "#password-target",
+                            "defaultClass": "bi-eye-slash",
+                            "showClass": "bi-eye",
+                            "classChangeTarget": "#password-icon"
+                        }'>
+                        <a id="password-target" class="input-group-append input-group-text" href="javascript:;">
+                            <i id="password-icon" class="bi-eye"></i>
+                        </a>
+                    </div>
+                    <x-nue::error for="password" class="mt-1" />
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-primary">
+                    {{ __('Save changes') }}
+                </button>
+            </div>
+        </div>
+    </div>
+    {!! Form::hidden('page', 'email') !!}
+{!! Form::close() !!}

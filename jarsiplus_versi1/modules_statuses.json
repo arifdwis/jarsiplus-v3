@@ -1,0 +1,10 @@
+{
+    "Template": true,
+    "Core": true,
+    "Pemohon": true,
+    "Formulir": true,
+    "Kategori": true,
+    "Wilayah": true,
+    "Faq": true,
+    "Frontend": true
+}

@@ -16,5 +16,13 @@ Route::get('home', 'App\Http\Controllers\HomeController@index')
     ->name('home')
     ->prefix(config('nue.route.prefix'));
 
+Route::get('/home', 'App\Http\Controllers\HomeController@index');
 
 Route::view('crud', 'crud')->middleware('nue.lock');
+
+Route::any('/logout', 'Novay\SSO\Http\Controllers\OAuthController@logout')->name('logout');
+
+// Global Route Aliases for Template Module
+Route::get('/informasi', 'Modules\Template\Http\Controllers\TemplateController@informasi')->name('informasi');
+Route::get('/faq', 'Modules\Template\Http\Controllers\FaqController@index')->name('faq');
+Route::get('/statistik', 'Modules\Template\Http\Controllers\StatistikController@index')->name('statistik');

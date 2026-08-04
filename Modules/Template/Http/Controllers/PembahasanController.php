@@ -13,6 +13,14 @@ use Modules\Core\Entities\Pembahasan;
 class PembahasanController extends Controller
 {
     protected $title = 'Pembahasan';
+    protected $parent;
+    protected $dfile;
+    protected $data;
+    protected $module;
+    protected $entiti;
+    protected $view;
+    protected $prefix;
+    protected $tCreate;
 
     public function __construct(Penilaian $parent, Dfile $dfile, Pembahasan $data) 
     {
@@ -60,22 +68,28 @@ class PembahasanController extends Controller
      * @return mixed
      */
 
-    public function store(Request $request,$parent,$uuid) 
+    public function store(Request $request, $parent, $uuid) 
     {
         $input = $request->all();
-        $data   = $this->dfile->uuid($uuid)->firstOrFail();
+        $parentModel = $this->parent->uuid($parent)->firstOrFail();
+        $data = $this->dfile->uuid($uuid)->firstOrFail();
 
         $input['id_permohonan'] = $data->id_permohonan;
         $input['id_file'] = $data->id;
-        $input['id_operator'] = me()->id;
+        $input['id_operator'] = me() ? me()->id : auth()->id();
+        
+        if (empty($input['id_histori']) && $data->histori) {
+            $input['id_histori'] = $data->histori->id;
+        }
+
         $this->data::create($input);
 
-        $return = '<div class="message-item user"><div class="content"><div class="bubble">';
-        $return .= $request->komentar;    
-        $return .= '</div><div class="footer">10:40 AM</div></div></div>';
+        if ($request->ajax() || $request->wantsJson()) {
+            $parent = $parentModel;
+            return view("$this->view.chat", compact('parent', 'data'))->render();
+        }
 
-        return $return;
-    
+        return redirect()->back();
     }
     
 }

@@ -1,0 +1,5 @@
+[30-Oct-2022 06:05:02 UTC] PHP Parse error:  syntax error, unexpected token "}", expecting ";" in /home/siadwilsamarinda/app/Helpers/Enterwind.php on line 18
+[30-Oct-2022 06:05:06 UTC] PHP Parse error:  syntax error, unexpected token "}", expecting ";" in /home/siadwilsamarinda/app/Helpers/Enterwind.php on line 18
+[30-Oct-2022 06:06:14 UTC] PHP Parse error:  syntax error, unexpected token "}", expecting ";" in /home/siadwilsamarinda/app/Helpers/Enterwind.php on line 21
+[30-Oct-2022 14:41:07 UTC] PHP Fatal error:  Cannot use isset() on the result of an expression (you can use "null !== expression" instead) in /home/siadwilsamarinda/storage/framework/views/c2c5859fffa2cc796078e517f655e8405991a141.php on line 27
+[31-Oct-2022 04:32:33 UTC] PHP Fatal error:  Cannot use isset() on the result of an expression (you can use "null !== expression" instead) in /home/siadwilsamarinda/storage/framework/views/c2c5859fffa2cc796078e517f655e8405991a141.php on line 26

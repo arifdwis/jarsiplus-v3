@@ -2,11 +2,11 @@
 @section('title', "Create :: $title")
 
 @section('css')
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-duallistbox@3.0.9/dist/bootstrap-duallistbox.min.css">
+    <link rel="stylesheet" href="{{ asset('vendor/duallistbox/bootstrap-duallistbox.min.css') }}">
 @endsection
 
 @section('js')
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap-duallistbox@3.0.9/dist/jquery.bootstrap-duallistbox.min.js"></script>
+    <script src="{{ asset('vendor/duallistbox/jquery.bootstrap-duallistbox.min.js') }}"></script>
     <script>
         $(document).ready(function() {
             var listbox = $('select[name="permissions[]"]').bootstrapDualListbox();

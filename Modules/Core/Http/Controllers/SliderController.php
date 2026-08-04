@@ -191,30 +191,27 @@ class SliderController extends Controller
     public function datatable($data) 
     {
         return datatables()->of($data)
-        ->editColumn('pilihan', function($data) {
-            $return  = '<span>';
-            $return .= '    <div class="checkbox checkbox-only">';
-            $return .= '        <input type="checkbox" id="pilihan['.$data->id.']" name="pilihan[]" value="'.$data->uuid.'">';
-            $return .= '        <label for="pilihan['.$data->id.']"></label>';
-            $return .= '    </div>';
-            $return .= '</span>';
-            return $return;
-        })
-        ->editColumn('file', function($data) {
-            return '<a href="'. viewImg($data->file) . '" data-lity><img src="'. viewImg($data->file, 'm') . '" class="img-responsive img-thumbnail" width="100px"></a>';
-        })
-        
-        ->editColumn('judul', function($data) {
-            $return  = $data->label;
-            return $return;
-        })
-        ->editColumn('action', function($data) {
-            return '<a href="'.route("$this->prefix.edit", $data->uuid).'" class="link link-secondary">
-            <span class="iconify" data-icon="uil:edit"></span> <span class="">Edit</span>
-            </a>';
+            ->addColumn('pilihan', function($data) {
+                return '<div class="form-check mb-0"><input type="checkbox" name="ids[]" value="'.$data->id.'" class="form-check-input check-id"><label class="form-check-label"></label></div>';
+            })
+            ->editColumn('file', function($data) {
+                if ($data->file) {
+                    $src = viewImg($data->file, 'm');
+                    return '<a href="'.viewImg($data->file, 'l').'" data-lity><img src="'.$src.'" height="35" class="rounded border" style="object-fit:cover;"></a>';
+                }
+                return '-';
+            })
+            ->editColumn('judul', function($data) {
+                return $data->label ?? $data->judul;
+            })
+            ->addColumn('action', function($data) {
+                $updateUrl = route($this->prefix.'.update', $data->uuid ?? $data->id);
+                $labelAttr = htmlspecialchars($data->label ?? $data->judul, ENT_QUOTES, 'UTF-8');
+                $fileAttr = viewImg($data->file, 'm');
 
-            return $return;
-        })
-        ->escapeColumns(['*'])->toJson();
+                return '<button type="button" class="btn btn-xs btn-outline-secondary" onclick="openEditSliderModal(\''.$updateUrl.'\', \''.$labelAttr.'\', \''.$fileAttr.'\')"><i class="bi-pencil me-1"></i> Edit</button>';
+            })
+            ->rawColumns(['pilihan', 'file', 'action'])
+            ->make(true);
     }
 }

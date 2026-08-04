@@ -1,71 +1,72 @@
 @extends('template::layouts.master')
 
-@section('css')
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-@endsection
+@section('title', 'Upload Data Dukung — ' . config('app.name', 'JARSIPLUS Samarinda'))
 
 @section('content')
-    <section class="page-header">
-        <div class="header-light text-center mb-3">
-            <h1 class="title">{{$parent->indikators->label}}</h1>
-            <h4 class="subtitle">Maksimal File Untuk Data Dukung 10 MB</h4>
-            <a href="{{ route('indikator.data.index', $parent->uuid) }}"
-                style="display: inline-block; margin-top: 10px; padding: 6px 16px; background: rgba(255,255,255,0.2); color: #fff; border-radius: 20px; font-size: 13px; text-decoration: none; border: 1px solid rgba(255,255,255,0.4);">
-                ← Kembali ke Data Dukung
-            </a>
-        </div>
-    </section>
-    <svg width="100%" height="40px" viewBox="0 0 100 100" version="1.1" preserveAspectRatio="none" class="svg-header">
-        <path d="M0,0 C16.6666667,66 33.3333333,99 50,99 C66.6666667,99 83.3333333,66 100,0 L100,100 L0,100 L0,0 Z"
-            fill="#f9f9f9"></path>
-    </svg>
+<x-page-header
+    badge="UPLOAD DATA DUKUNG"
+    :title="$parent->label_indikator ?? 'Upload Berkas'"
+    desc="Unggah dokumen atau tautan resmi sebagai bukti dukung indikator. Ukuran berkas maksimal 10 MB."
+    :back="route('indikator.data.index', $parent->uuid)"
+    backLabel="Kembali ke Data Dukung"
+/>
 
-    <div class="section pb-1 pt-2">
+<div class="jp-section jp-section--sm">
+    <div class="l-container l-container--narrow">
+
         @if ($errors->any())
-            <div class="alert alert-danger mb-2">
-                <ul class="mb-0 pl-3">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
+            <div class="jp-notice jp-notice--danger u-mb-lg">
+                <span class="jp-notice__icon"><x-icon name="alert-circle" size="20" /></span>
+                <div class="jp-notice__body">
+                    <strong class="jp-notice__title">Terjadi kesalahan pengisian</strong>
+                    <ul class="jp-notice__list">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
             </div>
         @endif
 
-        {!! Form::open(['route' => ["$prefix.store", $parent->uuid], 'autocomplete' => 'off', 'files' => true]) !!}
-        @include("$view.form")
-        <div class="form-group mt-5">
-            <button type="submit" class="btn btn-primary btn-block">Submit</button>
+        <div class="jp-card">
+            {!! Form::open(['route' => ["$prefix.store", $parent->uuid], 'autocomplete' => 'off', 'files' => true]) !!}
+                @include("$view.form")
+
+                <div class="jp-form-foot">
+                    <a href="{{ route('indikator.data.index', $parent->uuid) }}" class="jp-btn jp-btn--ghost">Batal</a>
+                    <button type="submit" class="jp-btn jp-btn--accent jp-btn--lg">
+                        <x-icon name="check" size="18" />
+                        Simpan Berkas Data Dukung
+                    </button>
+                </div>
+            {!! Form::close() !!}
         </div>
-        {!! Form::close() !!}
+
     </div>
+</div>
 @endsection
 
 @section('js')
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script>
-        $('.select2').select2({ minimumResultsForSearch: 20 });
-
-        // Toggle field URL / File berdasarkan pilihan Jenis Berkas
-        function toggleFields() {
-            var jenis = $('#jenis').val();
-            if (jenis === 'url') {
-                $('#field-url').show();
-                $('#field-file').hide();
-                $('#file-upload').val('');
-            } else {
-                $('#field-url').hide();
-                $('#field-file').show();
-                $('input[name="url"]').val('');
-            }
+<script>
+    function toggleFields() {
+        var jenis = $('#jenis').val();
+        if (jenis === 'url') {
+            $('#field-url').show();
+            $('#field-file').hide();
+            $('#file-upload').val('');
+        } else {
+            $('#field-url').hide();
+            $('#field-file').show();
+            $('input[name="url"]').val('');
         }
+    }
 
+    $(document).ready(function() {
         toggleFields();
-
         $('#jenis').on('change', function () {
             toggleFields();
         });
 
-        // Validasi ukuran file maksimal 10MB
         $('#file-upload').on('change', function () {
             var file = this.files[0];
             if (file && file.size > 10 * 1024 * 1024) {
@@ -73,5 +74,6 @@
                 $(this).val('');
             }
         });
-    </script>
+    });
+</script>
 @endsection

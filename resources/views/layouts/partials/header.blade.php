@@ -9,8 +9,8 @@
 
         <div class="navbar-nav-wrap-content-start">
             <button type="button" class="js-navbar-vertical-aside-toggle-invoker navbar-aside-toggler">
-                <i class="bi-arrow-bar-left navbar-toggler-short-align" data-bs-template='<div class="tooltip d-none d-md-block" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>' data-bs-toggle="tooltip" data-bs-placement="right" title="Collapse"></i>
-                <i class="bi-arrow-bar-right navbar-toggler-full-align" data-bs-template='<div class="tooltip d-none d-md-block" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>' data-bs-toggle="tooltip" data-bs-placement="right" title="Expand"></i>
+                <i class="bi-arrow-bar-left navbar-toggler-short-align" data-bs-toggle="tooltip" data-bs-placement="right" title="Collapse"></i>
+                <i class="bi-arrow-bar-right navbar-toggler-full-align" data-bs-toggle="tooltip" data-bs-placement="right" title="Expand"></i>
             </button>
         </div>
 
@@ -19,16 +19,18 @@
                 <ul class="navbar-nav">
                     <li class="nav-item">
                         <div class="dropdown">
-                            <a class="" href="javascript:;" id="accountNavbarDropdown" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside" data-bs-dropdown-animation>
+                            <a class="nav-link p-0" href="javascript:;" id="accountNavbarDropdown" onclick="var m = this.nextElementSibling; if(m) m.classList.toggle('show');" aria-expanded="false">
                                 @if(Novay\Nue\Features::enabled(Novay\Nue\Features::profilePhoto()))
                                     <div class="avatar avatar-sm avatar-circle">
                                         <img class="avatar-img" src="{{ Nue::user()->photo_url }}" alt="{{ Nue::user()->name }}">
                                     </div>
                                 @else
-                                    <span class="text-secondary">{{ Nue::user()->name }}</span>
+                                    <span class="avatar avatar-sm avatar-circle bg-soft-primary text-primary fw-bold flex-shrink-0 d-inline-flex align-items-center justify-content-center" style="width: 38px; height: 38px; border-radius: 50%;">
+                                        {{ strtoupper(substr(Nue::user()->name ?? 'U', 0, 2)) }}
+                                    </span>
                                 @endif
                             </a>
-                            <div class="dropdown-menu dropdown-menu-end navbar-dropdown-menu navbar-dropdown-menu-borderless navbar-dropdown-account" aria-labelledby="accountNavbarDropdown" style="width: 16rem;">
+                            <div class="dropdown-menu dropdown-menu-end navbar-dropdown-menu navbar-dropdown-menu-borderless navbar-dropdown-account" aria-labelledby="accountNavbarDropdown" style="width: 16rem; right: 0; left: auto;">
                                 <div class="dropdown-item-text">
                                     <div class="d-flex align-items-center">
                                         @if(Novay\Nue\Features::enabled(Novay\Nue\Features::profilePhoto()))
@@ -38,7 +40,7 @@
                                         @endif
                                         <div class="flex-grow-1">
                                             <h5 class="mb-0">{{ Nue::user()->name }}</h5>
-                                            <p class="card-text text-body">{{ Nue::user()->{config('nue.username')} }}</p>
+                                            <p class="card-text text-body mb-0" style="font-size: 12px;">{{ Nue::user()->email }}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -47,18 +49,13 @@
 
                                 @if(Route::has('profile.show'))
                                     <a class="dropdown-item" href="{{ route('profile.show') }}">
-                                        <span class="iconify nav-icon me-1" data-icon="icon-park-twotone:user-positioning"></span>
                                         Profile
                                     </a>
                                 @endif
                                 
-                                <a class="dropdown-item text-danger" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                    <span class="iconify nav-icon me-1" data-icon="icon-park-twotone:outbound"></span>
-                                    <b>Sign out</b>
+                                <a class="dropdown-item text-danger fw-bold" href="{{ route('sso.logout') }}">
+                                    Sign out / Keluar (SSO)
                                 </a>
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                    @csrf
-                                </form>
                             </div>
                         </div>
                     </li>
@@ -67,3 +64,13 @@
         </div>
     </div>
 </header>
+
+<script>
+    document.addEventListener('click', function (e) {
+        var dropdown = document.querySelector('.navbar-dropdown-account');
+        var toggle = document.getElementById('accountNavbarDropdown');
+        if (dropdown && toggle && !dropdown.contains(e.target) && !toggle.contains(e.target)) {
+            dropdown.classList.remove('show');
+        }
+    });
+</script>

@@ -5,19 +5,29 @@ namespace Modules\Template\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Redirect;
 
-use Modules\Formulir\Entities\Permohonan;
 use Modules\Formulir\Entities\Penilaian;
 use Modules\Formulir\Entities\DataDukung;
-use Modules\Core\Entities\Histori;
 use Modules\Core\Entities\Validasi;
 use App\Observers\FileObserver;
 
-
 class DataController extends Controller
 {
-    protected $title = 'data';
+    /**
+     * Display a listing of the resource.
+     * @return Renderable
+     */
+
+    protected $title = 'Data Dukung';
+    protected $parent;
+    protected $data;
+    protected $validasi;
+    protected $module;
+    protected $entiti;
+    protected $view;
+    protected $prefix;
+    protected $tCreate;
+    protected $tUpdate;
 
     public function __construct(Penilaian $parent, DataDukung $data, Validasi $validasi)
     {
@@ -30,8 +40,8 @@ class DataController extends Controller
         $this->view = $this->module . '::permohonan.' . $this->entiti;
         $this->prefix = 'indikator.data';
 
-        $this->tCreate = "$this->title created successfully!";
-        $this->tUpdate = "$this->title udpated successfully!";
+        $this->tCreate = "Data dukung berhasil ditambahkan!";
+        $this->tUpdate = "Data dukung berhasil diperbarui!";
 
         view()->share([
             'view' => $this->view,
@@ -43,27 +53,32 @@ class DataController extends Controller
     public function index(Request $request, $parent)
     {
         $parent = $this->parent->uuid($parent)->firstOrFail();
-        // return $parent;
         $data = $parent->files()->latest()->get();
         $permohonan = $parent->inovasis;
 
         return view("$this->view.index", compact('parent', 'data', 'permohonan'));
     }
 
-
-
-    public function create(Request $request, $uuid)
+    /**
+     * Show the form for creating a new resource.
+     * @return Renderable
+     */
+    public function create(Request $request, $parent)
     {
         if (role_me() == 4 && pendaftaran_inovasi_ditutup()) {
             notify()->flash(pendaftaran_inovasi_pesan_tutup(), 'warning');
-            return redirect()->route("$this->prefix.index", $uuid);
+            return redirect()->route("$this->prefix.index", $parent);
         }
 
-        $parent = $this->parent::where('uuid', $uuid)->firstOrFail();
-        $permohonan = $parent->inovasis;
-        return view("$this->view.create", compact('parent', 'permohonan'));
+        $parent = $this->parent->uuid($parent)->firstOrFail();
+        return view("$this->view.create", compact('parent'));
     }
 
+    /**
+     * Store a newly created resource in storage.
+     * @param Request $request
+     * @return Renderable
+     */
     public function store(Request $request, $uuid)
     {
         if (role_me() == 4 && pendaftaran_inovasi_ditutup()) {
@@ -71,33 +86,28 @@ class DataController extends Controller
             return redirect()->route("$this->prefix.index", $uuid);
         }
 
+        $parent = $this->parent->uuid($uuid)->firstOrFail();
+
         // Validasi server-side
         $request->validate([
             'label' => 'required',
-            'url' => 'required_without:file',
-            'file' => 'required_without:url|max:10240',
+            'nomor_surat' => 'required',
+            'file' => 'nullable|max:10240',
         ], [
-            'url.required_without' => 'URL/Link harus diisi jika File Berkas kosong.',
-            'file.required_without' => 'File Berkas harus diisi jika URL/Link kosong.',
             'file.max' => 'Ukuran file maksimal 10 MB.',
         ]);
 
-        $parent = $this->parent->uuid($uuid)->firstOrFail();
         $input = $request->all();
-        $slug = str_slug($request->label) . '-' . time();
-        $input['slug'] = $slug;
-        $input['id_permohonan'] = $parent->inovasi_id;
+        $input['id_operator'] = me()->id;
         $input['inovasi_penilaian_id'] = $parent->id;
-        $input['status'] = 0; // Berkas baru selalu belum tervalidasi
+        $input['status'] = 0; // Berkas baru belum disetujui
 
-
-        // Jika ada file yang diupload, proses uploadnya
         if ($request->hasFile('file')) {
             $input['file'] = $this->upload($request->file('file'));
         }
 
         $this->data::create($input);
-        notify()->flash($this->tCreate, 'success');
+        notify()->flash("Data dukung berhasil ditambahkan!", 'success');
         return redirect(route("$this->prefix.index", $uuid));
     }
 
@@ -111,7 +121,6 @@ class DataController extends Controller
         $parent = $this->parent->uuid($parent)->firstOrFail();
         $data = $this->data->uuid($id)->firstOrFail();
 
-        // Validasi server-side
         $request->validate([
             'label' => 'required',
             'file' => 'nullable|max:10240',
@@ -126,13 +135,11 @@ class DataController extends Controller
             $input['file'] = $this->upload($request->file('file'));
         }
 
-        // FileObserver akan otomatis membuat histori saat update
         $data->update($input);
 
-        notify()->flash($this->tUpdate, 'success');
+        notify()->flash("Pembaruan data dukung berhasil disimpan!", 'success');
         return redirect()->back();
     }
-
 
     public function validate(Request $request, $parent, $id)
     {
@@ -140,22 +147,44 @@ class DataController extends Controller
         $data = $this->data->uuid($id)->firstOrFail();
         $input = $request->all();
         $input['id_permohonan'] = $parent->id;
-        $input['status'] = 0;
-
-        if (isset($input['validate'])) {
-            $input['status'] = 1;
+        
+        $statusVal = 0;
+        if (isset($input['validate']) && ($input['validate'] == '1' || $input['validate'] === 1)) {
+            $statusVal = 1;
         }
-        //  return $input;
+
+        $input['status'] = $statusVal;
+
+        // Simpan / update ke tabel validasi
         $this->validasi->updateOrCreate(['id_file' => $data->id, 'id_operator' => me()->id], $input);
 
+        // PERBAIKAN: Update status langsung pada record data_dukung agar kartu & badge langsung ter-update!
+        $data->status = $statusVal;
+        $data->save();
+
         $penilaian = Penilaian::where('id', $parent->id)->first();
-        if ($penilaian) {
+        if ($penilaian && isset($parent->parameters)) {
             $penilaian->bobot = $parent->parameters->bobot;
             $penilaian->label_parameter = $parent->parameters->label;
             $penilaian->save();
         }
 
-        notify()->flash($this->tUpdate, 'success');
+        $msg = ($statusVal == 1) ? 'Berkas data dukung berhasil disetujui!' : 'Persetujuan berkas data dukung telah dibatalkan.';
+        notify()->flash($msg, 'success');
+        return redirect()->back();
+    }
+
+    public function destroy(Request $request, $parent, $id)
+    {
+        if (role_me() == 4 && pendaftaran_inovasi_ditutup()) {
+            notify()->flash(pendaftaran_inovasi_pesan_tutup(), 'warning');
+            return redirect()->back();
+        }
+
+        $data = $this->data->uuid($id)->firstOrFail();
+        $data->delete();
+
+        notify()->flash("Data dukung berhasil dihapus!", 'success');
         return redirect()->back();
     }
 
@@ -163,12 +192,14 @@ class DataController extends Controller
     {
         $path = 'jarsiplus/inovasi/file/';
         $tmpFilePath = 'app/public/' . $path;
-        $tmpFileDate = date('Y-m') . '/' . date('d') . '/';
-        $tmpFileName = uniqid();
-        $tmpFileExt = $file->getClientOriginalExtension();
-        $file->move(storage_path() . '/' . $tmpFilePath . '/' . $tmpFileDate, $tmpFileName . '.' . $tmpFileExt);
-        return "storage/{$path}{$tmpFileDate}/{$tmpFileName}.{$tmpFileExt}";
+
+        $targetPath = storage_path($tmpFilePath);
+        if (!file_exists($targetPath)) {
+            mkdir($targetPath, 0777, true);
+        }
+
+        $name = time() . '.' . $file->getClientOriginalExtension();
+        $file->move($targetPath, $name);
+        return 'storage/' . $path . $name;
     }
-
-
 }

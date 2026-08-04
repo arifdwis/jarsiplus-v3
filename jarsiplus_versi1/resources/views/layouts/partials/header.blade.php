@@ -1,0 +1,69 @@
+<header id="header" class="navbar navbar-expand-lg navbar-fixed navbar-height navbar-container navbar-bordered bg-white">
+    <div class="navbar-nav-wrap">
+        <a class="navbar-brand" href="/" aria-label="UI">
+            <img class="navbar-brand-logo" src="{{ config('nue.brand.logo.default.light') }}" alt="Logo" data-hs-theme-appearance="default">
+            <img class="navbar-brand-logo" src="{{ config('nue.brand.logo.default.dark') }}" alt="Logo" data-hs-theme-appearance="dark">
+            <img class="navbar-brand-logo-mini" src="{{ config('nue.brand.logo.mini.light') }}" alt="Logo" data-hs-theme-appearance="default">
+            <img class="navbar-brand-logo-mini" src="{{ config('nue.brand.logo.mini.dark') }}" alt="Logo" data-hs-theme-appearance="dark">
+        </a>
+
+        <div class="navbar-nav-wrap-content-start">
+            <button type="button" class="js-navbar-vertical-aside-toggle-invoker navbar-aside-toggler">
+                <i class="bi-arrow-bar-left navbar-toggler-short-align" data-bs-template='<div class="tooltip d-none d-md-block" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>' data-bs-toggle="tooltip" data-bs-placement="right" title="Collapse"></i>
+                <i class="bi-arrow-bar-right navbar-toggler-full-align" data-bs-template='<div class="tooltip d-none d-md-block" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>' data-bs-toggle="tooltip" data-bs-placement="right" title="Expand"></i>
+            </button>
+        </div>
+
+        <div class="navbar-nav-wrap-content-end">
+            @auth
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <div class="dropdown">
+                            <a class="" href="javascript:;" id="accountNavbarDropdown" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside" data-bs-dropdown-animation>
+                                @if(Novay\Nue\Features::enabled(Novay\Nue\Features::profilePhoto()))
+                                    <div class="avatar avatar-sm avatar-circle">
+                                        <img class="avatar-img" src="{{ Nue::user()->photo_url }}" alt="{{ Nue::user()->name }}">
+                                    </div>
+                                @else
+                                    <span class="text-secondary">{{ Nue::user()->name }}</span>
+                                @endif
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end navbar-dropdown-menu navbar-dropdown-menu-borderless navbar-dropdown-account" aria-labelledby="accountNavbarDropdown" style="width: 16rem;">
+                                <div class="dropdown-item-text">
+                                    <div class="d-flex align-items-center">
+                                        @if(Novay\Nue\Features::enabled(Novay\Nue\Features::profilePhoto()))
+                                            <div class="avatar avatar-sm avatar-circle me-3">
+                                                <img class="avatar-img" src="{{ Nue::user()->photo_url }}" alt="{{ Nue::user()->name }}">
+                                            </div>
+                                        @endif
+                                        <div class="flex-grow-1">
+                                            <h5 class="mb-0">{{ Nue::user()->name }}</h5>
+                                            <p class="card-text text-body">{{ Nue::user()->{config('nue.username')} }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="dropdown-divider"></div>
+
+                                @if(Route::has('profile.show'))
+                                    <a class="dropdown-item" href="{{ route('profile.show') }}">
+                                        <span class="iconify nav-icon me-1" data-icon="icon-park-twotone:user-positioning"></span>
+                                        Profile
+                                    </a>
+                                @endif
+                                
+                                <a class="dropdown-item text-danger" href="{{ route('sso.logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    <span class="iconify nav-icon me-1" data-icon="icon-park-twotone:outbound"></span>
+                                    <b>Sign out</b>
+                                </a>
+                                <form id="logout-form" action="{{ route('sso.logout') }}" method="GET" class="d-none">
+                                    @csrf
+                                </form>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            @endauth
+        </div>
+    </div>
+</header>

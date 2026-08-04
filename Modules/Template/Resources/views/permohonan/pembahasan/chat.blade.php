@@ -1,61 +1,92 @@
-@foreach($data->historis as $key => $value)
-    <div class="message-divider">
-        {{tgl_indo($value->created_at)}}
-    </div>
+@if(isset($data->historis) && $data->historis->count() > 0)
+    @php
+        $myUserId = me() ? me()->id : auth()->id();
+    @endphp
 
-    <div class="message-item {{$value->id_operator != me()->id ? '' : 'user'}}">
-        <div class="content">
-            <div class="title py-2">{{$value->operator->name}} ( {{$value->operator->roles->first()->name}} )</div>
-            <div class="bubble">
-                {{$value->deskripsi}} oleh {{optional($value->operator)->name}}
-            </div>
+    @foreach($data->historis as $key => $value)
+        <div class="jp-chat-divider">
+            <span>{{ tgl_indo($value->created_at) }}</span>
         </div>
-    </div>
 
-    {{-- Tampilkan file dari histori (field file di histori sendiri) --}}
-    @if(!empty($value->file) && strlen(trim($value->file)) > 0)
-        <div class="message-item {{$value->id_operator != me()->id ? '' : 'user'}}">
-            <div class="content">
-                <a href="{{asset($value->file)}}" data-lity>
-                    <div class="bubble px-5 py-5">
-                        <iconify-icon icon="ant-design:file-pdf-twotone" class="detail-file"></iconify-icon>
-                    </div>
-                </a>
-                <div class="footer">{{waktu_chat($value->created_at)}}</div>
-            </div>
-        </div>
-    @endif
+        @php
+            $isMine = ($value->id_operator == $myUserId);
+            $operatorName = optional($value->operator)->name ?? 'Sistem';
+            $operatorRole = optional(optional($value->operator)->roles)->first()->name ?? 'Pengguna';
+        @endphp
 
-    {{-- Tampilkan URL: hanya di histori pertama (submit awal) --}}
-    @if($key == 0 && isset($value->dukungs) && !empty($value->dukungs->url))
-        <div class="message-item {{$value->id_operator != me()->id ? '' : 'user'}}">
-            <div class="content">
-                <div class="bubble px-3 py-3">
-                    <a href="{{$value->dukungs->url}}" target="_blank" style="color: white; text-decoration: none;">
-                        <iconify-icon icon="mdi:link-variant" class="detail-file"></iconify-icon>
-                        <br><small style="word-break: break-all;">{{$value->dukungs->url}}</small>
-                    </a>
+        {{-- Pesan utama --}}
+        <div class="jp-bubble-row {{ $isMine ? 'is-mine' : '' }}">
+            <div class="jp-bubble {{ $isMine ? 'jp-bubble--mine' : '' }}">
+                <div class="jp-bubble__head">
+                    <strong class="jp-bubble__name">
+                        {{ $operatorName }}
+                        <span class="font-mono jp-bubble__role">({{ $operatorRole }})</span>
+                    </strong>
+                    <span class="font-mono jp-bubble__time">{{ waktu_chat($value->created_at) }}</span>
                 </div>
-                <div class="footer">{{waktu_chat($value->created_at)}}</div>
-            </div>
-        </div>
-    @endif
 
-    @if($value->pembahasans)
-        @foreach($value->pembahasans as $child)
-            <div class="message-item {{$child->id_operator != me()->id ? '' : 'user'}}">
-                <div class="content">
-                    @if($child->id_operator != me()->id)
-                        <div class="title py-2">{{$child->operator->name}} ( {{$child->operator->roles->first()->name}} )</div>
+                <p class="jp-bubble__text">
+                    @if(filled($value->deskripsi))
+                        {{ $value->deskripsi }}
+                    @else
+                        <em>Tidak ada keterangan.</em>
                     @endif
-                    <div class="bubble">
-                        {{$child->komentar}}
+                </p>
+
+                @if(!empty($value->file) && strlen(trim($value->file)) > 0)
+                    <div class="jp-bubble__attach">
+                        <a href="{{ asset($value->file) }}" target="_blank" rel="noopener" class="jp-bubble__chip">
+                            <x-icon name="file" size="14" />
+                            {{ basename($value->file) }}
+                        </a>
                     </div>
-                    <div class="footer">{{waktu_chat($child->created_at)}}</div>
-                </div>
+                @endif
+
+                @if($key == 0 && isset($value->dukungs) && !empty($value->dukungs->url))
+                    <div class="jp-bubble__attach">
+                        <a href="{{ $value->dukungs->url }}" target="_blank" rel="noopener" class="jp-bubble__chip">
+                            <x-icon name="link" size="14" />
+                            {{ $value->dukungs->url }}
+                        </a>
+                    </div>
+                @endif
             </div>
-        @endforeach
-    @endif
+        </div>
 
+        {{-- Tanggapan --}}
+        @if($value->pembahasans && $value->pembahasans->count() > 0)
+            @foreach($value->pembahasans as $child)
+                @php
+                    $isChildMine = ($child->id_operator == $myUserId);
+                    $childName = optional($child->operator)->name ?? 'Pengguna';
+                    $childRole = optional(optional($child->operator)->roles)->first()->name ?? 'Pembahas';
+                @endphp
 
-@endforeach
+                <div class="jp-bubble-row {{ $isChildMine ? 'is-mine' : '' }}">
+                    <div class="jp-bubble jp-bubble--reply {{ $isChildMine ? 'jp-bubble--mine' : '' }}">
+                        <div class="jp-bubble__head">
+                            <strong class="jp-bubble__name">
+                                {{ $childName }}
+                                <span class="font-mono jp-bubble__role">({{ $childRole }})</span>
+                            </strong>
+                            <span class="font-mono jp-bubble__time">{{ waktu_chat($child->created_at) }}</span>
+                        </div>
+                        <p class="jp-bubble__text">
+                            @if(filled($child->komentar))
+                                {{ $child->komentar }}
+                            @else
+                                <em>Tidak ada keterangan.</em>
+                            @endif
+                        </p>
+                    </div>
+                </div>
+            @endforeach
+        @endif
+    @endforeach
+@else
+    <x-empty
+        icon="chat"
+        title="Belum ada pembahasan"
+        desc="Belum ada tanggapan atau pesan pada berkas ini. Tulis komentar pertama untuk memulai diskusi."
+    />
+@endif

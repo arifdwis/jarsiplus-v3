@@ -1,0 +1,13 @@
+{
+    "name": "Formulir",
+    "alias": "formulir",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Formulir\\Providers\\FormulirServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

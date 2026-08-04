@@ -1,22 +1,41 @@
-<!-- chat footer -->
-<div class="chatFooter">
-    {!! Form::open(['route' => ["$prefix.pembahasan.store", [$parent->uuid, $data->uuid]], 'autocomplete' => 'off', 'id' => 'form-chat']) !!}
-    {!! Form::hidden('id_histori', $data->histori ? $data->histori->id : null) !!}
-    <a href="javascript:;" class="btn btn-icon btn-secondary" data-toggle="modal" data-target="#addActionSheet">
-        <ion-icon name="add"></ion-icon>
-    </a>
-    <div class="form-group boxed">
-        <div class="input-wrapper">
-            <input type="text" name="komentar" id="input-chat" class="form-control" placeholder="Type a message...">
-            <i class="clear-input">
-                <ion-icon name="close-circle"></ion-icon>
-            </i>
+@if($type == 'pembahasan')
+    @if(role_me() == 4 && $parent->status == 1)
+        <div class="l-container u-mt-xl">
+            <div class="jp-actionbar">
+                <p class="jp-actionbar__text">Apakah data sudah lengkap?</p>
+                <div class="u-flex u-gap-sm u-flex-wrap">
+                    <button type="button" class="jp-btn jp-btn--on-dark"
+                            onclick="event.preventDefault();document.getElementById('formLengkapi').submit();">
+                        Ya, Lengkapi
+                    </button>
+                    <button type="button" class="jp-btn jp-btn--on-dark"
+                            onclick="event.preventDefault();document.getElementById('formKurang').submit();">
+                        Kurang Lengkap
+                    </button>
+                </div>
+            </div>
         </div>
-    </div>
-    <button type="submit" class="btn btn-icon btn-primary">
-        <ion-icon name="send"></ion-icon>
-    </button>
+        <form id="formLengkapi" action="{{ route('permohonan.berkas.lengkapi',[$parent->uuid]) }}" method="POST" class="u-hidden">@csrf @method('PATCH')</form>
+        <form id="formKurang" action="{{ route('permohonan.berkas.kurang',[$parent->uuid]) }}" method="POST" class="u-hidden">@csrf @method('PATCH')</form>
+    @endif
 
-    {!! Form::close() !!}
-</div>
-<!-- * chat footer -->
+    @if(role_me() == 2 && in_array($parent->status,[2,3]))
+        <div class="l-container u-mt-xl">
+            <div class="jp-actionbar">
+                <p class="jp-actionbar__text">Verifikasi permohonan</p>
+                <div class="u-flex u-gap-sm u-flex-wrap">
+                    <button type="button" class="jp-btn jp-btn--on-dark"
+                            onclick="event.preventDefault();document.getElementById('formSetuju').submit();">
+                        Setuju
+                    </button>
+                    <button type="button" class="jp-btn jp-btn--on-dark"
+                            onclick="event.preventDefault();document.getElementById('formTolak').submit();">
+                        Tolak
+                    </button>
+                </div>
+            </div>
+        </div>
+        <form id="formSetuju" action="{{ route('permohonan.berkas.setuju',[$parent->uuid]) }}" method="POST" class="u-hidden">@csrf @method('PATCH')</form>
+        <form id="formTolak" action="{{ route('permohonan.berkas.tolak',[$parent->uuid]) }}" method="POST" class="u-hidden">@csrf @method('PATCH')</form>
+    @endif
+@endif

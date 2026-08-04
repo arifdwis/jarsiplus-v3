@@ -53,7 +53,7 @@
                             DESKRIPSI PERBAIKAN <span class="text-danger">*</span>
                         </label>
                         <div class="col-sm-9">
-                            {!! Form::textarea('deskripsi_perbaikan', null, ['class' => 'form-control form-control-sm form-style' . $errors->first('deskripsi_perbaikan', ' is-invalid')]) !!}
+                            {!! Form::textarea('deskripsi_perbaikan', null, ['class' => 'form-control form-control-sm' . $errors->first('deskripsi_perbaikan', ' is-invalid')]) !!}
                             {!! $errors->first('deskripsi_perbaikan', ' <span class="invalid-feedback">:message</span>') !!}
                         </div>
                     </div> 
@@ -62,7 +62,7 @@
                             Komentar <span class="text-danger">*</span>
                         </label>
                         <div class="col-sm-9">
-                            {!! Form::textarea('komentar', null, ['class' => 'form-control form-control-sm form-style' . $errors->first('komentar', ' is-invalid')]) !!}
+                            {!! Form::textarea('komentar', null, ['class' => 'form-control form-control-sm' . $errors->first('komentar', ' is-invalid')]) !!}
                             {!! $errors->first('komentar', ' <span class="invalid-feedback">:message</span>') !!}
                         </div>
                     </div>  -->

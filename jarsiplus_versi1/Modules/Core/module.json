@@ -1,0 +1,16 @@
+{
+    "name": "Core",
+    "alias": "core",
+    "description": "Core Module untuk E-Panel.",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Core\\Providers\\CoreServiceProvider"
+    ],
+    "aliases": {},
+    "files": [
+        "Helpers/Enterwind.php", 
+        "Helpers/Modules.php"
+    ],
+    "requires": []
+}

@@ -1,33 +1,59 @@
-@extends('template::layouts.master')
+@extends('template::layouts.master',['footer'=>false])
 
-@section('css')
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-@endsection
+@section('title', 'Upload Berkas Permohonan — ' . config('app.name', 'JARSIPLUS Samarinda'))
 
 @section('content')
-<section class="page-header">
-    <div class="header-light text-center mb-3">
-        <h1 class="title">Berkas</h1>
-        <h4 class="subtitle">Data Dukung Anda</h4>
-    </div>
-</section>
-<svg width="100%" height="40px" viewBox="0 0 100 100" version="1.1" preserveAspectRatio="none" class="svg-header">
-    <path d="M0,0 C16.6666667,66 33.3333333,99 50,99 C66.6666667,99 83.3333333,66 100,0 L100,100 L0,100 L0,0 Z" fill="#f9f9f9"></path>
-</svg>
+<x-page-header
+    badge="BERKAS PERMOHONAN"
+    title="Upload Berkas"
+    desc="Unggah dokumen yang diperlukan untuk mendukung permohonan Anda."
+    :back="route('permohonan.berkas.index', $parent->uuid)"
+    backLabel="Kembali ke Daftar Berkas"
+/>
 
-<div class="section pb-1 pt-2">
-    {!! Form::open(['route' => ["$prefix.store",$parent->uuid] , 'autocomplete' => 'off', 'files' => true]) !!}
-    @include("$view.form")
-    <div class="form-group mt-5">
-        <button type="submit" class="btn btn-primary btn-block">Submit</button>
+<div class="jp-section jp-section--sm">
+    <div class="l-container l-container--narrow">
+        <div class="jp-card">
+            <div class="jp-notice jp-notice--accent u-mb-lg">
+                <span class="jp-notice__icon"><x-icon name="info" size="20" /></span>
+                <div class="jp-notice__body">
+                    <strong class="jp-notice__title">Ketentuan unggah</strong>
+                    <p class="jp-notice__text">Format yang diterima: PDF, JPG, PNG. Maksimal 5 MB per berkas.</p>
+                </div>
+            </div>
+
+            <form action="{{ route('permohonan.berkas.store', $parent->uuid) }}" method="POST" enctype="multipart/form-data" id="uploadForm">
+                @csrf
+                <div id="fileInputs">
+                    <x-file-drop name="berkas[]" label="Dokumen Pendukung" multiple accept=".pdf,.jpg,.jpeg,.png" maxSize="5MB" />
+                </div>
+
+                <div class="jp-form-foot">
+                    <a href="{{ route('permohonan.berkas.index', $parent->uuid) }}" class="jp-btn jp-btn--ghost">Batal</a>
+                    <button type="submit" class="jp-btn jp-btn--accent">
+                        <x-icon name="check" size="16" />
+                        Simpan Berkas
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
-    {!! Form::close() !!}
 </div>
 @endsection
 
 @section('js')
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
-    $('.select2').select2({minimumResultsForSearch: 20});
+document.getElementById('uploadForm').addEventListener('submit', function(e) {
+    var fileInput = document.querySelector('input[name="berkas[]"]');
+    if (fileInput && fileInput.files.length > 0) {
+        for (var i = 0; i < fileInput.files.length; i++) {
+            if (fileInput.files[i].size > 5242880) {
+                e.preventDefault();
+                alert('File ' + fileInput.files[i].name + ' melebihi 5MB');
+                return false;
+            }
+        }
+    }
+});
 </script>
 @endsection

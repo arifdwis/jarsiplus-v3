@@ -4,12 +4,11 @@
 @section('js')
 <script>
     var table = HSCore.components.HSDatatables.init('.js-datatable', {
-        scrollY: 'calc(100vh - 250px)',
+        scrollY: 'calc(100vh - 280px)',
         ajax : '{!! request()->fullUrl() !!}?datatable=true', 
         columns: [
-        
-        { data: 'id', name: 'id', className: 'text-center' },
-        { data: 'name', name: 'name' }
+            { data: 'id', name: 'id', className: 'text-center', width: '50px' },
+            { data: 'name', name: 'name' }
         ],
         @include('nue::partials.datatable.script')
     });
@@ -17,52 +16,41 @@
 @endsection
 
 @section('content')
-@if($data->count())
-
-
-@include('layouts.breadcrumb', ['lists' => [
-'Dashboard' => 'javascript:;', 
-$title => 'active'
-]])
-
-@include('layouts.datatable.header', [
-'title' => $title, 
-'description' => 'Here is a list of all your data from your database.', 
-'datatable' => true
-])
-
-<div class="card card-bordered shadow-none rounded-0">
-    <div class="card-body p-0">
-        <div class="table-responsive">
-            <table id="datatable" class="js-datatable align-middle table-bordered table table-sm table-hover table-thead-bordered table-nowrap">
-                <thead class="thead-light">
-                    <tr>
-<!--                         <th class="table-column-pr-0" width="1">
-                            <div class="form-check mb-0">
-                                <input id="datatable-checkbox-check" type="checkbox" class="form-check-input">
-                                <label class="form-check-label" for="check-all"></label>
-                            </div>
-                        </th> -->
-                        <th width="1">No</th>
-                        <th>Nama Provinsi</th>
-                    </tr>
-                </thead>
-            </table>
-        </div>
-    </div>
-    @include('layouts.datatable.footer')
-</div>
-
-{!! Form::close() !!}
-@else
-
-@include('layouts.breadcrumb', ['lists' => [
-'Dashboard' => 'javascript:;', 
-$title => 'active'
-]])
 <div class="content container-fluid">
-    @include('layouts.empty')
-</div>
 
-@endif
+    @include('nue::partials.breadcrumb', [
+        'title' => $title,
+        'lists' => [
+            'Dashboard' => '/',
+            $title => 'active'
+        ]
+    ])
+
+    @if($data->count())
+        @include('nue::partials.datatable.header', [
+            'title' => 'Data ' . $title, 
+            'description' => 'Kelola daftar data ' . strtolower($title) . ' dalam sistem.', 
+            'datatable' => true
+        ])
+
+        <div class="card card-bordered shadow-none rounded-0">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table id="datatable" class="js-datatable align-middle table table-sm table-hover table-thead-bordered table-nowrap mb-0">
+                        <thead class="thead-light">
+                            <tr>
+                                <th width="60" class="text-center">No</th>
+                                <th>Nama Provinsi</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+            @include('nue::partials.datatable.footer')
+        </div>
+    @else
+        @include('layouts.empty')
+    @endif
+
+</div>
 @endsection

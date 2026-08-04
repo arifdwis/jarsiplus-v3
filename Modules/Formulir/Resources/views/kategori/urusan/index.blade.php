@@ -64,7 +64,7 @@ $title => 'active'
 $title => 'active'
 ]])
 <div class="content container-fluid">
-    @include('layouts.empties')
+    @include('layouts.empty')
 </div>
 
 @endif

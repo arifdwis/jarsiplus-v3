@@ -1,0 +1,121 @@
+<aside
+    class="js-navbar-vertical-aside navbar navbar-vertical-aside navbar-vertical navbar-vertical-fixed navbar-expand-xl navbar-bordered bg-white  ">
+    <div class="navbar-vertical-container">
+        <div class="navbar-vertical-footer-offset">
+            <a class="navbar-brand" href="/" aria-label="UI">
+                <img class="navbar-brand-logo" src="{{ config('nue.brand.logo.default.light') }}"
+                    alt="{{ config('nue.name') }}" data-hs-theme-appearance="default">
+                <img class="navbar-brand-logo" src="{{ config('nue.brand.logo.default.dark') }}"
+                    alt="{{ config('nue.name') }}" data-hs-theme-appearance="dark">
+                <img class="navbar-brand-logo-mini" src="{{ config('nue.brand.logo.mini.light') }}"
+                    alt="{{ config('nue.name') }}" data-hs-theme-appearance="default">
+                <img class="navbar-brand-logo-mini" src="{{ config('nue.brand.logo.mini.dark') }}"
+                    alt="{{ config('nue.name') }}" data-hs-theme-appearance="dark">
+
+                <span class="navbar-brand-logo h1 fw-bold mt-2">
+                    {{ config('nue.name') }}
+                </span>
+            </a>
+            <button type="button" class="js-navbar-vertical-aside-toggle-invoker navbar-aside-toggler">
+                <i class="bi-arrow-bar-left navbar-toggler-short-align"
+                    data-bs-template='<div class="tooltip d-none d-md-block" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>'
+                    data-bs-toggle="tooltip" data-bs-placement="right" title="Collapse"></i>
+                <i class="bi-arrow-bar-right navbar-toggler-full-align"
+                    data-bs-template='<div class="tooltip d-none d-md-block" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>'
+                    data-bs-toggle="tooltip" data-bs-placement="right" title="Expand"></i>
+            </button>
+            <div class="navbar-vertical-content">
+                <div id="navbarVerticalMenu" class="nav nav-pills nav-vertical card-navbar-nav">
+                    @each('nue::partials.menu', Nue::menu(), 'item')
+                </div>
+            </div>
+            <div class="navbar-vertical-footer">
+                <ul class="navbar-vertical-footer-list">
+                    <li class="navbar-vertical-footer-list-item">
+                        <div class="dropdown dropup">
+                            <button type="button" class="btn btn-ghost-secondary btn-icon rounded-circle"
+                                id="selectThemeDropdown" data-bs-toggle="dropdown" aria-expanded="false"
+                                data-bs-dropdown-animation></button>
+                            <div class="dropdown-menu navbar-dropdown-menu navbar-dropdown-menu-borderless"
+                                aria-labelledby="selectThemeDropdown">
+                                <a class="dropdown-item" href="#" data-icon="ic:twotone-deblur" data-value="auto">
+                                    <i class="iconify me-2" data-icon="ic:twotone-deblur"></i>
+                                    <span class="text-truncate" title="Auto (System Default)">Auto (System
+                                        Default)</span>
+                                </a>
+                                <a class="dropdown-item" href="#" data-icon="ic:twotone-light-mode"
+                                    data-value="default">
+                                    <i class="iconify me-2" data-icon="ic:twotone-light-mode"></i>
+                                    <span class="text-truncate" title="Default (Light Mode)">Default (Light Mode)</span>
+                                </a>
+                                <a class="dropdown-item active" href="#" data-icon="ic:twotone-dark-mode"
+                                    data-value="dark">
+                                    <i class="iconify me-2" data-icon="ic:twotone-dark-mode"></i>
+                                    <span class="text-truncate" title="Dark Mode">Dark Mode</span>
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="navbar-vertical-footer-list-item">
+                        <div class="dropdown dropup">
+                            <button type="button" class="btn btn-ghost-secondary btn-icon rounded-circle"
+                                id="otherLinksDropdown" data-bs-toggle="dropdown" aria-expanded="false"
+                                data-bs-dropdown-animation>
+                                <i class="bi-info-circle"></i>
+                            </button>
+                            <div class="dropdown-menu navbar-dropdown-menu-borderless"
+                                aria-labelledby="otherLinksDropdown">
+                                <span class="dropdown-header">Help</span>
+                                <a class="dropdown-item" href="https://nue.btekno.id/docs" target="_blank">
+                                    <i class="iconify h3 dropdown-item-icon mb-0"
+                                        data-icon="icon-park-twotone:book-one"></i>
+                                    <span class="text-truncate" title="Documentation">Documentation</span>
+                                </a>
+                                <a class="dropdown-item" href="https://github.com/novay/nue/blob/master/CHANGELOG.md"
+                                    target="_blank">
+                                    <i class="iconify h3 dropdown-item-icon mb-0"
+                                        data-icon="icon-park-twotone:exchange-four"></i>
+                                    <span class="text-truncate" title="Changelog">Changelog</span>
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <span class="dropdown-header">Contact Us</span>
+                                <a class="dropdown-item" href="https://wa.me/628115555573" target="_blank">
+                                    <i class="iconify h3 dropdown-item-icon mb-0"
+                                        data-icon="icon-park-twotone:wechat"></i>
+                                    <span class="text-truncate" title="WhatsApp">WhatsApp</span>
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="navbar-vertical-footer-list-item">
+                        <div class="dropdown dropup">
+                            <button type="button" class="btn btn-ghost-secondary btn-icon rounded-circle"
+                                id="selectLanguageDropdown" data-bs-toggle="dropdown" aria-expanded="false"
+                                data-bs-dropdown-animation>
+                                <img class="avatar avatar-xss avatar-circle"
+                                    src="https://cdnjs.cloudflare.com/ajax/libs/flag-icons/7.2.3/flags/1x1/gb.svg"
+                                    alt="">
+                            </button>
+                            <div class="dropdown-menu navbar-dropdown-menu-borderless"
+                                aria-labelledby="selectLanguageDropdown">
+                                <span class="dropdown-header">Select language</span>
+                                <a class="dropdown-item" href="#">
+                                    <img class="avatar avatar-xss avatar-circle me-2"
+                                        src="https://cdnjs.cloudflare.com/ajax/libs/flag-icons/7.2.3/flags/1x1/gb.svg"
+                                        alt="">
+                                    <span class="text-truncate" title="English">English</span>
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <img class="avatar avatar-xss avatar-circle me-2"
+                                        src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5MDAiIGhlaWdodD0iNjAwIj48cGF0aCBmaWxsPSIjZmZmIiBkPSJNMCAwSDkwMFY2MDBIMHoiLz48cGF0aCBmaWxsPSJyZWQiIGQ9Ik0wIDBIOTAwVjMwMEgweiIvPjwvc3ZnPg=="
+                                        alt="">
+                                    <span class="text-truncate" title="Bahasa Indonesia">Bahasa Indonesia</span>
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</aside>

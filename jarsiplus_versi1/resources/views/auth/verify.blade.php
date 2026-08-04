@@ -1,0 +1,84 @@
+@extends('layouts.blank')
+@section('title', __('Verify Your Email Address'))
+
+@section('content')
+    <main id="content" role="main" class="main pt-0">
+        <div class="container-fluid px-3">
+            <div class="row">
+                <div class="col-lg-8 d-lg-flex justify-content-center align-items-center min-vh-lg-100 position-relative bg-light px-0">
+                    <div class="position-absolute top-0 start-0 end-0 mt-3 mx-3">
+                        <div class="d-flex justify-content-between">
+                            <a href="/">
+                                <img class="w-100" height="50" src="{{ config('nue.brand.logo.default.light') }}" alt="" data-hs-theme-appearance="default" style="min-width: 7rem; max-width: 7rem;">
+                                <img class="w-100" height="50" src="{{ config('nue.brand.logo.default.dark') }}" alt="" data-hs-theme-appearance="dark" style="min-width: 7rem; max-width: 7rem;">
+                            </a>
+                            <div class="dropdown dropup zi-2">
+                                <button type="button" class="btn btn-ghost-secondary btn-icon rounded-circle" id="selectThemeDropdown" data-bs-toggle="dropdown" aria-expanded="false" data-bs-dropdown-animation></button>
+                                <div class="dropdown-menu navbar-dropdown-menu navbar-dropdown-menu-borderless" aria-labelledby="selectThemeDropdown">
+                                    <a class="dropdown-item" href="#" data-icon="bi-moon-stars" data-value="auto">
+                                        <i class="bi-moon-stars me-2"></i>
+                                        <span class="text-truncate" title="Auto (system default)">Auto (system default)</span>
+                                    </a>
+                                    <a class="dropdown-item" href="#" data-icon="bi-brightness-high" data-value="default">
+                                        <i class="bi-brightness-high me-2"></i>
+                                        <span class="text-truncate" title="Default (light mode)">Default (light mode)</span>
+                                    </a>
+                                    <a class="dropdown-item active" href="#" data-icon="bi-moon" data-value="dark">
+                                        <i class="bi-moon me-2"></i>
+                                        <span class="text-truncate" title="Dark">Dark</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-none d-lg-block" style="max-width: 23rem;">
+                        <div class="text-center mb-5">
+                            <img class="img-fluid" src="https://cdn.btekno.id/templates/v2/svg/illustrations/oc-chatting.svg" alt="" style="width: 12rem;" data-hs-theme-appearance="default">
+                            <img class="img-fluid" src="https://cdn.btekno.id/templates/v2/svg/illustrations-light/oc-chatting.svg" alt="" style="width: 12rem;" data-hs-theme-appearance="dark">
+                        </div>
+                        <div class="mb-5">
+                            <h2 class="display-5">Build digital products with:</h2>
+                        </div>
+                        <ul class="list-checked list-checked-lg list-checked-primary list-py-2">
+                            <li class="list-checked-item">
+                                <span class="d-block fw-semi-bold mb-1">All-in-one tool</span>
+                                Build, run, and scale your apps - end to end
+                            </li>
+                            <li class="list-checked-item">
+                                <span class="d-block fw-semi-bold mb-1">Easily add &amp; manage your services</span>
+                                It brings together your tasks, projects, timelines, files and more
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-4 d-flex justify-content-center align-items-center min-vh-lg-100">
+                    <div class="w-100 content-space-t-4 content-space-t-lg-2 content-space-b-1" style="max-width: 25rem;">
+                        @if(session('resent'))
+                            <div class="alert alert-success" role="alert">
+                                {{ __('A fresh verification link has been sent to your email.') }}
+                            </div>
+                        @endif
+                        <div class="text-center">
+                            <div class="mb-4">
+                                <img class="avatar avatar-xxl avatar-4x3" src="https://cdn.btekno.id/templates/v2/svg/illustrations/oc-email-verification.svg" alt="Image Description" data-hs-theme-appearance="default">
+                                <img class="avatar avatar-xxl avatar-4x3" src="https://cdn.btekno.id/templates/v2/svg/illustrations-light/oc-email-verification.svg" alt="Image Description" data-hs-theme-appearance="dark">
+                            </div>
+                            <h1 class="display-5">{{ __('Verify Your Email') }}</h1>
+                            <p class="mb-1">{{ __('We\'ve sent a link to your email address:') }}</p>
+
+                            <span class="d-block text-dark fw-semi-bold mb-1">{{ auth()->user()->email }}</span>
+
+                            <p>{{ __('Please follow the link inside to continue.') }}</p>
+
+                            <p>{{ __('Didn\'t receive an email?') }}</p>
+                            <form class="mb-3" method="POST" action="{{ route('verification.resend') }}">
+                                @csrf
+                                <button type="submit" class="btn btn-primary">{{ __('Request Another') }}</button>.
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+@endsection

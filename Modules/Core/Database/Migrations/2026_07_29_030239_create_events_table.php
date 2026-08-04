@@ -1,0 +1,42 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('events', function (Blueprint $table) {
+            $table->id();
+            $table->uuid('uuid')->nullable()->index();
+            $table->unsignedBigInteger('id_operator')->nullable();
+            $table->string('title');
+            $table->string('subtitle')->nullable();
+            $table->string('banner')->nullable();
+            $table->string('file_edaran')->nullable();
+            $table->string('file_panduan')->nullable();
+            $table->string('url_daftar')->nullable();
+            $table->text('description')->nullable();
+            $table->tinyInteger('status')->default(1);
+            $table->timestamps();
+            $table->softDeletes();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('events');
+    }
+};

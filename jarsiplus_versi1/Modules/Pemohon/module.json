@@ -1,0 +1,13 @@
+{
+    "name": "Pemohon",
+    "alias": "pemohon",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Pemohon\\Providers\\PemohonServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

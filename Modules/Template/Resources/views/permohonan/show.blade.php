@@ -1,138 +1,204 @@
-@extends('template::layouts.master',['footer'=>false])
+@extends('template::layouts.master')
 
-@section('css')
-<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.6/sweetalert2.min.css">
-
-@endsection
+@section('title', 'Detail Permohonan (' . $data->kode . ') — ' . config('app.name', 'JARSIPLUS Samarinda'))
 
 @section('content')
-<section class="page-header">
-    <div class="header-light text-center">
-        <h1 class="title">{{$data->kode}}</h1>
-        <h4 class="subtitle">Riwayat permohonan yang telah anda ajukan.</h4>
-    </div>
-</section>
-<svg width="100%" height="40px" viewBox="0 0 100 100" version="1.1" preserveAspectRatio="none" class="svg-header">
-    <path d="M0,0 C16.6666667,66 33.3333333,99 50,99 C66.6666667,99 83.3333333,66 100,0 L100,100 L0,100 L0,0 Z" fill="#f9f9f9"></path>
-</svg>
+@php
+    $isJuriActive = (!empty($juriComments) && count($juriComments));
+    $permohonanUuid = $data->uuid ?? $data->kode;
 
-<div class="section mt-3 mb-3">
-    <div class="row">
+    if ($data->status == 0) {
+        $statusBadge = 'jp-badge--amber';
+        $statusLabel = 'Menunggu Validasi';
+    } elseif ($data->status == 1 || $data->status == 2) {
+        $statusBadge = 'jp-badge--accent';
+        $statusLabel = 'Tervalidasi / Pembahasan';
+    } elseif ($data->status == 4) {
+        $statusBadge = 'jp-badge--success';
+        $statusLabel = 'Selesai / Evaluasi';
+    } elseif ($data->status == 9) {
+        $statusBadge = 'jp-badge--danger';
+        $statusLabel = 'Ditolak';
+    } else {
+        $statusBadge = 'jp-badge--neutral';
+        $statusLabel = 'Draf';
+    }
 
-        <div class="col-6 col-lg-3 mb-2">
-            <a href="{{route("$prefix.detail",$data->uuid)}}">
-                <div class="card h-100">
-                    <div class="kode bg-primary">
-                        <iconify-icon icon="ic:twotone-pending-actions"></iconify-icon>
-                        <h3>Permohonan</h3>
-                    </div>
-                </div>
-            </a>
-        </div>
+    $pengaju = optional($data->pemohon1)->name ?? me()->name;
+    $instansi = optional($data->pemohon1)->unit_kerja;
+@endphp
 
-        @if($data->status != 9 && $data->status < 3)
-        
-        @if($data->status > 0)
-        <div class="col-6 col-lg-3 mb-2">
-            <a href="{{route("$prefix.indikator.index",$data->uuid)}}">
-                <div class="card h-100">
-                    <div class="kode bg-primary">
-                        <iconify-icon icon="ic:twotone-note-alt"></iconify-icon>
-                        <h3>Indikator</h3>
-                    </div>
-                </div>
-            </a>
-        </div>
-        @endif
+<x-page-header
+    :title="$data->label"
+    :back="route('permohonan.index')"
+    backLabel="Kembali ke Daftar Permohonan"
+/>
 
-        @if($data->status > 1)
-        <div class="col-6 col-lg-3 mb-2">
-            <a href="{{route("$prefix.persetujuan",$data->uuid)}}">
-                <div class="card h-100">
-                    <div class="kode bg-primary">
-                        <iconify-icon icon="ic:twotone-send"></iconify-icon>
-                        <h3>Kirim Inovasi</h3>
-                    </div>
-                </div>
-            </a>
-        </div>
-        @endif
-        @endif
-
-        @php
-            $isJuriActive = (!empty($juriComments) && count($juriComments));
-        @endphp
-        <div class="col-6 col-lg-3 mb-2">
-            <a href="{{ $isJuriActive ? '#' : 'javascript:;' }}"
-                @if($isJuriActive)
-                    data-toggle="modal" data-target="#modalKomentarJuri"
-                @else
-                    class="juri-pending-btn"
-                @endif
-                title="Dalam Proses Penilaian Juri">
-                <div class="card h-100">
-                    <div class="kode {{ $isJuriActive ? 'bg-primary' : 'bg-secondary' }}" style="{{ $isJuriActive ? '' : 'opacity:.8;' }}">
-                        <iconify-icon icon="{{ $isJuriActive ? 'ic:twotone-chat-bubble-outline' : 'mdi:comment-off-outline' }}"></iconify-icon>
-                        <h3>Komentar Juri</h3>
-                    </div>
-                </div>
-            </a>
-        </div>
-
-        <div class="col-6 col-lg-3 mb-2">
-            <a href="{{route("$prefix.riwayat",$data->uuid)}}">
-                <div class="card h-100">
-                    <div class="kode bg-primary">
-                        <iconify-icon icon="uim:history-alt"></iconify-icon>
-                        <h3>Riwayat</h3>
-                    </div>
-                </div>
-            </a>
-        </div>
-
-        @if($data->status == 4)
-        <div class="col-6 col-lg-3 mb-2">
-            <a href="{{route("$prefix.finish",$data->uuid)}}">
-                <div class="card h-100">
-                    <div class="kode bg-primary">
-                        <iconify-icon icon="ic:twotone-check-circle"></iconify-icon>
-                        <h3>Nilai</h3>
-                    </div>
-                </div>
-            </a>
-        </div>
-        @endif
-
+{{-- Meta permohonan --}}
+<div class="jp-subhead">
+    <div class="l-container jp-subhead__inner">
+        <span class="jp-badge jp-badge--neutral font-mono">KODE: {{ $data->kode }}</span>
+        <span class="jp-badge {{ $statusBadge }}">{{ $statusLabel }}</span>
+        <span class="jp-subhead__meta">
+            <x-icon name="user" size="14" />
+            {{ $pengaju }}
+        </span>
+        <span class="jp-subhead__meta">
+            <x-icon name="building" size="14" />
+            {{ $instansi ?? 'Instansi belum dicantumkan' }}
+        </span>
+        <span class="jp-subhead__meta font-mono">
+            <x-icon name="calendar" size="14" />
+            {{ $data->created_at ? $data->created_at->format('d M Y') : 'Tanggal tidak tersedia' }}
+        </span>
     </div>
 </div>
 
-@include('template::partials.juri-komentar-modal')
+<div class="jp-section jp-section--sm">
+    <div class="l-container">
 
-@endsection
+        @if(isset($data) && $data->status == 9)
+            <div class="jp-notice jp-notice--danger u-mb-lg">
+                <span class="jp-notice__icon"><x-icon name="alert-circle" size="20" /></span>
+                <div class="jp-notice__body">
+                    <strong class="jp-notice__title">Permohonan ditolak</strong>
+                    <p class="jp-notice__text">{{ $data->alasan_tolak ?? 'Usulan permohonan ditolak oleh admin verifikator.' }}</p>
+                </div>
+            </div>
+        @endif
 
+        <div class="jp-section__head u-mb-lg">
+            <h2 class="jp-section__title">Kelola Permohonan Ini</h2>
+            <p class="jp-section__desc">Pilih bagian yang ingin Anda buka: rincian formulir, berkas indikator, pengiriman, catatan juri, atau riwayat aktivitas.</p>
+        </div>
 
-@section('js')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.6/sweetalert2.min.js"></script>
+        <div class="l-grid l-grid--4">
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var showPendingJuriMessage = function () {
-            if (typeof window.swal === 'function') {
-                return window.swal({
-                    title: 'Dalam Proses Penilaian Juri',
-                    type: 'info',
-                    confirmButtonText: 'OK'
-                });
-            }
-        };
+            {{-- Permohonan --}}
+            <a href="{{ route($prefix.'.detail', $permohonanUuid) }}" class="jp-nav-card jp-nav-card--accent">
+                <span class="jp-nav-card__icon"><x-icon name="document" size="30" /></span>
+                <span class="jp-nav-card__title">Permohonan</span>
+                <span class="jp-nav-card__desc">Lihat rincian formulir Segment 1–3</span>
+                <span class="jp-nav-card__link">Buka rincian <span aria-hidden="true">&rarr;</span></span>
+            </a>
 
-        document.querySelectorAll('.juri-pending-btn').forEach(function (el) {
-            el.addEventListener('click', function (e) {
-                e.preventDefault();
-                showPendingJuriMessage();
-            });
-        });
-    });
-</script>
+            {{-- Indikator --}}
+            @if($data->status != 9 && $data->status > 0)
+                <a href="{{ route($prefix.'.indikator.index', $permohonanUuid) }}" class="jp-nav-card jp-nav-card--teal">
+                    <span class="jp-nav-card__icon"><x-icon name="clipboard" size="30" /></span>
+                    <span class="jp-nav-card__title">Indikator</span>
+                    <span class="jp-nav-card__desc">Kelola berkas bukti dukung indikator</span>
+                    <span class="jp-nav-card__link">Kelola berkas <span aria-hidden="true">&rarr;</span></span>
+                </a>
+            @endif
 
+            {{-- Kirim Inovasi --}}
+            @if($data->status != 9 && $data->status > 1 && $data->status < 3 && role_me() == 4)
+                <button type="button" class="jp-nav-card jp-nav-card--success" onclick="document.getElementById('modalKirimInovasi').showModal()">
+                    <span class="jp-nav-card__icon"><x-icon name="check-circle" size="30" /></span>
+                    <span class="jp-nav-card__title">Kirim Inovasi</span>
+                    <span class="jp-nav-card__desc">Kirim berkas ke Tim Verifikator</span>
+                    <span class="jp-nav-card__link">Kirim sekarang <span aria-hidden="true">&rarr;</span></span>
+                </button>
+            @endif
+
+            {{-- Komentar Juri --}}
+            @if(role_me() == 4)
+                @if($isJuriActive)
+                    <button type="button" class="jp-nav-card jp-nav-card--amber" onclick="document.getElementById('modalKomentarJuri').showModal()">
+                        <span class="jp-nav-card__icon"><x-icon name="chat" size="30" /></span>
+                        <span class="jp-nav-card__title">Komentar Juri</span>
+                        <span class="jp-nav-card__desc">Catatan &amp; evaluasi dari tim juri</span>
+                        <span class="jp-nav-card__link">Lihat catatan <span aria-hidden="true">&rarr;</span></span>
+                    </button>
+                @else
+                    {{-- Belum ada catatan juri: kartu tetap tampil, tapi nonaktif & jelas alasannya --}}
+                    <div class="jp-nav-card jp-nav-card--amber is-disabled" aria-disabled="true">
+                        <span class="jp-nav-card__icon"><x-icon name="chat" size="30" /></span>
+                        <span class="jp-nav-card__title">Komentar Juri</span>
+                        <span class="jp-nav-card__desc">Belum ada catatan yang dipublikasikan</span>
+                        <span class="jp-nav-card__link">Dalam proses penjurian</span>
+                    </div>
+                @endif
+            @endif
+
+            {{-- Riwayat --}}
+            <a href="{{ route($prefix.'.riwayat', $permohonanUuid) }}" class="jp-nav-card jp-nav-card--neutral">
+                <span class="jp-nav-card__icon"><x-icon name="clock" size="30" /></span>
+                <span class="jp-nav-card__title">Riwayat</span>
+                <span class="jp-nav-card__desc">Log aktivitas &amp; perubahan status</span>
+                <span class="jp-nav-card__link">Lihat riwayat <span aria-hidden="true">&rarr;</span></span>
+            </a>
+
+        </div>
+    </div>
+</div>
+
+{{-- MODAL: Kirim Inovasi --}}
+@if($data->status != 9 && $data->status > 1 && $data->status < 3)
+    <dialog id="modalKirimInovasi" class="jp-modal">
+        <div class="jp-modal__head">
+            <div class="u-flex u-align-center u-gap-sm">
+                <span class="jp-modal__icon"><x-icon name="check-circle" size="22" /></span>
+                <h3 class="jp-modal__title">Konfirmasi Pengiriman Inovasi</h3>
+            </div>
+            <button type="button" class="jp-modal__close" aria-label="Tutup" onclick="document.getElementById('modalKirimInovasi').close()">
+                <x-icon name="close" size="22" />
+            </button>
+        </div>
+
+        {!! Form::open(['route' => ['permohonan.kirim', $permohonanUuid], 'autocomplete' => 'off', 'files' => true, 'method' => 'PUT', 'id' => 'formKirimInovasiModal']) !!}
+            <div class="jp-modal__body">
+                <p class="jp-notice__text">
+                    Apakah Anda yakin ingin mengirim usulan berkas inovasi ini ke Tim Verifikator?
+                    Pastikan seluruh nilai &amp; dokumen bukti dukung indikator telah terisi dengan benar.
+                </p>
+            </div>
+
+            <div class="jp-modal__foot">
+                <button type="button" class="jp-btn jp-btn--ghost" onclick="document.getElementById('modalKirimInovasi').close()">Batal</button>
+                <button type="submit" class="jp-btn jp-btn--accent">Ya, Kirim Sekarang</button>
+            </div>
+        {!! Form::close() !!}
+    </dialog>
+@endif
+
+{{-- MODAL: Komentar Juri --}}
+@if($isJuriActive)
+    <dialog id="modalKomentarJuri" class="jp-modal jp-modal--lg">
+        <div class="jp-modal__head">
+            <div class="u-flex u-align-center u-gap-sm">
+                <span class="jp-modal__icon" style="background-color: var(--c-amber-soft); color: var(--c-amber);">
+                    <x-icon name="chat" size="22" />
+                </span>
+                <h3 class="jp-modal__title">Catatan &amp; Evaluasi Juri</h3>
+            </div>
+            <button type="button" class="jp-modal__close" aria-label="Tutup" onclick="document.getElementById('modalKomentarJuri').close()">
+                <x-icon name="close" size="22" />
+            </button>
+        </div>
+
+        <div class="jp-modal__body">
+            <div class="u-flex u-flex-col u-gap-sm">
+                @foreach($juriComments as $juri)
+                    @php
+                        $juriName = data_get($juri, 'name') ?? data_get($juri, 'nama') ?? 'Juri Evaluator';
+                        $juriText = data_get($juri, 'komentar') ?? data_get($juri, 'catatan') ?? data_get($juri, 'deskripsi') ?? null;
+                    @endphp
+                    <div class="jp-card jp-card--compact jp-card--flat" style="border: 1px solid var(--c-border);">
+                        <strong class="u-block u-mb-2xs" style="font-size: var(--t-sm); color: var(--c-ink);">{{ $juriName }}</strong>
+                        <p class="jp-card__text {{ filled($juriText) ? '' : 'jp-prose--empty' }}">
+                            {{ filled($juriText) ? $juriText : 'Juri belum menuliskan catatan.' }}
+                        </p>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+
+        <div class="jp-modal__foot">
+            <span class="jp-field__hint">{{ count($juriComments) }} catatan juri</span>
+            <button type="button" class="jp-btn jp-btn--ghost" onclick="document.getElementById('modalKomentarJuri').close()">Tutup</button>
+        </div>
+    </dialog>
+@endif
 @endsection

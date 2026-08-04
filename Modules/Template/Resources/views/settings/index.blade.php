@@ -1,27 +1,37 @@
 @extends('template::layouts.master')
 
-@section('css')
-@endsection
+@section('title', 'Pengaturan Akun — ' . config('app.name', 'JARSIPLUS Samarinda'))
 
 @section('content')
-<section class="page-header">
-    <div class="header-light text-center mb-3">
-        <h1 class="title">Pengaturan</h1>
-        <h4 class="subtitle">Kelola pengaturan anda pada halaman berikut.</h4>
+<x-page-header
+    badge="AKUN &amp; PROFIL"
+    title="Pengaturan Akun Pemohon"
+    desc="Kelola biodata diri dan data instansi yang dipakai pada setiap pengajuan inovasi."
+    :back="url('/permohonan')"
+    backLabel="Kembali ke Dashboard"
+/>
+
+<div class="jp-section jp-section--sm">
+    <div class="l-container l-container--narrow">
+        <div class="l-grid l-grid--2">
+            <a href="{{ route('settings.profile.index') }}" class="jp-action-card jp-action-card--accent">
+                <div>
+                    <span class="jp-action-card__icon-box"><x-icon name="user" size="22" /></span>
+                    <h3 class="jp-action-card__title">Biodata Diri</h3>
+                    <p class="jp-action-card__desc">Kelola profil, NIK, NIP, dan data kontak pribadi Anda.</p>
+                </div>
+                <span class="jp-action-card__link">Pengaturan Biodata <span aria-hidden="true">&rarr;</span></span>
+            </a>
+
+            <a href="{{ route('settings.corporate.index') }}" class="jp-action-card jp-action-card--teal">
+                <div>
+                    <span class="jp-action-card__icon-box jp-action-card__icon-box--teal"><x-icon name="building" size="22" /></span>
+                    <h3 class="jp-action-card__title">Data Instansi</h3>
+                    <p class="jp-action-card__desc">Kelola nama instansi/OPD, kontak resmi, dan alamat kantor.</p>
+                </div>
+                <span class="jp-action-card__link">Pengaturan Instansi <span aria-hidden="true">&rarr;</span></span>
+            </a>
+        </div>
     </div>
-</section>
-<svg width="100%" height="40px" viewBox="0 0 100 100" version="1.1" preserveAspectRatio="none" class="svg-header">
-    <path d="M0,0 C16.6666667,66 33.3333333,99 50,99 C66.6666667,99 83.3333333,66 100,0 L100,100 L0,100 L0,0 Z" fill="#f9f9f9"></path>
-</svg>
-
-<div class="section full pb-1 pt-4">
-<ul class="listview link-listview">
-    <li><a href="{{route('settings.profile.index')}}">Pengaturan Biodata</a></li>
-    <li><a href="{{route('settings.corporate.index')}}">Pengaturan Instansi</a></li>
-   
-</ul>
 </div>
-@endsection
-
-@section('js')
 @endsection

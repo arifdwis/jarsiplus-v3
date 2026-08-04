@@ -4,7 +4,7 @@
             Nama Indikator <span class="text-danger">*</span>
         </label>
         <div class="col-sm-9">
-            {!! Form::text('label', null, ['class' => 'form-control form-style' . $errors->first('label', ' is-invalid')]) !!}
+            {!! Form::text('label', null, ['class' => 'form-control' . $errors->first('label', ' is-invalid')]) !!}
             {!! $errors->first('label', ' <span class="invalid-feedback">:message</span>') !!}
         </div>
     </div>
@@ -13,7 +13,7 @@
             Deskripsi<span class="text-danger">*</span>
         </label>
         <div class="col-sm-9">
-            {!! Form::textarea('deskripsi', null, ['class' => 'form-control form-style' . $errors->first('deskripsi', ' is-invalid'), 'rows' => 5]) !!}
+            {!! Form::textarea('deskripsi', null, ['class' => 'form-control' . $errors->first('deskripsi', ' is-invalid'), 'rows' => 5]) !!}
             {!! $errors->first('deskripsi', ' <span class="invalid-feedback">:message</span>') !!}
         </div>
     </div>
@@ -22,7 +22,7 @@
             Informasi Data Dukung<span class="text-danger">*</span>
         </label>
         <div class="col-sm-9">
-            {!! Form::textarea('informasi_data_dukung', null, ['class' => 'form-control form-style' . $errors->first('informasi_data_dukung', ' is-invalid'), 'rows' => 5]) !!}
+            {!! Form::textarea('informasi_data_dukung', null, ['class' => 'form-control' . $errors->first('informasi_data_dukung', ' is-invalid'), 'rows' => 5]) !!}
             {!! $errors->first('informasi_data_dukung', ' <span class="invalid-feedback">:message</span>') !!}
         </div>
     </div>

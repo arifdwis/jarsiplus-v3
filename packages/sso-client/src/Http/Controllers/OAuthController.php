@@ -96,7 +96,8 @@ class OAuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         
-        return redirect('/login');
+        $cookieName = 'sso_token_' . preg_replace('/[_\W]+/', '_', strtolower(config('sso.broker_name', 'jarsiplus')));
+        return redirect('/login')->with('success', 'Anda telah berhasil keluar dari akun.')->cookie(cookie()->forget($cookieName));
     }
 
     /**

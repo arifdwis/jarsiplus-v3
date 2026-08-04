@@ -1,71 +1,98 @@
-@extends('template::layouts.master',['footer'=>false,'bottom'=>false])
+@extends('template::layouts.master')
 
-@section('css')
-<link rel="stylesheet" type="text/css" href="{{asset('assets/datetimepicker/datetimepicker.css?v='.env('APP_VERSION'))}}">
-<style type="text/css">
-
-</style>
-@endsection
-
-@section('bottom')
-@endsection
+@section('title', 'Kirim Inovasi Daerah — ' . config('app.name', 'JARSIPLUS Samarinda'))
 
 @section('content')
-{!! Form::open(['route' => ['permohonan.kirim', $data->uuid], 'autocomplete' => 'off', 'files' => true, 'method' => 'PUT']) !!}
-<section class="page-header">
-    <div class="header-light text-center">
-        <h1 class="title"> Kirim Inovasi</h1>
-        <h4 class="subtitle">{{$data->label}}</h4>
+<x-page-header
+    badge="KIRIM INOVASI"
+    :title="$data->label"
+    :back="route('permohonan.show', $data->kode ?? $data->uuid)"
+    backLabel="Kembali ke Rincian Menu"
+/>
+
+<div class="jp-subhead">
+    <div class="l-container jp-subhead__inner">
+        <span class="jp-badge jp-badge--neutral font-mono">KODE: {{ $data->kode }}</span>
+        <span class="jp-subhead__meta">
+            <x-icon name="user" size="14" />
+            {{ optional($data->pemohon1)->name ?? me()->name }}
+        </span>
+        <span class="jp-subhead__meta">
+            <x-icon name="building" size="14" />
+            {{ optional($data->pemohon1)->unit_kerja ?? 'Instansi belum dicantumkan' }}
+        </span>
     </div>
-</section>
+</div>
 
-<svg width="100%" height="40px" viewBox="0 0 100 100" version="1.1" preserveAspectRatio="none" class="svg-header">
-    <path d="M0,0 C16.6666667,66 33.3333333,99 50,99 C66.6666667,99 83.3333333,66 100,0 L100,100 L0,100 L0,0 Z" fill="#f9f9f9"></path>
-</svg>
+<div class="jp-section jp-section--sm">
+    <div class="l-container l-container--narrow">
 
-<div class="section full pt-2 pb-3">
-    <div class="container pt-2 pb-2">
-        <ul class="nav nav-tabs style1" role="tablist">
-            <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#desk2Desk" role="tab">
-                    <input type="hidden" id="kategori" name="status" value="3">
-                    Peringatan
-                </a>
-            </li>
-        </ul>
-        <div class="mt-2">
-            <div id="desk2Desk" class="tab-content">
-                Mohon untuk melakukan pengecekan ulang terhadap data yang telah Anda berikan. Jika data telah diverifikasi dan benar, silakan lakukan pengiriman data. Harap diingat bahwa setelah data inovasi dikirimkan, tidak akan ada kemungkinan untuk mengubahnya. Terima kasih atas kerja sama yang diberikan.
+        {!! Form::open(['route' => ['permohonan.kirim', $data->uuid], 'autocomplete' => 'off', 'files' => true, 'method' => 'PUT', 'id' => 'formKirimInovasi']) !!}
+            <input type="hidden" name="status" value="2">
+
+            <div class="jp-card jp-card--featured">
+                <div class="u-text-center u-mb-lg">
+                    <span class="jp-result-head__icon" style="background-color: var(--c-accent-soft); border-color: var(--c-accent-line); color: var(--c-accent); margin-inline: auto;">
+                        <x-icon name="check-circle" size="30" />
+                    </span>
+                    <h2 class="u-mt-sm u-mb-xs">Konfirmasi Pengiriman Inovasi</h2>
+                    <p class="jp-section__desc">
+                        Pengiriman berkas akhir inovasi untuk ditinjau oleh Tim Kerja Sama Daerah (TKSD).
+                    </p>
+                </div>
+
+                <div class="jp-notice jp-notice--amber u-mb-lg">
+                    <span class="jp-notice__icon"><x-icon name="alert-triangle" size="20" /></span>
+                    <div class="jp-notice__body">
+                        <strong class="jp-notice__title">Periksa ulang sebelum mengirim</strong>
+                        <p class="jp-notice__text">
+                            Mohon cek kembali seluruh data formulir dan dokumen indikator bukti dukung yang telah Anda unggah.
+                            Setelah dikirim, berkas usulan akan <strong>terkunci</strong> dan tidak dapat diubah selama proses evaluasi juri.
+                        </p>
+                    </div>
+                </div>
+
+                <label class="jp-consent u-mb-lg">
+                    <input type="checkbox" id="agreeSubmitCheck" required>
+                    <span>Saya telah mengecek ulang seluruh data dan menyatakan siap mengirimkan usulan inovasi ini.</span>
+                </label>
+
+                <div class="jp-form-foot" style="margin-top: 0;">
+                    <a href="{{ route('permohonan.show', $data->kode ?? $data->uuid) }}" class="jp-btn jp-btn--ghost">Batal</a>
+                    <button type="submit" class="jp-btn jp-btn--accent jp-btn--lg" id="btnSubmitKirim">
+                        <x-icon name="check" size="18" />
+                        Kirim Berkas Inovasi
+                    </button>
+                </div>
             </div>
-        </div>
+        {!! Form::close() !!}
+
     </div>
 </div>
-
-
-<div class="form-button-group">
-    <button type="submit" class="btn  btn-primary btn-block">Submit Data</button>
-</div>
-{!! Form::close() !!}
 @endsection
-
-@section('other')
-
-@endsection
-
 
 @section('js')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js" type="text/javascript"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/locale/id.min.js" type="text/javascript"></script>
-<script src="{{asset('assets/datetimepicker/datetimepicker.js?v='.env('APP_VERSION'))}}"></script>
-<script type="text/javascript">
-    var d = new Date();
-    $('#tanggal').datetimepicker({
-       format: 'd-m-Y',
-       inline: true,
-       sideBySide: true,
-       timepicker:false,
-       minDate:d,
-       lang:'id',
-   });
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var form = document.getElementById('formKirimInovasi');
+    if (form) {
+        form.addEventListener('submit', function (e) {
+            var check = document.getElementById('agreeSubmitCheck');
+            if (check && !check.checked) {
+                e.preventDefault();
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        title: 'Konfirmasi Diperlukan',
+                        text: 'Harap centang persetujuan terlebih dahulu sebelum mengirimkan berkas.',
+                        icon: 'warning',
+                        confirmButtonColor: '#1B4DD1'
+                    });
+                } else {
+                    alert('Harap centang persetujuan terlebih dahulu.');
+                }
+            }
+        });
+    }
+});
 </script>
 @endsection

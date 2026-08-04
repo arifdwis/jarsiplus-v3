@@ -1,70 +1,134 @@
-@extends('template::layouts.master',['footer'=>false,'bottom'=>false])
+@extends('template::layouts.master')
 
-@section('css')
-<link rel="stylesheet" type="text/css" href="{{asset('assets/datetimepicker/datetimepicker.css?v='.env('APP_VERSION'))}}">
-<style type="text/css">
-
-</style>
-@endsection
-
-@section('bottom')
-@endsection
+@section('title', 'Hasil Evaluasi Inovasi Daerah — ' . config('app.name', 'JARSIPLUS Samarinda'))
 
 @section('content')
-<section class="page-header">
-    <div class="header-light text-center">
-        <h1 class="title"> Skor Inovasi</h1>
-        <h4 class="subtitle">{{$data->label}}</h4>
-    </div>
-</section>
+@php
+    $nilaiAkhir = $data->nilai_akhir;
+    $adaNilai = filled($nilaiAkhir) && is_numeric($nilaiAkhir);
 
-<svg width="100%" height="40px" viewBox="0 0 100 100" version="1.1" preserveAspectRatio="none" class="svg-header">
-    <path d="M0,0 C16.6666667,66 33.3333333,99 50,99 C66.6666667,99 83.3333333,66 100,0 L100,100 L0,100 L0,0 Z" fill="#f9f9f9"></path>
-</svg>
+    // Predikat diturunkan dari nilai, bukan teks tetap.
+    if (!$adaNilai) {
+        $predikat = null;
+    } elseif ($nilaiAkhir >= 85) {
+        $predikat = 'Sangat Inovatif';
+    } elseif ($nilaiAkhir >= 70) {
+        $predikat = 'Inovatif';
+    } elseif ($nilaiAkhir >= 55) {
+        $predikat = 'Cukup Inovatif';
+    } else {
+        $predikat = 'Kurang Inovatif';
+    }
 
-@if($data->status==4)
-    <div class="section full pt-2 pb-3">
-    <div class="card comment-box">
-        <div class="text-center">
-            <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" style="margin: 0 auto;">
-                <path fill="currentColor" d="M12 4c-4.42 0-8 3.58-8 8s3.58 8 8 8s8-3.58 8-8s-3.58-8-8-8zM8.88 7.82L11 9.94L9.94 11L8.88 9.94L7.82 11L6.76 9.94l2.12-2.12zM12 17.5c-2.33 0-4.31-1.46-5.11-3.5h10.22c-.8 2.04-2.78 3.5-5.11 3.5zm4.18-6.5l-1.06-1.06L14.06 11L13 9.94l2.12-2.12l2.12 2.12L16.18 11z" opacity=".3"/><path fill="currentColor" d="M8.88 9.94L9.94 11L11 9.94L8.88 7.82L6.76 9.94L7.82 11zm4.12 0L14.06 11l1.06-1.06L16.18 11l1.06-1.06l-2.12-2.12zM11.99 2C6.47 2 2 6.47 2 12s4.47 10 9.99 10S22 17.53 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8s8 3.58 8 8s-3.58 8-8 8zm0-2.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/>
-            </svg>
-        </div>
-        <h4 class="card-title text-center">Skor Anda {{$data->nilai_akhir}} !</h4>
-        <div class="text">
-            Ucapan terima kasih untuk partisipasi dan inovasi yang Anda berikan. Kami menghargai kontribusi Anda dalam meningkatkan kualitas dan kemajuan kami.
-        </div>
-    </div>
-</div>
+    $instansi = optional($data->pemohon1)->unit_kerja;
+    $inovator = optional($data->pemohon1)->name ?? me()->name;
+@endphp
 
-@else
-    <div class="section full pt-2 pb-3">
-    <div class="card comment-box">
-        <div class="text-center">
-            <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" style="margin: 0 auto;">
-                <path fill="currentColor" d="M12 4c-4.42 0-8 3.58-8 8s3.58 8 8 8s8-3.58 8-8s-3.58-8-8-8zm3.5 4c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5s-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5zm-7 0c.83 0 1.5.67 1.5 1.5S9.33 11 8.5 11S7 10.33 7 9.5S7.67 8 8.5 8zm3.5 9.5c-2.33 0-4.32-1.45-5.12-3.5h1.67c.7 1.19 1.97 2 3.45 2s2.76-.81 3.45-2h1.67c-.8 2.05-2.79 3.5-5.12 3.5z" opacity=".3"/>
-                <circle cx="15.5" cy="9.5" r="1.5" fill="currentColor"/>
-                <circle cx="8.5" cy="9.5" r="1.5" fill="currentColor"/>
-                <path fill="currentColor" d="M12 16c-1.48 0-2.75-.81-3.45-2H6.88a5.495 5.495 0 0 0 10.24 0h-1.67c-.69 1.19-1.97 2-3.45 2zm-.01-14C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8s8 3.58 8 8s-3.58 8-8 8z"/>
-            </svg>
-        </div>
-        <h4 class="card-title text-center">Masih menunggu validasi</h4>
-        <div class="text">
-            Masih menunggu validasi untuk setiap aspek yang telah Anda kontribusikan. Kami akan segera memeriksa dan mengonfirmasi kontribusi Anda.
-        </div>
+<x-page-header
+    :title="$data->label"
+    badge="HASIL EVALUASI"
+    :back="route('permohonan.show', $data->kode ?? $data->uuid)"
+    backLabel="Kembali ke Rincian Menu"
+/>
+
+<div class="jp-subhead">
+    <div class="l-container jp-subhead__inner">
+        <span class="jp-badge jp-badge--neutral font-mono">KODE: {{ $data->kode }}</span>
+        <span class="jp-subhead__meta">
+            <x-icon name="user" size="14" />
+            {{ $inovator }}
+        </span>
+        <span class="jp-subhead__meta">
+            <x-icon name="building" size="14" />
+            {{ $instansi ?? 'Instansi belum dicantumkan' }}
+        </span>
     </div>
 </div>
-@endif
 
+<div class="jp-section jp-section--sm">
+    <div class="l-container l-container--narrow">
+        @if($data->status == 4)
+            <div class="jp-card u-p-0" style="overflow: hidden;">
 
+                {{-- Kepala sertifikat --}}
+                <div class="jp-result-head">
+                    <span class="jp-result-head__icon"><x-icon name="star" size="34" /></span>
+                    <span class="jp-badge jp-badge--success">EVALUASI TERVALIDASI</span>
+                    <h2 class="jp-result-head__title">Hasil Skor Inovasi Daerah</h2>
+                    <p class="jp-result-head__sub">Kota Samarinda &middot; Indeks Inovasi Daerah (IGA)</p>
+                </div>
 
-@endsection
+                <div class="u-p-xl">
+                    {{-- Nilai akhir --}}
+                    <div class="jp-score">
+                        <span class="jp-score__label">Nilai Akhir Inovasi</span>
 
-@section('other')
+                        @if($adaNilai)
+                            <span class="jp-score__value">{{ number_format($nilaiAkhir, 2) }}</span>
+                            <span class="jp-badge jp-badge--success">PREDIKAT: {{ strtoupper($predikat) }}</span>
+                        @else
+                            {{-- Nilai belum tersedia: jangan tampilkan angka contoh --}}
+                            <span class="jp-score__value jp-score__value--empty">—</span>
+                            <span class="jp-badge jp-badge--neutral">NILAI BELUM DIPUBLIKASIKAN</span>
+                            <p class="jp-field__hint u-mt-xs">
+                                Evaluasi telah selesai, namun nilai akhir belum dipublikasikan oleh tim penilai.
+                            </p>
+                        @endif
+                    </div>
 
-@endsection
+                    {{-- Metadata --}}
+                    <div class="jp-deflist jp-deflist--2 u-mt-lg">
+                        <div class="jp-deflist__row">
+                            <span class="jp-deflist__label">Judul Inovasi</span>
+                            <span class="jp-deflist__value">{{ $data->label }}</span>
+                        </div>
+                        <div class="jp-deflist__row">
+                            <span class="jp-deflist__label">Inovator / Instansi</span>
+                            <span class="jp-deflist__value">
+                                {{ $inovator }}@if($instansi) &middot; {{ $instansi }}@endif
+                            </span>
+                        </div>
+                        <div class="jp-deflist__row">
+                            <span class="jp-deflist__label">Urusan Utama</span>
+                            <span class="jp-deflist__value">
+                                @if(filled($data->urusan_utama)){{ $data->urusan_utama }}@else<span class="jp-value-empty"></span>@endif
+                            </span>
+                        </div>
+                        <div class="jp-deflist__row">
+                            <span class="jp-deflist__label">Tanggal Evaluasi</span>
+                            <span class="jp-deflist__value font-mono">
+                                @if($data->updated_at){{ $data->updated_at->format('d M Y') }}@else<span class="jp-value-empty"></span>@endif
+                            </span>
+                        </div>
+                    </div>
 
+                    <p class="u-text-center u-mt-lg" style="font-size: var(--t-sm); color: var(--c-ink-muted);">
+                        Terima kasih atas partisipasi dan dedikasi Anda dalam memberikan kontribusi inovasi daerah
+                        untuk kemajuan pelayanan publik Kota Samarinda.
+                    </p>
 
-@section('js')
-
+                    <div class="u-flex u-justify-center u-gap-sm u-flex-wrap u-mt-lg pt-3" style="border-top: 1px solid var(--c-border);">
+                        <a href="{{ route('permohonan.show', $data->kode ?? $data->uuid) }}" class="jp-btn jp-btn--ghost">
+                            Kembali ke Permohonan
+                        </a>
+                        <a href="{{ route('permohonan.index') }}" class="jp-btn jp-btn--accent">
+                            Daftar Inovasi Daerah <span aria-hidden="true">&rarr;</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        @else
+            {{-- Belum selesai dievaluasi --}}
+            <x-empty
+                icon="clock"
+                title="Masih dalam proses verifikasi"
+                desc="Tim verifikator masih meninjau setiap aspek usulan yang Anda kontribusikan. Hasil evaluasi akan tampil di halaman ini setelah proses penilaian selesai."
+            >
+                <a href="{{ route('permohonan.show', $data->kode ?? $data->uuid) }}" class="jp-btn jp-btn--accent u-mt-sm">
+                    Cek Progres Inovasi
+                </a>
+            </x-empty>
+        @endif
+    </div>
+</div>
 @endsection

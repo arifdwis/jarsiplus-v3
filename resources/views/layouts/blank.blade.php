@@ -10,18 +10,19 @@
     <link rel="shortcut icon" href="{{ config('nue.brand.favicon') }}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="https://samarindakota.go.id/template/nue/css/vendor.min.css">
-    <link rel="stylesheet" href="https://samarindakota.go.id/template/nue/css/nue.min.css">
-    <link rel="preload" href="https://samarindakota.go.id/template/nue/css/nue.min.css" data-nue-appearance="default" as="style">
-    <link rel="preload" href="https://samarindakota.go.id/template/nue/css/nue-dark.min.css" data-nue-appearance="dark" as="style">
+    <link rel="stylesheet" href="https://cdn.btekno.id/templates/v2/css/vendor.min.css">
+    <link rel="stylesheet" href="https://cdn.btekno.id/templates/v2/css/theme.min.css">
+    <link rel="preload" href="https://cdn.btekno.id/templates/v2/css/theme.min.css" data-hs-appearance="default" as="style">
+    <link rel="preload" href="https://cdn.btekno.id/templates/v2/css/theme-dark.min.css" data-hs-appearance="dark" as="style">
+    <link rel="stylesheet" href="https://cdn.btekno.id/templates/v2/css/nue.css">
 
-    <style data-nue-appearance-onload-styles>
+    <style data-hs-appearance-onload-styles>
         *{transition:unset!important}
         body{opacity:0}
     </style>
 
     <script>
-        window.nue_config = {
+        window.hs_config = {
             "themeAppearance":{
                 "layoutSkin": "default"
             }
@@ -32,12 +33,13 @@
 </head>
 
 <body class="d-flex align-items-center min-h-100">
-    <script src="https://samarindakota.go.id/template/nue/js/nue.theme-appearance.js"></script>
+    <script src="https://cdn.btekno.id/templates/v2/js/hs.theme-appearance.js"></script>
 
     @yield('content')
 
-    <script src="https://samarindakota.go.id/template/nue/js/vendor.min.js"></script>
-    <script src="https://samarindakota.go.id/template/nue/js/nue.min.js"></script>
+    <script src="https://cdn.btekno.id/templates/v2/js/vendor.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.btekno.id/templates/v2/js/theme.min.js"></script>
     <script src="https://code.iconify.design/2/2.2.1/iconify.min.js"></script>
 
     @if(notify()->ready())
