@@ -144,15 +144,33 @@ class SliderController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        if($request->has('pilihan')):
-            foreach($request->pilihan as $temp):
-                $each = $this->data->uuid($temp)->firstOrFail();
-                deleteImg($each->file);
-                $each->delete();
-            endforeach;
+        $ids = $request->get('ids', $request->get('pilihan', []));
+
+        if ($id === 'hapus-all' || !empty($ids)) {
+            if (!empty($ids) && is_array($ids)) {
+                $sliders = $this->data->whereIn('id', $ids)->orWhereIn('uuid', $ids)->get();
+                foreach ($sliders as $slider) {
+                    if (!empty($slider->file)) {
+                        deleteImg($slider->file);
+                    }
+                    $slider->delete();
+                }
+            }
+        } else {
+            $slider = $this->data->where('uuid', $id)->orWhere('id', $id)->first();
+            if ($slider) {
+                if (!empty($slider->file)) {
+                    deleteImg($slider->file);
+                }
+                $slider->delete();
+            }
+        }
+
+        if (function_exists('notify')) {
             notify()->flash($this->tDelete, 'success');
-            return redirect()->back();
-        endif;
+        }
+
+        return redirect($this->toIndex)->with('success', $this->tDelete);
     }
 
     /**
@@ -206,10 +224,14 @@ class SliderController extends Controller
             })
             ->addColumn('action', function($data) {
                 $updateUrl = route($this->prefix.'.update', $data->uuid ?? $data->id);
+                $deleteUrl = route($this->prefix.'.destroy', $data->uuid ?? $data->id);
                 $labelAttr = htmlspecialchars($data->label ?? $data->judul, ENT_QUOTES, 'UTF-8');
                 $fileAttr = viewImg($data->file, 'm');
 
-                return '<button type="button" class="btn btn-xs btn-outline-secondary" onclick="openEditSliderModal(\''.$updateUrl.'\', \''.$labelAttr.'\', \''.$fileAttr.'\')"><i class="bi-pencil me-1"></i> Edit</button>';
+                return '<div class="btn-group btn-group-xs">
+                    <button type="button" class="btn btn-xs btn-outline-secondary" onclick="openEditSliderModal(\''.$updateUrl.'\', \''.$labelAttr.'\', \''.$fileAttr.'\')"><i class="bi-pencil me-1"></i> Edit</button>
+                    <button type="button" class="btn btn-xs btn-outline-danger" onclick="deleteSliderItem(\''.$deleteUrl.'\')"><i class="bi-trash me-1"></i> Hapus</button>
+                </div>';
             })
             ->rawColumns(['pilihan', 'file', 'action'])
             ->make(true);

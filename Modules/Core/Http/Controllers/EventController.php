@@ -133,9 +133,10 @@ class EventController extends Controller
             ->addColumn('action', function($data) {
                 $updateUrl = route($this->prefix.'.update', $data->uuid ?? $data->id);
                 $titleAttr = htmlspecialchars($data->title, ENT_QUOTES, 'UTF-8');
+                $descAttr = htmlspecialchars($data->description ?? '', ENT_QUOTES, 'UTF-8');
                 $bannerAttr = asset($data->banner ?? 'baimbai/Banner Lomba Baimbai 2026.jpeg');
 
-                return '<button type="button" class="btn btn-xs btn-outline-secondary" onclick="openEditModal(\''.$updateUrl.'\', \''.$titleAttr.'\', \''.$bannerAttr.'\')"><i class="bi-pencil me-1"></i> Edit</button>';
+                return '<button type="button" class="btn btn-xs btn-outline-secondary" onclick="openEditModal(\''.$updateUrl.'\', \''.$titleAttr.'\', \''.$descAttr.'\', \''.$bannerAttr.'\')"><i class="bi-pencil me-1"></i> Edit</button>';
             })
             ->rawColumns(['pilihan', 'banner', 'action'])
             ->make(true);

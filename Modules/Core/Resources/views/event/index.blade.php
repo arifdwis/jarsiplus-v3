@@ -23,15 +23,17 @@
 
     function openCreateModal() {
         $('#createTitle').val('');
+        $('#createDescription').val('');
         $('#createFileInput').val('');
         $('#createImgPreview').attr('src', '{{ asset("assets/img/holder.jpg") }}');
         var modal = new bootstrap.Modal(document.getElementById('modalCreateEvent'));
         modal.show();
     }
 
-    function openEditModal(url, title, bannerUrl) {
+    function openEditModal(url, title, description, bannerUrl) {
         $('#formEditEvent').attr('action', url);
         $('#editTitle').val(title);
+        $('#editDescription').val(description || '');
         $('#editImgPreview').attr('src', bannerUrl);
         var modal = new bootstrap.Modal(document.getElementById('modalEditEvent'));
         modal.show();
@@ -131,6 +133,12 @@ $title => 'active'
                         <input type="text" name="title" id="createTitle" class="form-control" required placeholder="Contoh: Lomba Inovasi Kota Samarinda &quot;BAIMBAI 2026&quot;" style="font-size: 14px; border-radius: 8px; padding: 10px 14px;">
                     </div>
 
+                    {{-- Uraian / Deskripsi Event --}}
+                    <div class="mb-4">
+                        <label class="form-label font-weight-bold mb-2" style="font-size: 13.5px; color: #334155;">Uraian / Deskripsi Event</label>
+                        <textarea name="description" id="createDescription" class="form-control" rows="3" placeholder="Tuliskan uraian atau deskripsi event lomba inovasi..." style="font-size: 14px; border-radius: 8px; padding: 10px 14px;"></textarea>
+                    </div>
+
                     {{-- Banner Upload & Preview --}}
                     <div>
                         <label class="form-label font-weight-bold mb-2" style="font-size: 13.5px; color: #334155;">File Banner (Potrait)</label>
@@ -174,6 +182,12 @@ $title => 'active'
                     <div class="mb-4">
                         <label class="form-label font-weight-bold mb-2" style="font-size: 13.5px; color: #334155;">Judul Event <span class="text-danger">*</span></label>
                         <input type="text" name="title" id="editTitle" class="form-control" required placeholder="Contoh: Lomba Inovasi Kota Samarinda &quot;BAIMBAI 2026&quot;" style="font-size: 14px; border-radius: 8px; padding: 10px 14px;">
+                    </div>
+
+                    {{-- Uraian / Deskripsi Event --}}
+                    <div class="mb-4">
+                        <label class="form-label font-weight-bold mb-2" style="font-size: 13.5px; color: #334155;">Uraian / Deskripsi Event</label>
+                        <textarea name="description" id="editDescription" class="form-control" rows="3" placeholder="Tuliskan uraian atau deskripsi event lomba inovasi..." style="font-size: 14px; border-radius: 8px; padding: 10px 14px;"></textarea>
                     </div>
 
                     {{-- Banner Upload & Preview --}}
