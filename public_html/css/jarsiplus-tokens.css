@@ -26,7 +26,7 @@
   /* ---- Ink ---- */
   --c-ink:             #0B1526;
   --c-ink-muted:       #4A5A70;
-  --c-ink-subtle:      #8494A8;
+  --c-ink-subtle:      #64748B;
 
   /* Alias yang dipakai di seluruh Blade */
   --c-text:            var(--c-ink);
