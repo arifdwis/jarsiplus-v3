@@ -20,3 +20,5 @@ yarn-error.log
 /storage/framework/views/*
 /storage/logs/*
 design.md
+.DS_Store
+*.DS_Store
