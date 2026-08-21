@@ -366,7 +366,7 @@
             </div>
 
             <div>
-                <h1 id="brand-title" class="jp-auth__brand-title">Jaringan Inovasi Plus Daerah</h1>
+                <h1 id="brand-title" class="jp-auth__brand-title">Jaringan Aplikasi Inovasi Plus Kota Samarinda</h1>
                 <p class="jp-auth__brand-lead">
                     Platform resmi Bapperida Kota Samarinda untuk pengelolaan,
                     evaluasi, dan publikasi usulan inovasi pelayanan publik

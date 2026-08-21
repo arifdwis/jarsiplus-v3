@@ -11,7 +11,7 @@ const isMobileMenuOpen = ref(false);
 
 <template>
     <div>
-        <Head :title="title ? `${title} - JARSIPLUS Kota Samarinda` : 'JARSIPLUS - Jaringan Inovasi Plus Daerah Kota Samarinda'" />
+        <Head :title="title ? `${title} - JARSIPLUS Kota Samarinda` : 'JARSIPLUS - Jaringan Aplikasi Inovasi Plus Kota Samarinda'" />
 
         <div class="min-h-screen bg-[#F7F5F0] text-[#3E4C57] flex flex-col font-sans">
             <!-- Header Navigation -->
@@ -79,7 +79,7 @@ const isMobileMenuOpen = ref(false);
                         <div class="flex items-center gap-2 mb-1">
                             <span class="font-bold text-[#14202B] text-base">Pemerintah Kota Samarinda</span>
                         </div>
-                        <p class="text-xs text-[#71808A]">JARSIPLUS — Jaringan Inovasi Plus Daerah Kota Samarinda &copy; 2026</p>
+                        <p class="text-xs text-[#71808A]">JARSIPLUS — Jaringan Aplikasi Inovasi Plus Kota Samarinda &copy; 2026</p>
                     </div>
                     <div class="flex items-center gap-6 text-xs font-semibold text-[#3E4C57]">
                         <Link href="/informasi" class="hover:text-[#0E8F79] transition">Informasi</Link>

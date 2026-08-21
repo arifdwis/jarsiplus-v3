@@ -13,7 +13,7 @@
         ],
         [
             'question' => 'Bagaimana alur pengajuan permohonan inovasi baru?',
-            'answer' => '1. Masuk/Login menggunakan akun Single Sign-On (SSO) Samarinda.<br>2. Pilih menu <strong>Pengajuan Inovasi Baru</strong>.<br>3. Isi formulir Segment 1 (Data Umum), Segment 2 (Data Petugas), dan Segment 3 (Deskripsi Inovasi).<br>4. Unggah berkas indikator bukti dukung yang dipersyaratkan.<br>5. Kirim permohonan untuk dilakukan pembahasan oleh Tim Verifikator (TKSD).'
+            'answer' => '1. Masuk/Login menggunakan akun Single Sign-On (SSO) Samarinda.<br>2. Pilih menu <strong>Pengajuan Inovasi Baru</strong>.<br>3. Isi formulir Segment 1 (Data Umum), Segment 2 (Data Petugas), dan Segment 3 (Deskripsi Inovasi).<br>4. Unggah berkas indikator bukti dukung yang dipersyaratkan.<br>5. Kirim permohonan untuk dilakukan pembahasan oleh Tim Verifikator.'
         ],
         [
             'question' => 'Siapa saja yang dapat mengajukan permohonan inovasi?',

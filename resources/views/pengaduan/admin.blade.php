@@ -1,0 +1,3 @@
+@extends('layouts.app')
+@section('title','Pengaduan')
+@section('content')<div class="jp-section"><div class="l-container"><div class="jp-card"><h1>Daftar Pengaduan</h1><table class="table"><thead><tr><th>Tanggal</th><th>Pelapor</th><th>Kategori</th><th>Judul</th><th>Status</th></tr></thead><tbody>@forelse($items as $item)<tr><td>{{ $item->created_at->format('d M Y H:i') }}</td><td>{{ $item->nama }}</td><td>{{ $item->kategori }}</td><td>{{ $item->judul }}<br><small>{{ $item->isi }}</small></td><td>{{ ucfirst($item->status) }}</td></tr>@empty<tr><td colspan="5">Belum ada pengaduan.</td></tr>@endforelse</tbody></table>{{ $items->links() }}</div></div></div>@endsection

@@ -32,7 +32,7 @@
 <x-page-header
     badge="PORTAL INOVATOR"
     title="Daftar Permohonan Inovasi"
-    desc="Kelola seluruh usulan inovasi daerah Anda dan lacak progres verifikasi TKSD."
+    desc="Kelola seluruh usulan inovasi daerah Anda dan lacak progres verifikasi Tim Verifikator."
 >
     @if((!$is_closed || $is_arif) && $identityComplete)
         <a href="{{ route('permohonan.create') }}" class="jp-btn jp-btn--accent">

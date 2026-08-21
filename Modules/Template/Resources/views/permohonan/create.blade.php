@@ -334,6 +334,10 @@
                         </div>
                     </div>
 
+                    <div class="u-mt-md">
+                        <div class="cf-turnstile" data-sitekey="{{ config('services.cloudflare.turnstile.site_key') }}" data-theme="light"></div>
+                    </div>
+
                     <div class="jp-form-foot">
                         <button type="button" class="jp-btn jp-btn--ghost" onclick="prevStep(2)">
                             <span aria-hidden="true">&larr;</span> Kembali ke Segment 2
@@ -352,6 +356,7 @@
 @endsection
 
 @section('js')
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <script>
 let currentStep = 1;
 
@@ -459,6 +464,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 return false;
             }
 
+            const turnstileToken = form.querySelector('[name="cf-turnstile-response"]')?.value;
+            if (!turnstileToken) {
+                e.preventDefault();
+                alert('Harap selesaikan verifikasi keamanan terlebih dahulu.');
+                return false;
+            }
             const submitBtn = form.querySelector('button[type="submit"]');
             if (form.getAttribute('data-submitting') === 'true') {
                 e.preventDefault();

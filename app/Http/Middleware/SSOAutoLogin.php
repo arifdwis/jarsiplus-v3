@@ -63,6 +63,10 @@ class SSOAutoLogin
         $sso['last_ip_address'] = request()->ip(); 
 
         if($check):
+            if ($check->deleted_at) {
+                auth()->logout();
+                return;
+            }
             $check->update($sso);
             auth()->login($check);
         else: 

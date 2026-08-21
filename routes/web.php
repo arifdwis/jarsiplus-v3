@@ -26,5 +26,18 @@ Route::any('/logout', 'Novay\SSO\Http\Controllers\OAuthController@logout')->name
 Route::get('/informasi', 'Modules\Template\Http\Controllers\TemplateController@informasi')->name('informasi');
 Route::get('/faq', 'Modules\Template\Http\Controllers\FaqController@index')->name('faq');
 Route::get('/statistik', 'Modules\Template\Http\Controllers\StatistikController@index')->name('statistik');
-Route::post('/chatbot/message', 'Modules\Template\Http\Controllers\ChatbotController@message')->name('chatbot.message');
 
+
+Route::get('/download/manual-pemohon', function () {
+    return response()->download(storage_path('app/public/jarsiplus/informasi/Manual Pemohon.pdf'), 'Manual Pemohon JARSIPLUS.pdf', ['Content-Type' => 'application/pdf']);
+})->name('download.manual-pemohon');
+
+Route::get('/download/manual-verifikator', function () {
+    return response()->download(storage_path('app/public/jarsiplus/informasi/Manual Verifikator.pdf'), 'Manual Verifikator JARSIPLUS.pdf', ['Content-Type' => 'application/pdf']);
+})->name('download.manual-verifikator');
+
+
+Route::get('/pengaduan', [\App\Http\Controllers\PengaduanController::class, 'create'])->name('pengaduan.create');
+Route::post('/pengaduan', [\App\Http\Controllers\PengaduanController::class, 'store'])->middleware('throttle:5,10')->name('pengaduan.store');
+Route::get('/jarsiplus/pengaduan', [\App\Http\Controllers\AdminPengaduanController::class, 'index'])->middleware('auth')->name('admin.pengaduan');
+Route::get('/sikerja/pengaduan', [\App\Http\Controllers\AdminPengaduanController::class, 'index'])->middleware('auth')->name('admin.sikerja.pengaduan');

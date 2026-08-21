@@ -90,7 +90,7 @@
                 <a href="{{ url('/permohonan') }}" class="jp-drawer-nav__item {{ request()->is('permohonan*') ? 'is-active' : '' }}">Portal Permohonan</a>
             @endif
             <hr class="jp-dropdown-divider">
-            <a href="{{ url('/jarsiplus') }}" class="jp-drawer-nav__item">E-Panel Admin &rarr;</a>
+            <a href="{{ url('/home') }}" class="jp-drawer-nav__item">E-Panel Admin &rarr;</a>
         </nav>
     </div>
     <div class="jp-drawer__footer">

@@ -182,8 +182,8 @@
             <div class="u-flex u-flex-col u-gap-sm">
                 @foreach($juriComments as $juri)
                     @php
-                        $juriName = data_get($juri, 'name') ?? data_get($juri, 'nama') ?? 'Juri Evaluator';
-                        $juriText = data_get($juri, 'komentar') ?? data_get($juri, 'catatan') ?? data_get($juri, 'deskripsi') ?? null;
+                        $juriName = data_get($juri, 'nama_juri') ?? data_get($juri, 'name') ?? data_get($juri, 'nama') ?? 'Juri Evaluator';
+                        $juriText = data_get($juri, 'komentar_juri') ?? data_get($juri, 'komentar') ?? data_get($juri, 'catatan') ?? data_get($juri, 'deskripsi') ?? null;
                     @endphp
                     <div class="jp-card jp-card--compact jp-card--flat" style="border: 1px solid var(--c-border);">
                         <strong class="u-block u-mb-2xs" style="font-size: var(--t-sm); color: var(--c-ink);">{{ $juriName }}</strong>

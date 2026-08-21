@@ -17,9 +17,9 @@
         <div class="u-flex u-flex-col u-gap-sm">
             @foreach($comments as $comment)
                 @php
-                    $namaJuri = $comment['nama_juri'] ?? null;
+                    $namaJuri = $comment['nama_juri'] ?? $comment['name'] ?? $comment['nama'] ?? null;
                     $nilaiJuri = $comment['nilai_juri'] ?? null;
-                    $komentarJuri = trim((string) ($comment['komentar_juri'] ?? ''));
+                    $komentarJuri = trim((string) ($comment['komentar_juri'] ?? $comment['komentar'] ?? $comment['catatan'] ?? $comment['deskripsi'] ?? ''));
                 @endphp
 
                 <article class="jp-card jp-card--compact jp-card--flat" style="border: 1px solid var(--c-border); background-color: var(--c-surface-sunken);">

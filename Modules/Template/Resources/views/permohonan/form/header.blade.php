@@ -5,7 +5,7 @@
                 <div class="jp-strip u-mb-xl" style="background:var(--c-amber);color:#fff">
                     <div class="u-flex u-align-center u-gap-sm">
                         <x-icon name="alert-triangle" size="20" style="color:#fff" />
-                        <p class="u-mb-0" style="color:#fff;font-weight:600">Menunggu Verifikasi TKSD</p>
+                        <p class="u-mb-0" style="color:#fff;font-weight:600">Menunggu Verifikasi Tim Verifikator</p>
                     </div>
                 </div>
             @endif

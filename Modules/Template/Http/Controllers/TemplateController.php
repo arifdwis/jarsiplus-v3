@@ -20,13 +20,13 @@ class TemplateController extends Controller
      *
      * @return void
      */
-    public function __construct() 
+    public function __construct()
     {
         $this->module = strtolower('Template');
         $this->entiti = strtolower('Home');
-        
+
         view()->share([
-            'title' => $this->title, 
+            'title' => $this->title,
         ]);
     }
 
@@ -36,8 +36,8 @@ class TemplateController extends Controller
      */
     public function index(Request $request)
     {
-        $sliders = class_exists(\Modules\Core\Entities\Slider::class) 
-            ? \Modules\Core\Entities\Slider::latest()->take(5)->get() 
+        $sliders = class_exists(\Modules\Core\Entities\Slider::class)
+            ? \Modules\Core\Entities\Slider::latest()->take(5)->get()
             : collect();
 
         $totalPermohonan = class_exists(\Modules\Formulir\Entities\Permohonan::class) ? \Modules\Formulir\Entities\Permohonan::count() : 0;
@@ -52,20 +52,20 @@ class TemplateController extends Controller
             'innovators' => $totalPemohon,
         ];
 
-        $lamans = class_exists(\Modules\Core\Entities\Laman::class) 
-            ? \Modules\Core\Entities\Laman::where('status', 1)->latest()->take(6)->get() 
+        $lamans = class_exists(\Modules\Core\Entities\Laman::class)
+            ? \Modules\Core\Entities\Laman::where('status', 1)->latest()->take(6)->get()
             : collect();
 
-        $inovasis = class_exists(\Modules\Formulir\Entities\Permohonan::class) 
-            ? \Modules\Formulir\Entities\Permohonan::with(['pemohon1', 'kategori'])->latest()->take(6)->get() 
+        $inovasis = class_exists(\Modules\Formulir\Entities\Permohonan::class)
+            ? \Modules\Formulir\Entities\Permohonan::with(['pemohon1', 'kategori'])->latest()->take(6)->get()
             : collect();
 
-        $faqs = class_exists(\Modules\Faq\Entities\Faq::class) 
-            ? \Modules\Faq\Entities\Faq::take(5)->get() 
+        $faqs = class_exists(\Modules\Faq\Entities\Faq::class)
+            ? \Modules\Faq\Entities\Faq::take(5)->get()
             : collect();
 
-        $events = class_exists(\Modules\Core\Entities\Event::class) 
-            ? \Modules\Core\Entities\Event::where('status', 1)->latest()->get() 
+        $events = class_exists(\Modules\Core\Entities\Event::class)
+            ? \Modules\Core\Entities\Event::where('status', 1)->latest()->get()
             : collect();
 
         return view('template::index', compact('events', 'sliders', 'stats', 'lamans', 'inovasis', 'faqs'));
@@ -73,12 +73,12 @@ class TemplateController extends Controller
 
     public function informasi(Request $request)
     {
-        $sliders = class_exists(\Modules\Core\Entities\Slider::class) 
-            ? \Modules\Core\Entities\Slider::latest()->take(5)->get() 
+        $sliders = class_exists(\Modules\Core\Entities\Slider::class)
+            ? \Modules\Core\Entities\Slider::latest()->take(5)->get()
             : collect();
 
-        $lamans = class_exists(\Modules\Core\Entities\Laman::class) 
-            ? \Modules\Core\Entities\Laman::where('status', 1)->latest()->paginate(9) 
+        $lamans = class_exists(\Modules\Core\Entities\Laman::class)
+            ? \Modules\Core\Entities\Laman::latest()->paginate(9)
             : collect();
 
         return view('template::informasi', compact('sliders', 'lamans'));
@@ -160,5 +160,5 @@ class TemplateController extends Controller
         return view('template::maintenance');
     }
 
-   
+
 }

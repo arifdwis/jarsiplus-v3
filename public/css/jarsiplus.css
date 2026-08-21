@@ -3711,25 +3711,29 @@ dialog.jp-toast::backdrop { background: transparent; }
   }
 }
 
-.jp-steps,
+.jp-flow-list,
 .jp-cats {
   display: flex;
   flex-direction: column;
 }
 
-.jp-step,
+.jp-flow-item,
 .jp-cat {
   display: flex;
   gap: var(--s-md);
   align-items: flex-start;
   padding: var(--s-md) 0;
+  border: none;
   border-bottom: 1px solid var(--c-border);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
 }
 
-.jp-step:last-child,
+.jp-flow-item:last-child,
 .jp-cat:last-child { border-bottom: none; }
 
-.jp-step__num {
+.jp-flow-num {
   font-family: var(--font-mono);
   font-size: var(--t-xl);
   font-weight: 800;
@@ -3740,10 +3744,10 @@ dialog.jp-toast::backdrop { background: transparent; }
   flex-shrink: 0;
 }
 
-.jp-step__body,
+.jp-flow-body,
 .jp-cat__body { min-width: 0; }
 
-.jp-step__title,
+.jp-flow-title,
 .jp-cat__title {
   font-size: var(--t-lg);
   font-weight: 700;
@@ -3752,7 +3756,7 @@ dialog.jp-toast::backdrop { background: transparent; }
   margin-bottom: 4px;
 }
 
-.jp-step__desc,
+.jp-flow-desc,
 .jp-cat__desc {
   font-size: var(--t-sm);
   color: var(--c-ink-muted);
@@ -3802,3 +3806,11 @@ dialog.jp-toast::backdrop { background: transparent; }
 
 .jp-info-row__arrow { color: var(--c-ink-subtle); flex-shrink: 0; }
 
+
+.jp-service-point[type="button"] {
+  width: 100%;
+  text-align: left;
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+}

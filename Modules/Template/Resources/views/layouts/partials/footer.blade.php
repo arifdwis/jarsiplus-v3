@@ -11,7 +11,7 @@
                     @endif
                 </a>
                 <p class="jp-footer__desc">
-                    Jaringan Inovasi Plus Daerah Kota Samarinda. Platform resmi pengajuan, penilaian, dan publikasi inovasi tata kelola pemerintahan &amp; pelayanan publik.
+                    Jaringan Aplikasi Inovasi Plus Kota Samarinda. Platform resmi pengajuan, penilaian, dan publikasi inovasi tata kelola pemerintahan &amp; pelayanan publik.
                 </p>
             </div>
 
@@ -30,7 +30,7 @@
                 <ul class="jp-footer__list">
                     <li><a href="{{ url('/permohonan/create') }}">Pengajuan Inovasi Baru</a></li>
                     <li><a href="{{ url('/login') }}">Masuk Portal SSO</a></li>
-                    <li><a href="{{ url('/jarsiplus') }}" class="text-teal font-mono">E-Panel Admin &rarr;</a></li>
+                    <li><a href="{{ url('/home') }}" class="text-teal font-mono">E-Panel Admin &rarr;</a></li>
                 </ul>
             </div>
         </div>

@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', config('app.name', 'JARSIPLUS Samarinda'))</title>
-    <meta name="description" content="@yield('meta_description', 'Jaringan Inovasi Plus Daerah Kota Samarinda — Platform Pengajuan & Evaluation Inovasi.')">
+    <meta name="description" content="@yield('meta_description', 'Jaringan Aplikasi Inovasi Plus Kota Samarinda — Platform Pengajuan & Evaluation Inovasi.')">
     <meta name="robots" content="index, follow">
 
     <meta property="og:title" content="@yield('title', config('app.name', 'JARSIPLUS Samarinda'))">
-    <meta property="og:description" content="@yield('meta_description', 'Jaringan Inovasi Plus Daerah Kota Samarinda')">
+    <meta property="og:description" content="@yield('meta_description', 'Jaringan Aplikasi Inovasi Plus Kota Samarinda')">
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ url()->current() }}">
 

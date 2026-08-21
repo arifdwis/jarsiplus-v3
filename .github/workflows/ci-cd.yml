@@ -1,0 +1,36 @@
+name: JARSIPLUS CI/CD
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, xml, ctype, fileinfo, pdo, pdo_mysql
+          coverage: none
+      - run: composer install --no-interaction --prefer-dist --no-progress
+      - run: cp .env.example .env
+      - run: php artisan key:generate
+      - run: php artisan view:cache
+      - run: php -l app/Http/Controllers/PengaduanController.php
+      - run: php -l app/Http/Controllers/AdminPengaduanController.php
+
+  deploy:
+    needs: ci
+    if: github.ref == 'refs/heads/main' && secrets.SERVER_HOST != ''
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      - run: rsync -az --delete --exclude=.env --exclude=storage --exclude=public/storage ./ ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:${{ secrets.SERVER_PATH }}/
+      - run: ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} 'cd ${{ secrets.SERVER_PATH }} && composer install --no-dev --no-interaction --prefer-dist && php artisan migrate --force && php artisan optimize:clear'

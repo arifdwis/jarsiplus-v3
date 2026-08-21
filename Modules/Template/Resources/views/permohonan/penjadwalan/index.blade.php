@@ -37,7 +37,7 @@
                     </span>
                     <h2 class="u-mt-sm u-mb-xs">Konfirmasi Pengiriman Inovasi</h2>
                     <p class="jp-section__desc">
-                        Pengiriman berkas akhir inovasi untuk ditinjau oleh Tim Kerja Sama Daerah (TKSD).
+                        Pengiriman berkas akhir inovasi untuk ditinjau oleh Tim Verifikator.
                     </p>
                 </div>
 

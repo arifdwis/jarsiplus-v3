@@ -50,7 +50,7 @@
                     icon="shield"
                     title="E-Panel Administrator"
                     desc="Anda terdaftar sebagai Administrator. Gunakan tombol di bawah untuk masuk ke dashboard pengelolaan."
-                    :action="url('/jarsiplus')"
+                    :action="url('/home')"
                     actionLabel="Masuk ke E-Panel Admin"
                 />
             @endif
@@ -68,7 +68,7 @@
                         <span class="jp-hero__eyebrow-dot" aria-hidden="true"></span>
                         Pemerintah Kota Samarinda
                     </p>
-                    <h1 class="jp-hero__title">Jaringan Inovasi <br class="u-hide-mobile">Plus Daerah</h1>
+                    <h1 class="jp-hero__title">Jaringan Aplikasi <br class="u-hide-mobile">Inovasi Plus</h1>
                     <p class="jp-hero__lede">
                         Platform resmi untuk mengajukan, mengevaluasi, dan memantau inovasi
                         pelayanan publik &amp; tata kelola pemerintahan di Kota Samarinda.
@@ -174,6 +174,7 @@
                         </span>
                         <span class="jp-service-point__arrow" aria-hidden="true">&rarr;</span>
                     </a>
+                    <button type="button" class="jp-service-point" onclick="document.getElementById('modalPengaduan').showModal()"><span class="jp-service-point__icon"><x-icon name="chat" size="18" /></span><span class="jp-service-point__body"><strong>Layanan Pengaduan</strong><small>Sampaikan kendala dan masukan terkait JARSIPLUS.</small></span><span class="jp-service-point__arrow" aria-hidden="true">&rarr;</span></button>
                     <a href="{{ url('/faq') }}" class="jp-service-point">
                         <span class="jp-service-point__icon"><x-icon name="chat" size="18" /></span>
                         <span class="jp-service-point__body">
@@ -191,7 +192,7 @@
                     <x-icon name="search" size="18" class="jp-icon-accent" />
                     <div>
                         <label for="lacakKodePublik" class="jp-label">Lacak status permohonan inovasi</label>
-                        <p class="jp-field__hint">Masukkan kode pengajuan untuk melihat progres verifikasi oleh Tim Verifikator (TKSD).</p>
+                        <p class="jp-field__hint">Masukkan kode pengajuan untuk melihat progres verifikasi oleh Tim Verifikator.</p>
                     </div>
                 </div>
 
@@ -449,7 +450,7 @@
                     ['01', 'Login SSO Samarinda', 'Masuk menggunakan akun Single Sign-On resmi Pemerintah Kota Samarinda.'],
                     ['02', 'Isi Profil & Inovasi', 'Lengkapi biodata diri, data umum usulan, dan deskripsi inovasi (Segment 1–3).'],
                     ['03', 'Upload Bukti Dukung', 'Unggah berkas indikator pendukung sesuai petunjuk teknis pengajuan.'],
-                    ['04', 'Pembahasan TKSD', 'Tim Verifikator meninjau berkas hingga dinyatakan tervalidasi atau selesai.'],
+                    ['04', 'Pembahasan Tim Verifikator', 'Tim Verifikator meninjau berkas hingga dinyatakan tervalidasi atau selesai.'],
                 ];
 
                 $kategoriList = [
@@ -469,13 +470,13 @@
             </div>
 
             <div class="jp-flow">
-                <div class="jp-steps">
+                <div class="jp-flow-list">
                     @foreach($alur as [$no, $judul, $desc])
-                        <div class="jp-step">
-                            <span class="jp-step__num">{{ $no }}</span>
-                            <div class="jp-step__body">
-                                <h3 class="jp-step__title">{{ $judul }}</h3>
-                                <p class="jp-step__desc">{{ $desc }}</p>
+                        <div class="jp-flow-item">
+                            <span class="jp-flow-num">{{ $no }}</span>
+                            <div class="jp-flow-body">
+                                <h3 class="jp-flow-title">{{ $judul }}</h3>
+                                <p class="jp-flow-desc">{{ $desc }}</p>
                             </div>
                         </div>
                     @endforeach
@@ -484,7 +485,7 @@
                 <div class="jp-cats">
                     @foreach($kategoriList as [$badge, $judul, $desc])
                         <div class="jp-cat">
-                            <span class="jp-step__num">0{{ $loop->iteration }}</span>
+                            <span class="jp-flow-num">0{{ $loop->iteration }}</span>
                             <div class="jp-cat__body">
                                 <h3 class="jp-cat__title">{{ $judul }}</h3>
                                 <p class="jp-cat__desc">{{ $desc }}</p>
@@ -505,7 +506,7 @@
             <div class="jp-section__head">
                 <h2 class="jp-section__title">Apa itu JARSIPLUS Kota Samarinda?</h2>
                 <p class="jp-section__desc">
-                    <strong>JARSIPLUS (Jaringan Inovasi Plus Daerah)</strong> adalah sistem informasi terpadu yang
+                    <strong>JARSIPLUS (Jaringan Aplikasi Inovasi Plus Kota Samarinda)</strong> adalah sistem informasi terpadu yang
                     dikembangkan Bapperida Pemerintah Kota Samarinda untuk menghimpun, mengelola, mengevaluasi,
                     serta mempublikasikan inovasi daerah di bidang pelayanan publik dan tata kelola pemerintahan.
                 </p>
@@ -652,5 +653,7 @@
             </div>
         </div>
     </section>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<dialog id="modalPengaduan" class="jp-modal jp-modal--lg"><div class="jp-modal__head"><h3 class="jp-modal__title">Layanan Pengaduan JARSIPLUS</h3><button type="button" class="jp-modal__close" onclick="this.closest('dialog').close()"><x-icon name="close" size="22" /></button></div><div class="jp-modal__body"><p>Sampaikan kendala, masukan, atau laporan terkait layanan JARSIPLUS.</p><form method="POST" action="{{ route('pengaduan.store') }}">@csrf<input class="jp-input u-mb-sm" name="nama" required placeholder="Nama lengkap"><input class="jp-input u-mb-sm" name="email" type="email" placeholder="Email"><input class="jp-input u-mb-sm" name="telepon" placeholder="Nomor WhatsApp"><select class="jp-input u-mb-sm" name="kategori" required><option value="">Pilih kategori</option><option>Gangguan Sistem</option><option>Pengajuan Inovasi</option><option>Verifikasi</option><option>Lainnya</option></select><input class="jp-input u-mb-sm" name="judul" required placeholder="Judul pengaduan"><textarea class="jp-input u-mb-md" name="isi" rows="5" required placeholder="Isi pengaduan"></textarea><div class="cf-turnstile u-mb-md" data-sitekey="{{ config('services.cloudflare.turnstile.site_key') }}"></div><button class="jp-btn jp-btn--accent">Kirim Pengaduan</button></form></div></dialog>
 @endif
 @endsection

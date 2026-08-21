@@ -27,7 +27,7 @@ defineProps({
             <div class="max-w-6xl mx-auto px-4 sm:px-6">
                 <div class="max-w-3xl">
                     <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[#E9F6F2] border border-[#0E8F79]/20 text-[#0E8F79] text-xs font-extrabold uppercase tracking-wider mb-6">
-                        Jaringan Inovasi Plus Daerah Kota Samarinda
+                        Jaringan Aplikasi Inovasi Plus Kota Samarinda
                     </div>
                     <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#14202B] tracking-tight leading-tight mb-6">
                         Platform Pengajuan & Penilaian Inovasi Daerah

@@ -46,3 +46,8 @@ Route::prefix('support')->as('epanel.')->middleware(['auth'])->group(function()
     ]);
 
 });
+foreach (['sikerja', 'jarsiplus'] as $prefix) {
+    Route::prefix($prefix)->as('epanel.')->middleware(['auth'])->group(function () {
+        Route::get('pengaduan', [\App\Http\Controllers\AdminPengaduanController::class, 'index'])->name('pengaduan.index');
+    });
+}

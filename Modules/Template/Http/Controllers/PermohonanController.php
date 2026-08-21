@@ -4,6 +4,7 @@ namespace Modules\Template\Http\Controllers;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Routing\Controller;
 use GuzzleHttp\Client;
 
@@ -142,6 +143,22 @@ class PermohonanController extends Controller
             return redirect($this->toIndex);
         }
 
+        $turnstileToken = $request->input('cf-turnstile-response');
+        $turnstileSecret = config('services.cloudflare.turnstile.secret_key');
+        if (!$turnstileToken || !$turnstileSecret) {
+            return back()->withInput()->withErrors(['turnstile' => 'Verifikasi keamanan wajib diselesaikan sebelum pengajuan dikirim.']);
+        }
+        try {
+            $turnstile = Http::asForm()->timeout(8)->post('https://challenges.cloudflare.com/turnstile/v0/siteverify', [
+                'secret' => $turnstileSecret, 'response' => $turnstileToken, 'remoteip' => $request->ip(),
+            ]);
+        } catch (\Throwable $e) {
+            report($e);
+            return back()->withInput()->withErrors(['turnstile' => 'Verifikasi keamanan sedang tidak tersedia. Silakan coba lagi.']);
+        }
+        if (!$turnstile->successful() || !$turnstile->json('success')) {
+            return back()->withInput()->withErrors(['turnstile' => 'Verifikasi keamanan gagal. Silakan coba lagi.']);
+        }
         // Prevent duplicate submission via session lock
         $lockKey = 'permohonan_submit_lock_' . me()->id;
         if (session($lockKey)) {
@@ -257,7 +274,7 @@ class PermohonanController extends Controller
         // Record in Histori Log
         HistoriObserver::create([
             'id_permohonan' => $data->id,
-            'deskripsi' => 'Berkas usulan inovasi telah resmi dikirimkan oleh pemohon untuk dinilai oleh Tim TKSD.',
+            'deskripsi' => 'Berkas usulan inovasi telah resmi dikirimkan oleh pemohon untuk dinilai oleh Tim Verifikator.',
             'status' => 2
         ]);
 
@@ -287,7 +304,7 @@ class PermohonanController extends Controller
             } catch (\Throwable $e) {}
         }
 
-        notify()->flash('Berkas usulan inovasi telah berhasil dikirimkan ke Tim TKSD untuk dinilai.', 'success');
+        notify()->flash('Berkas usulan inovasi telah berhasil dikirimkan ke Tim Verifikator untuk dinilai.', 'success');
         return redirect()->route('permohonan.show', $data->kode);
     }
 

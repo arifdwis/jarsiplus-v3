@@ -5,7 +5,7 @@
 @section('content')
 @php
     $sliders = $sliders ?? (class_exists('Modules\Core\Entities\Slider') ? Modules\Core\Entities\Slider::latest()->take(5)->get() : collect([]));
-    $lamans = $lamans ?? (class_exists('Modules\Core\Entities\Laman') ? Modules\Core\Entities\Laman::where('status', 1)->latest()->paginate(9) : collect([]));
+    $lamans = $lamans ?? (class_exists('Modules\Core\Entities\Laman') ? Modules\Core\Entities\Laman::latest()->paginate(9) : collect([]));
 
     $sedangMencari = request()->filled('search');
 @endphp
@@ -47,7 +47,8 @@
                 @foreach($lamans as $laman)
                     @php
                         $judul   = jp_isi($laman->label) ?? 'Tanpa judul';
-                        $isi     = trim(strip_tags((string) $laman->content));
+                        $isiHtml = trim((string) $laman->content);
+                        $isi     = html_entity_decode(trim(strip_tags($isiHtml)), ENT_QUOTES | ENT_HTML5, 'UTF-8');
                         $ringkas = jp_isi($isi);
                         $idModal = 'modalLaman-' . ($laman->uuid ?? $laman->id);
                     @endphp
@@ -93,7 +94,7 @@
 
                         <div class="jp-modal__body">
                             @if($ringkas)
-                                <div class="jp-prose" style="white-space: pre-line;">{{ $isi }}</div>
+                                <div class="jp-prose">{!! $isiHtml !!}</div>
                             @else
                                 <p class="jp-prose jp-prose--empty">Isi informasi belum tersedia.</p>
                             @endif
