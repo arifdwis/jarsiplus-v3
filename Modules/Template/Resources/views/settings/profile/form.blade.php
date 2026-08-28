@@ -33,7 +33,7 @@
                     <label class="jp-label">Foto Profil</label>
                     @if(auth()->user()->avatar ?? null)
                         <div class="u-mb-sm">
-                            <img src="{{ asset('storage/'.auth()->user()->avatar) }}" alt="Foto profil saat ini"
+                            <img src="{{ file_url(auth()->user()->avatar) }}" alt="Foto profil saat ini"
                                  style="width: 80px; height: 80px; border-radius: var(--r-md); object-fit: cover; border: 1px solid var(--c-border);">
                         </div>
                     @endif

@@ -28,7 +28,7 @@
                     <label class="jp-label">Logo</label>
                     @if($instansi->logo ?? null)
                         <div class="u-mb-sm">
-                            <img src="{{ asset('storage/'.$instansi->logo) }}" alt="Logo" style="max-height:80px;border-radius:var(--r-card)">
+                            <img src="{{ file_url($instansi->logo) }}" alt="Logo" style="max-height:80px;border-radius:var(--r-card)">
                         </div>
                     @endif
                     <x-file-drop name="logo" accept=".svg,.png,.jpg,.jpeg" />

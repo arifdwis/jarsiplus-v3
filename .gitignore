@@ -18,7 +18,11 @@ yarn-error.log
 /.vscode
 /storage/framework/sessions/*
 /storage/framework/views/*
+/storage/framework/cache/*
+/storage/app/public/*
+/public_html/storage
 /storage/logs/*
 design.md
 .DS_Store
 *.DS_Store
+

@@ -10,12 +10,12 @@
     backLabel="Kembali ke Data Dukung"
 >
     @if($data->url)
-        <a href="{{ $data->url }}" target="_blank" rel="noopener" class="jp-btn jp-btn--accent">
+        <a href="{{ file_url($data->url) }}" target="_blank" rel="noopener" class="jp-btn jp-btn--accent">
             <x-icon name="link" size="16" />
             Buka Tautan Berkas
         </a>
     @elseif($data->file)
-        <a href="{{ asset($data->file) }}" target="_blank" rel="noopener" class="jp-btn jp-btn--accent">
+        <a href="{{ file_url($data->file) }}" target="_blank" rel="noopener" class="jp-btn jp-btn--accent">
             <x-icon name="download" size="16" />
             Unduh Berkas
         </a>

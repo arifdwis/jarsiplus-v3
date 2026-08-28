@@ -35,7 +35,7 @@
 
                 @if(!empty($value->file) && strlen(trim($value->file)) > 0)
                     <div class="jp-bubble__attach">
-                        <a href="{{ asset($value->file) }}" target="_blank" rel="noopener" class="jp-bubble__chip">
+                        <a href="{{ file_url($value->file) }}" target="_blank" rel="noopener" class="jp-bubble__chip">
                             <x-icon name="file" size="14" />
                             {{ basename($value->file) }}
                         </a>

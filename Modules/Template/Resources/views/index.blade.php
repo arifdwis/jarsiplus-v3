@@ -225,7 +225,7 @@
                 <div class="u-scroll-x">
                     @foreach($events as $ev)
                         @php
-                            $evBanner = $ev->banner ? asset($ev->banner) : asset('baimbai/Banner Lomba Baimbai 2026.jpeg');
+                            $evBanner = $ev->banner ? file_url($ev->banner) : asset('baimbai/Banner Lomba Baimbai 2026.jpeg');
                             $evRingkas = jp_isi($ev->subtitle) ?? jp_isi(strip_tags((string) $ev->description));
                         @endphp
 
@@ -293,7 +293,7 @@
                                         <span class="jp-deflist__label u-block u-mb-xs">Dokumen</span>
                                         <div class="u-flex u-gap-xs u-flex-wrap">
                                             @foreach($lampiran as $labelDok => $berkas)
-                                                <a href="{{ asset($berkas) }}" target="_blank" rel="noopener" class="jp-btn jp-btn--ghost jp-btn--sm">
+                                                <a href="{{ file_url($berkas) }}" target="_blank" rel="noopener" class="jp-btn jp-btn--ghost jp-btn--sm">
                                                     <x-icon name="download" size="15" />
                                                     {{ $labelDok }}
                                                 </a>
@@ -328,7 +328,7 @@
         if (isset($sliders) && $sliders->count() > 0) {
             $slideItems = $sliders->map(function ($s) {
                 return [
-                    'image' => $s->file ? asset($s->file) : null,
+                    'image' => $s->file ? file_url($s->file) : null,
                     'title' => $s->judul ?? $s->label ?? null,
                     'desc'  => $s->label ?? null,
                 ];

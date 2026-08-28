@@ -92,9 +92,9 @@ class DataController extends Controller
         $request->validate([
             'label' => 'required',
             'nomor_surat' => 'required',
-            'file' => 'nullable|max:10240',
+            'file' => 'nullable|max:102400',
         ], [
-            'file.max' => 'Ukuran file maksimal 10 MB.',
+            'file.max' => 'Ukuran file maksimal 100 MB.',
         ]);
 
         $input = $request->all();
@@ -123,9 +123,9 @@ class DataController extends Controller
 
         $request->validate([
             'label' => 'required',
-            'file' => 'nullable|max:10240',
+            'file' => 'nullable|max:102400',
         ], [
-            'file.max' => 'Ukuran file maksimal 10 MB.',
+            'file.max' => 'Ukuran file maksimal 100 MB.',
         ]);
 
         $input = $request->all();
@@ -200,6 +200,8 @@ class DataController extends Controller
 
         $name = time() . '.' . $file->getClientOriginalExtension();
         $file->move($targetPath, $name);
-        return 'storage/' . $path . $name;
+        $resPath = 'storage/' . $path . $name;
+        sync_to_s3($resPath);
+        return $resPath;
     }
 }

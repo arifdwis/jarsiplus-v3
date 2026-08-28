@@ -236,13 +236,13 @@
                             @if($adaLampiran)
                                 <div class="u-flex u-flex-col u-gap-xs">
                                     @if($data->anggaran)
-                                        <a href="{{ asset($data->anggaran) }}" target="_blank" rel="noopener" class="jp-btn jp-btn--ghost jp-btn--sm" style="justify-content: flex-start;">
+                                        <a href="{{ file_url($data->anggaran) }}" target="_blank" rel="noopener" class="jp-btn jp-btn--ghost jp-btn--sm" style="justify-content: flex-start;">
                                             <x-icon name="file" size="16" />
                                             Berkas Anggaran
                                         </a>
                                     @endif
                                     @if($data->profil_bisnis)
-                                        <a href="{{ asset($data->profil_bisnis) }}" target="_blank" rel="noopener" class="jp-btn jp-btn--ghost jp-btn--sm" style="justify-content: flex-start;">
+                                        <a href="{{ file_url($data->profil_bisnis) }}" target="_blank" rel="noopener" class="jp-btn jp-btn--ghost jp-btn--sm" style="justify-content: flex-start;">
                                             <x-icon name="file" size="16" />
                                             Proposal / Profil Bisnis
                                         </a>

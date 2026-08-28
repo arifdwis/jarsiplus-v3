@@ -88,9 +88,14 @@
                             </div>
 
                             @if($value->url)
-                                <a href="{{ $value->url }}" target="_blank" rel="noopener" class="jp-link-arrow" style="font-size: var(--t-xs); word-break: break-all;">
+                                <a href="{{ file_url($value->url) }}" target="_blank" rel="noopener" class="jp-link-arrow" style="font-size: var(--t-xs); word-break: break-all;">
                                     <x-icon name="link" size="14" />
                                     Buka tautan berkas
+                                </a>
+                            @elseif($value->file)
+                                <a href="{{ file_url($value->file) }}" target="_blank" rel="noopener" class="jp-link-arrow" style="font-size: var(--t-xs); word-break: break-all;">
+                                    <x-icon name="file" size="14" />
+                                    Unduh / Buka berkas
                                 </a>
                             @endif
 

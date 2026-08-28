@@ -304,3 +304,134 @@ if (! function_exists('jp_isi')) {
         return $value;
     }
 }
+
+if (! function_exists('sync_to_s3')) {
+    /**
+     * Sinkronisasikan berkas lokal ke AWS S3 tanpa menghapus berkas di aplikasi lokal.
+     *
+     * @param string $path
+     * @return bool
+     */
+    function sync_to_s3($path)
+    {
+        if (empty($path)) {
+            return false;
+        }
+
+        try {
+            $fullPath = null;
+            $s3Key = null;
+
+            if (file_exists($path) && is_file($path)) {
+                $fullPath = $path;
+                if (str_contains($path, 'storage/app/public/')) {
+                    $s3Key = substr($path, strpos($path, 'storage/app/public/') + strlen('storage/app/public/'));
+                } elseif (str_contains($path, 'public_html/storage/')) {
+                    $s3Key = 'storage/' . substr($path, strpos($path, 'public_html/storage/') + strlen('public_html/storage/'));
+                } elseif (str_contains($path, 'public/storage/')) {
+                    $s3Key = 'storage/' . substr($path, strpos($path, 'public/storage/') + strlen('public/storage/'));
+                } else {
+                    $s3Key = ltrim($path, '/');
+                }
+            } else {
+                $s3Key = ltrim($path, '/');
+                $cleanPath = ltrim(str_replace(['storage/', 'public/'], '', $path), '/');
+
+                $candidates = [
+                    storage_path('app/public/' . $cleanPath),
+                    public_path('storage/' . $cleanPath),
+                    base_path('public_html/storage/' . $cleanPath),
+                    public_path($path),
+                    base_path($path),
+                ];
+
+                foreach ($candidates as $candidate) {
+                    if (file_exists($candidate) && is_file($candidate)) {
+                        $fullPath = $candidate;
+                        break;
+                    }
+                }
+            }
+
+            if (!$fullPath || !file_exists($fullPath) || !is_file($fullPath)) {
+                return false;
+            }
+
+            $s3Key = ltrim(str_replace('//', '/', $s3Key), '/');
+
+            $stream = fopen($fullPath, 'r+');
+            if ($stream) {
+                \Illuminate\Support\Facades\Storage::disk('s3')->put($s3Key, $stream);
+                if (is_resource($stream)) {
+                    fclose($stream);
+                }
+                return true;
+            }
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning('S3 Sync Warning: ' . $e->getMessage(), ['path' => $path]);
+        }
+
+        return false;
+    }
+}
+
+if (! function_exists('file_url')) {
+    /**
+     * Dapatkan URL berkas (fleksibel: mendukung S3 CloudFront & Storage Lokal).
+     *
+     * @param string|null $path
+     * @param string $disk 'auto'|'s3'|'local'
+     * @return string|null
+     */
+    function file_url($path, $disk = 'auto')
+    {
+        if (empty($path)) {
+            return null;
+        }
+
+        if (str_starts_with($path, 'http://') || str_starts_with($path, 'https://')) {
+            return $path;
+        }
+
+        $cleanPath = ltrim($path, '/');
+
+        if ($disk === 's3' || env('FILESYSTEM_DRIVER') === 's3') {
+            return env('AWS_URL', 'https://d3dyajxapape7i.cloudfront.net') . '/' . $cleanPath;
+        }
+
+        if (str_starts_with($cleanPath, 'storage/')) {
+            return asset($cleanPath);
+        }
+
+        return asset('storage/' . $cleanPath);
+    }
+}
+
+if (! function_exists('s3_url')) {
+    /**
+     * Dapatkan URL berkas langsung dari AWS S3 CloudFront.
+     *
+     * @param string|null $path
+     * @return string|null
+     */
+    function s3_url($path)
+    {
+        if (empty($path)) {
+            return null;
+        }
+
+        if (str_starts_with($path, 'http://') || str_starts_with($path, 'https://')) {
+            return $path;
+        }
+
+        $cleanPath = ltrim($path, '/');
+
+        if (!str_starts_with($cleanPath, 'storage/') && !str_starts_with($cleanPath, 'sikerja/') && !str_starts_with($cleanPath, 'jarsiplus/')) {
+            $cleanPath = 'storage/' . $cleanPath;
+        }
+
+        return env('AWS_URL', 'https://d3dyajxapape7i.cloudfront.net') . '/' . $cleanPath;
+    }
+}
+
+

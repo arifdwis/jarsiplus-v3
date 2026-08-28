@@ -133,8 +133,9 @@ class BerkasController extends Controller
         $tmpFileDate =  date('Y-m') .'/'.date('d').'/';
         $tmpFileName = uniqid();
         $tmpFileExt = $file->getClientOriginalExtension();
-        $file->move(storage_path().'/'.$tmpFilePath.'/'.$tmpFileDate, $tmpFileName . '.' . $tmpFileExt);
-        return "storage/{$path}{$tmpFileDate}/{$tmpFileName}.{$tmpFileExt}";
+        $resPath = "storage/{$path}{$tmpFileDate}/{$tmpFileName}.{$tmpFileExt}";
+        sync_to_s3($resPath);
+        return $resPath;
     }
     
 }

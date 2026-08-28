@@ -164,6 +164,8 @@ class EventController extends Controller
             copy($targetDirPublic . '/' . $fileName, $publicHtmlPath . '/' . $fileName);
         }
 
-        return $destinationPath . '/' . $fileName;
+        $resPath = $destinationPath . '/' . $fileName;
+        sync_to_s3($resPath);
+        return $resPath;
     }
 }

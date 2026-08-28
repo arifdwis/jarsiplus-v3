@@ -51,7 +51,7 @@
                                                     @if($b)
                                                         <div class="jp-badge jp-badge--accent u-flex u-gap-xs u-align-center" style="max-width:100%">
                                                             <span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ $b }}</span>
-                                                            <a href="{{ asset('storage/'.$b) }}" target="_blank" class="jp-btn jp-btn--quiet jp-btn--xs">
+                                                            <a href="{{ file_url($b) }}" target="_blank" class="jp-btn jp-btn--quiet jp-btn--xs">
                                                                 <x-icon name="eye" size="14" />
                                                             </a>
                                                         </div>
@@ -102,7 +102,7 @@
                                                     @if($b)
                                                         <div class="jp-badge jp-badge--accent u-flex u-gap-xs u-align-center" style="max-width:100%">
                                                             <span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ $b }}</span>
-                                                            <a href="{{ asset('storage/'.$b) }}" target="_blank" class="jp-btn jp-btn--quiet jp-btn--xs">
+                                                            <a href="{{ file_url($b) }}" target="_blank" class="jp-btn jp-btn--quiet jp-btn--xs">
                                                                 <x-icon name="eye" size="14" />
                                                             </a>
                                                         </div>
