@@ -57,7 +57,10 @@ class SSOAutoLogin
     public function handleLogin($response)
     {
         $sso    = $response['data'];
-        $check  = User::where('uid',$sso['id'])->where('email',$sso['email'])->first();
+        $check  = User::where('uid', $sso['id'])->first();
+        if (!$check && !empty($sso['email'])) {
+            $check = User::where('email', $sso['email'])->first();
+        }
         $sso['uid']             = $sso['id'];   
         $sso['last_login']      = \Carbon\Carbon::now(); 
         $sso['last_ip_address'] = request()->ip(); 
