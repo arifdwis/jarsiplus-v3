@@ -41,3 +41,19 @@ Route::get('/pengaduan', [\App\Http\Controllers\PengaduanController::class, 'cre
 Route::post('/pengaduan', [\App\Http\Controllers\PengaduanController::class, 'store'])->middleware('throttle:5,10')->name('pengaduan.store');
 Route::get('/jarsiplus/pengaduan', [\App\Http\Controllers\AdminPengaduanController::class, 'index'])->middleware('auth')->name('admin.pengaduan');
 Route::get('/sikerja/pengaduan', [\App\Http\Controllers\AdminPengaduanController::class, 'index'])->middleware('auth')->name('admin.sikerja.pengaduan');
+
+Route::get('/switch-role/{id}', function ($id) {
+    if (!auth()->check()) {
+        return redirect()->route('login');
+    }
+    $user = auth()->user();
+    $role = $user->roles()->where('roles.id', (int) $id)->first();
+    if ($role) {
+        session(['active_role_id' => (int) $id]);
+        $roleLabel = $role->name === 'Pembahas' ? 'Tim Verifikator' : ($role->name === 'Pemohon' ? 'Pemohon Inovasi' : $role->name);
+        if (function_exists('notify')) {
+            notify()->flash("Berhasil beralih ke peran: <b>{$roleLabel}</b>", 'success');
+        }
+    }
+    return redirect()->back();
+})->middleware('auth')->name('switch.role');

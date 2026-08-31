@@ -24,6 +24,27 @@
         @endif
     </x-page-header>
 
+    @if(Auth::user()->roles->count() > 1)
+        <div style="background: linear-gradient(135deg, #1e293b, #0f172a); border-bottom: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 10px 0;">
+            <div class="l-container" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;">
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <span style="display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px; border-radius:50%; background:rgba(56,189,248,0.2); color:#38bdf8; font-size:12px;">★</span>
+                    <span style="font-size:13px;">Akun Anda memiliki akses <strong>{{ Auth::user()->roles->count() }} Peran</strong>. Sedang aktif sebagai: <span class="jp-badge jp-badge--accent" style="font-size:11px; padding:2px 8px; margin-left:4px;">{{ role_me() == 3 ? 'Tim Verifikator' : (role_me() == 4 ? 'Pemohon Inovasi' : 'Admin') }}</span></span>
+                </div>
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <span style="color:#94a3b8; font-size:12px;">Ganti Mode:</span>
+                    @foreach(Auth::user()->roles as $r)
+                        @if($r->id != role_me())
+                            <a href="{{ route('switch.role', $r->id) }}" class="jp-btn jp-btn--ghost" style="padding:4px 12px; font-size:12px; height:auto; color:#fff; border-color:rgba(255,255,255,0.3); background:rgba(255,255,255,0.08);">
+                                ⇄ Beralih ke {{ $r->name == 'Pembahas' ? 'Tim Verifikator' : ($r->name == 'Pemohon' ? 'Pemohon Inovasi' : $r->name) }}
+                            </a>
+                        @endif
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    @endif
+
     <div class="jp-subhead">
         <div class="l-container jp-subhead__inner">
             <span class="jp-subhead__meta">

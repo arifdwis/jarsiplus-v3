@@ -33,7 +33,28 @@
                         <div class="jp-dropdown-header">
                             <strong class="jp-dropdown-name">{{ Auth::user()->name }}</strong>
                             <small class="jp-dropdown-email" style="color:var(--c-text-muted)">{{ Auth::user()->email }}</small>
+                            <div style="margin-top: 6px;">
+                                <span class="jp-badge jp-badge--accent" style="font-size: 11px; padding: 2px 8px;">
+                                    {{ role_me() == 3 ? 'Tim Verifikator' : (role_me() == 4 ? 'Pemohon Inovasi' : (role_me() == 1 ? 'Administrator' : (role_me() == 2 ? 'Superadmin' : 'Pengguna'))) }}
+                                </span>
+                            </div>
                         </div>
+                        @if(Auth::user()->roles->count() > 1)
+                            <hr class="jp-dropdown-divider">
+                            <div style="padding: 6px 16px 2px; font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--c-text-muted); letter-spacing: 0.5px;">
+                                Ganti Peran:
+                            </div>
+                            @foreach(Auth::user()->roles as $r)
+                                <a href="{{ route('switch.role', $r->id) }}" class="jp-dropdown-item {{ role_me() == $r->id ? 'is-active font-bold' : '' }}" style="display:flex; align-items:center; justify-content:space-between;">
+                                    <span>{{ $r->name == 'Pembahas' ? 'Tim Verifikator' : ($r->name == 'Pemohon' ? 'Pemohon Inovasi' : $r->name) }}</span>
+                                    @if(role_me() == $r->id)
+                                        <span class="jp-badge jp-badge--accent" style="font-size: 10px; padding: 1px 6px;">Aktif</span>
+                                    @else
+                                        <span style="font-size: 11px; color: var(--c-text-muted);">Pilih &rarr;</span>
+                                    @endif
+                                </a>
+                            @endforeach
+                        @endif
                         <hr class="jp-dropdown-divider">
                         <a href="{{ url('/permohonan') }}" class="jp-dropdown-item">
                             <x-icon name="document" size="16" />
@@ -97,6 +118,21 @@
         @if(Auth::check())
             <div class="u-flex u-flex-col u-gap-sm">
                 <span class="jp-text-sm" style="color:var(--c-text-muted)">Masuk sebagai: <strong>{{ Auth::user()->name }}</strong></span>
+                @if(Auth::user()->roles->count() > 1)
+                    <div style="font-size: 12px; margin-bottom: 4px;">
+                        <span style="color:var(--c-text-muted)">Peran aktif:</span>
+                        <strong style="color:var(--c-accent)">{{ role_me() == 3 ? 'Tim Verifikator' : (role_me() == 4 ? 'Pemohon Inovasi' : 'Admin') }}</strong>
+                        <div style="display:flex; gap:6px; margin-top:6px; flex-wrap:wrap;">
+                            @foreach(Auth::user()->roles as $r)
+                                @if($r->id != role_me())
+                                    <a href="{{ route('switch.role', $r->id) }}" class="jp-btn jp-btn--ghost" style="padding:4px 8px; font-size:11px;">
+                                        Ganti ke {{ $r->name == 'Pembahas' ? 'Tim Verifikator' : ($r->name == 'Pemohon' ? 'Pemohon' : $r->name) }}
+                                    </a>
+                                @endif
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
                 <a href="{{ route('sso.logout') }}" class="jp-btn jp-btn--ghost u-w-100">Keluar / Logout</a>
             </div>
         @else

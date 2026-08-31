@@ -17,8 +17,24 @@ if(!function_exists('me')) {
 
 if(!function_exists('role_me')) {
     function role_me() {
-        $role_id = Auth::user()->roles->first()->id;
-        return $role_id;
+        if (!Auth::check()) {
+            return null;
+        }
+        $user = Auth::user();
+        if (!$user->relationLoaded('roles')) {
+            $user->load('roles');
+        }
+        $userRoles = $user->roles;
+        if ($userRoles->isEmpty()) {
+            return null;
+        }
+
+        $activeRoleId = session('active_role_id');
+        if ($activeRoleId && $userRoles->contains('id', (int) $activeRoleId)) {
+            return (int) $activeRoleId;
+        }
+
+        return (int) $userRoles->first()->id;
     }
 }
 
